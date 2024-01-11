@@ -1,5 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import InputField from './elements/inputField'
+import axios from 'axios'
+import { Link, useNavigate } from 'react-router-dom'
+import { API_BASE_URL, GOOGLE_AUTH_API } from '../../constant/api'
+import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode'
+
 
 
 function Signup() {
@@ -9,34 +16,138 @@ function Signup() {
     const fields = [
 
         {
-            name: "Name",
+            name: "Username",
             type: "text",
             placeholder: "Enter your Password",
+            formName: "name"
         },
         {
             name: "Email",
             type: "text",
             placeholder: "Enter your Email",
+            formName: "email",
         },
         {
             name: "Password",
             type: "Password",
             placeholder: "Enter your Password",
+            formName: "password",
             EyeIcon: EyeIcon,
         },
         {
             name: "Confirm password",
             type: "password",
             placeholder: "Enter your Password",
+            formName: "confirmPassword",
             EyeIcon: EyeIcon,
         },
     ]
+    const navigate = useNavigate()
+
+    const [formError, setFormError] = useState([])
+    const handleLoginSubmit = async (event) => {
+        event.preventDefault();
+        console.log("submitted");
+        const formData = new FormData();
+        const name = event.target.name.value
+        const email = event.target.email.value
+        const password = event.target.password.value
+        const confirmPassword = event.target.confirmPassword.value
+        // console.log(formData, email.indexOf('@'), name.indexOf(' '));
+        if (!name) {
+            setFormError(['Please enter a username'])
+        }
+        if (name.indexOf(' ') !== -1) {
+            setFormError(['Enter a valid username'])
+        }
+        else if (!email) {
+            setFormError(['Please enter an email address'])
+        }
+        else if (name.replaceAll(/\s/g, '') > 3) {
+            setFormError('Type more')
+        }
+        else if (password.trim() === "") {
+            setFormError(['Invalid Password'])
+        }
+        else if (confirmPassword !== password) {
+            setFormError(['Passwords do not match'])
+        }
+        else if (email.indexOf('@') == -1 || email.indexOf('.') == -1) {
+            setFormError(['Invalid email address'])
+
+        }
+        else {
+            //add user to database here
+            setFormError([])
+            formData.append("email", email);
+            formData.append("password", password);
+            formData.append("username", name)
+        }
+        try {
+            const res = await axios.post(API_BASE_URL + '/auth/register', formData)
+            console.log(res);
+            if (res.status === 201) {
+                console.log("Saved successfully man");
+                navigate('/auth/login',
+                    {
+                        state: res.data.Message
+                    })
+                return res
+            }
+        }
+        catch (error) {
+            console.log("DafdAA\n\n", error);
+            // if (error.response.status===406)
+            // {
+            //   console.log("error")
+            //   console.log(error.response.data)
+            //   setFormError(error.response.data)
+            // }
+            // else
+            // {
+            //   console.log(error);
+
+            // }
+        }
+
+
+    }
+
+
+    const Google_login = async (user_detail) =>{
+        const formData = new FormData();
+        formData.append("email", user_detail.email)
+        formData.append("username", user_detail.name)
+        formData.append("password", "1704974569")
+        try {
+            const res = await axios.post(API_BASE_URL + '/auth/register', formData)
+            console.log(res);
+            if (res.status === 201) {
+                console.log("Saved successfully man");
+                navigate('/auth/login',
+                    {
+                        state: res.data.Message
+                    })
+                return res
+            }
+        }
+        catch (error) {
+            console.log("DafdAA\n\n", error);
+        }
+    } 
+
     return (
         <div>
-            <form class="form">
+            <form class="form" method='POST' onSubmit={handleLoginSubmit}>
 
-                {fields.map((field)=><InputField {...field} />)}
+                {fields.map((field) => <InputField {...field} />)}
 
+
+                <ul className='text-red-500'>
+                    {formError && <li>
+                        {formError}
+                    </li>}
+                </ul>
 
                 <div class="flex-row">
                     <div>
@@ -45,13 +156,36 @@ function Signup() {
                     </div>
                     <span class="span">Forgot password?</span>
                 </div>
-                <button class="button-submit">Sign In</button>
-                <p class="p">Don't have an account? <span class="span">Sign Up</span>
+                <button class="button-submit" type='submit'>Sign Up</button>
+                <p class="p">Don't have an account? <Link to={'/auth/login'}><span class="span">Log in</span></Link>
 
                 </p><p class="p line">Or With</p>
 
                 <div class="flex-row">
-                    <button className="btn google">
+
+                    <GoogleLogin
+                        onSuccess={credentialResponse => {
+                            const user_detail = jwtDecode(credentialResponse.credential)
+                            console.log('User detail: ', user_detail);
+                            Google_login(user_detail)
+                        }}
+                        onError={() => {
+                            console.log('Login Failed');
+                        }}
+                    />
+
+
+                    {/* <GoogleLogin
+                            onSuccess={credentialResponse => {
+                                console.log(credentialResponse);
+                            }}
+                            onError={() => {
+                                console.log('Login Failed');
+                            }}
+                        />; */}
+
+
+                    {/* <button className="btn google" onClick={() => login()}>
                         <svg version="1.1" width="20" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style={{ enableBackground: 'new 0 0 512 512' }} xmlSpace="preserve">
                             <path style={{ fill: '#FBBB00' }} d="M113.47,309.408L95.648,375.94l-65.139,1.378C11.042,341.211,0,299.9,0,256
                     c0-42.451,10.324-82.483,28.624-117.732h0.014l57.992,10.632l25.404,57.644c-5.317,15.501-8.215,32.141-8.215,49.456
@@ -68,8 +202,11 @@ function Signup() {
                     C318.115,0,375.068,22.126,419.404,58.936z"></path>
                         </svg>
                         Google
-                    </button>
-                    <button className="btn apple">
+                    </button> */}
+
+
+
+                    {/* <button className="btn apple">
                         <svg version="1.1" height="20" width="20" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 22.773 22.773" style={{ enableBackground: 'new 0 0 22.773 22.773' }} xmlSpace="preserve">
                             <g>
                                 <g>
@@ -85,7 +222,7 @@ function Signup() {
                             </g>
                         </svg>
                         Apple
-                    </button>
+                    </button> */}
 
                 </div>
             </form>

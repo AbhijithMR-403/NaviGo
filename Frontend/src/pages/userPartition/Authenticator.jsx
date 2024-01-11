@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from 'react'
 import NET from 'vanta/dist/vanta.net.min'
 import * as THREE from "three";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import Login from '../components/auth/Login';
-import Signup from '../components/auth/signup';
-import "../Style/auth.scss"
+import Login from '../../components/auth/Login';
+import Signup from '../../components/auth/signup';
+import "../../Style/auth.scss"
 
 
 
@@ -41,11 +41,14 @@ function Authenticator() {
   return (
     <div className='auth' ref={vantaRef}>
       <p style={{ color: "#fff", paddingTop: "20px" }}>
+        
         <Routes>
+          
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup /> } />
+            
         </Routes>
-
+     
       </p>
     </div>
   );

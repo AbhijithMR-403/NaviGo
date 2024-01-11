@@ -1,14 +1,13 @@
 import React from 'react'
 
 function InputField(props) {
-    console.log(props);
   return (
-    <div className='mb-10'>
-        <div class="flex-column">
-        <label> {props.name}</label></div>
+    <div className='mb-4' key={props.name}>
+        <div class="flex-column mb-2">
+        <label > {props.name}</label></div>
         <div class="inputForm">
           {props.Icon? <props.Icon />:<></>}
-            <input type="password" class="input" placeholder="Enter your Password" />
+            <input type={props.type} class="input" placeholder={props.placeholder} name={props.formName}/>
            
             {props.EyeIcon? <props.EyeIcon />:<></>}
             
