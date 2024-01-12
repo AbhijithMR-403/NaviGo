@@ -10,15 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@chakra-ui/react": "^2.8.2",
-    "@emotion/react": "^11.11.3",
-    "@emotion/styled": "^11.11.0",
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.1.1",
     "@react-oauth/google": "^0.12.1",
     "@reduxjs/toolkit": "^2.0.1",
     "axios": "^1.6.5",
-    "framer-motion": "^10.17.9",
     "heroicons": "^2.1.1",
     "jwt-decode": "^4.0.0",
     "react": "^18.2.0",

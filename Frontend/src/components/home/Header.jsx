@@ -1,5 +1,4 @@
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { TabList, Tab } from '@chakra-ui/react'
 import { Dialog } from '@headlessui/react'
 import { useEffect, useState } from 'react'
 

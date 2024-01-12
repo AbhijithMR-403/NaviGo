@@ -1,5 +1,5 @@
 import React from 'react'
-import AdminHome from '../pages/adminPartition/AdminHome'
+
 import { Route, Routes } from 'react-router-dom';
 
 function AdminWrapper() {

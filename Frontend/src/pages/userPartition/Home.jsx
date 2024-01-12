@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import Header from '../../components/home/Header'
 import { useSelector } from 'react-redux'
 
