@@ -27,6 +27,7 @@ function UserWrapper() {
   useEffect(() => {
     if(!authentication_user.name)
     {
+      console.log(authentication_user);
      
       checkAuth();
     
