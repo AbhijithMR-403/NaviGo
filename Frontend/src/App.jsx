@@ -11,7 +11,6 @@ import AdminWrapper from './wrapper/AdminWrapper';
 
 function App() {
   return (
-    <Router>
       <Provider store={reduxStore}>
         <GoogleOAuthProvider clientId={GOOGLE_AUTH_API}>
 
@@ -19,13 +18,12 @@ function App() {
 
             <Route path="/auth/*" element={<Authenticator />} />
             <Route path="*" element={<UserWrapper />} />
-            {/* <Route path='/admin/' element={<AdminWrapper />} /> */}
+            <Route path='/admin/*' element={<AdminWrapper />} />
             {/* <Route path="*" element={<h1>404 Not Found</h1>}/> */}
           </Routes>
         </GoogleOAuthProvider>;
 
       </Provider>
-    </Router>
   )
 }
 
