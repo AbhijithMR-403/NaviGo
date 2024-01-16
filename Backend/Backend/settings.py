@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
 
-    'djangoAuthenticator',
+    'account',
 
 
     'corsheaders',
@@ -62,7 +62,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'Backend.urls'
 
-AUTH_USER_MODEL = "djangoAuthenticator.Account"
+AUTH_USER_MODEL = "account.Account"
 
 
 TEMPLATES = [
@@ -156,3 +156,10 @@ SIMPLE_JWT = {
      'ROTATE_REFRESH_TOKENS': True,
      'BLACKLIST_AFTER_ROTATION': True
 }
+
+# Email
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = "587"
+EMAIL_HOST_USER = "abhijithmr581@gmail.com"
+EMAIL_HOST_PASSWORD = "rwvh rjwl juzv calj"
+EMAIL_USE_TLS = True

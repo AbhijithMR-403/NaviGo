@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react'
 import NET from 'vanta/dist/vanta.net.min'
 import * as THREE from "three";
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from '../../components/auth/Login';
 import Signup from '../../components/auth/signup';
 import "../../Style/auth.scss"
+import ThemeProvider from '../../components/admin/theme';
 
 
 
 function Authenticator() {
-    
+
   const [vantaEffect, setVantaEffect] = useState(0);
   const vantaRef = useRef(null);
 
@@ -41,14 +42,12 @@ function Authenticator() {
   return (
     <div className='auth' ref={vantaRef}>
       <p style={{ color: "#fff", paddingTop: "20px" }}>
-        
+
         <Routes>
-          
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup /> } />
-            
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<ThemeProvider><Signup /></ThemeProvider>} />
         </Routes>
-     
+
       </p>
     </div>
   );

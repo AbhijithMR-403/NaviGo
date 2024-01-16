@@ -2,7 +2,7 @@
 
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
-from djangoAuthenticator.models import Account
+from account.models import Account
 # from rest_framework_simplejwt.tokens import RefreshToken, Token,AccessToken
 
 
@@ -17,7 +17,7 @@ from djangoAuthenticator.models import Account
 class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ['id', 'username', 'email', 'password']
+        fields = ['id', 'username', 'email', 'password', 'is_active']
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -25,4 +25,19 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data['password'] = make_password(
             validated_data.get('password'))
+        validated_data['is_active'] = False
         return super(UserRegisterSerializer, self).create(validated_data)
+
+
+# class UserDetails(serializers.Serializer):
+#     is_vendor = serializers.BooleanField()
+
+#     class Meta:
+#         model = Account
+#         fields = ['id', 'username', 'email', 'password', 'profile_img']
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        exclude = ('password',)

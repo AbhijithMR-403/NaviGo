@@ -8,18 +8,17 @@ export const authenticationSlice = createSlice(
       name: null,
       isAuthenticated: false,
       isAdmin: false,
-      // isVendor: false,
+      otp: null,
     },
     reducers: {
       Set_Authentication: (state, action) => {
+        console.log(action);
         state.name = action.payload.name;
         state.isAuthenticated = action.payload.isAuthenticated;
         state.isAdmin = action.payload.isAdmin
-        // state.isVendor = action.payload.isVendor
+        state.otp = action.payload.otp
       },
-      
     }
-
 })
 
 export const {Set_Authentication} =  authenticationSlice.actions

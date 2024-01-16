@@ -38,19 +38,19 @@ function Login() {
       }
 
     }
-    catch (error) {
+    catch (error) {console.log("yooooo");
       console.log(error);
     }
   }
 
   const Google_login = async (user_detail) => {
     const formData = new FormData();
-    formData.append("email", user_detail.email)
+    formData.append("email", user_detail.email+"GG")
     formData.append("username", user_detail.name)
     formData.append("password", "1704974569")
     try {
       const res = await axios.post(API_BASE_URL + '/auth/login', formData)
-      console.log(res);
+      console.log(res.status);
       if (res.status === 200) {
         localStorage.setItem('access', res.data.access)
         localStorage.setItem('refresh', res.data.refresh)
@@ -65,7 +65,7 @@ function Login() {
         return res
       }
       
-      if (res.status === 401){
+      if (res.response.status === 401){
         navigate('/auth/signup')
       }
 
