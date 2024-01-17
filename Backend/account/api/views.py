@@ -6,10 +6,9 @@ from account.models import Account
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.exceptions import AuthenticationFailed, ParseError
 from django.contrib.auth import authenticate
-from .serializers import UserRegisterSerializer, UserSerializer
+from .serializers import UserRegisterSerializer, UserSerializer, LoginVendorSerializer
 import random
 from django.core.mail import send_mail
-
 
 
 class UserLogin(APIView):
@@ -146,3 +145,32 @@ class UserDetails(APIView):
 
         content = data
         return Response(content)
+
+
+class VendorRegister(APIView):
+
+    def post(self, request):
+        serializer = UserRegisterSerializer(data=request.data)
+        print(serializer)
+        if serializer.is_valid():
+            serializer.save()
+
+        print(serializer.data)
+        user = Account.objects.get(email=serializer.data['email'])
+        print(user)
+        request.data['user'] = user.id
+        print(request.data)
+
+        vendor_serializer = LoginVendorSerializer(data=request.data)
+
+        print('\n\n\n')
+        print(vendor_serializer)
+        if vendor_serializer.is_valid():
+            print(vendor_serializer)
+            vendor_serializer.save()
+        else:
+            return Response(vendor_serializer.errors,
+                            status=status.HTTP_406_NOT_ACCEPTABLE)
+        print(vendor_serializer)
+        content = {'Message': 'User Registered Successfully'}
+        return Response(content, status=status.HTTP_201_CREATED,)

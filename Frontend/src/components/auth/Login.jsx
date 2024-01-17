@@ -45,7 +45,7 @@ function Login() {
 
   const Google_login = async (user_detail) => {
     const formData = new FormData();
-    formData.append("email", user_detail.email+"GG")
+    formData.append("email", user_detail.email)
     formData.append("username", user_detail.name)
     formData.append("password", "1704974569")
     try {

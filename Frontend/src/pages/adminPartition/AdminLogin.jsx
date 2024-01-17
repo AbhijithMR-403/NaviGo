@@ -20,24 +20,76 @@ import { bgGradient } from '../../components/admin/theme/css';
 // import Logo from 'src/components/logo';
 import Iconify from '../../components/admin/iconify';
 import { useRouter } from '../../components/admin/navbar/hooks';
+import { API_BASE_URL } from '../../constant/api';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode'
+import { Set_Authentication } from '../../redux/authentication/AuthenticationSlice';
+
+
 
 // ----------------------------------------------------------------------
 
 export default function LoginView() {
+  const [formError, setFormError] = useState([])
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+
+  const handleLoginSubmit = async(event)=> {
+    event.preventDefault();
+    setFormError([])
+    const formData = new FormData();
+    formData.append("email", event.target.email.value);
+    formData.append("password", event.target.password.value);
+    try {
+      const res = await axios.post(API_BASE_URL+'/auth/login', formData)
+      if(res.status === 200){
+        localStorage.setItem('access', res.data.access)
+        localStorage.setItem('refresh', res.data.refresh)
+        dispatch(
+          Set_Authentication({
+            name: jwtDecode(res.data.access).first_name,
+            isAuthenticated: true,
+            isAdmin:res.data.isAdmin,
+          })
+        );
+        navigate('/admin')
+        return res
+      }  
+      
+    }
+    catch (error) {
+      console.log(error);
+      if (error.response.status===401)
+      {
+       
+        setFormError(error.response.data)
+      }
+      else
+      {
+        console.log(error);
+  
+      }
+    }
+  }
+
   const theme = useTheme();
 
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleClick = () => {
-    router.push('/dashboard');
-  };
+  // const handleClick = () => {
+  //   router.push('/dashboard');
+  // };
 
   const renderForm = (
     <>
+        <form onSubmit={handleLoginSubmit}>
       <Stack spacing={3}>
-        <form >
 
         <TextField name="email" label="Email address" />
 
@@ -55,7 +107,6 @@ export default function LoginView() {
             ),
           }}
         />
-        </form>
 
       </Stack>
 
@@ -70,10 +121,12 @@ export default function LoginView() {
         type="submit"
         variant="contained"
         color="inherit"
-        onClick={handleClick}
+        // onClick={handleClick}
       >
         Login
       </LoadingButton>
+      </form>
+
     </>
   );
 

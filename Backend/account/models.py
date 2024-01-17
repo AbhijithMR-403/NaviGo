@@ -57,7 +57,8 @@ class Account(AbstractBaseUser):
 
 
 class VendorDetails(models.Model):
-    is_vendor = models.BooleanField(default=True)
+    is_vendor = models.BooleanField(default=False)
     user = models.OneToOneField(
         Account, on_delete=models.CASCADE, null=True, blank=True)
     company_name = models.CharField(max_length=50)
+    approve = models.BooleanField(default=False)

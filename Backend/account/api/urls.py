@@ -15,4 +15,5 @@ urlpatterns = [
     path('logout', views.LogoutView.as_view(), name='logout'),
     path('otpverify', views.OtpVerify.as_view(), name='otpverify'),
     path("details", views.UserDetails.as_view(), name="user-details"),
+    path("VendorRegister", views.VendorRegister.as_view(), name="VendorRegister"),
 ]

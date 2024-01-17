@@ -8,6 +8,8 @@ import UserWrapper from './wrapper/UserWrapper';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GOOGLE_AUTH_API } from './constant/api';
 import AdminWrapper from './wrapper/AdminWrapper';
+import VendorWrapper from './wrapper/VendorWrapper';
+
 
 function App() {
   return (
@@ -19,6 +21,7 @@ function App() {
             <Route path="/auth/*" element={<Authenticator />} />
             <Route path="*" element={<UserWrapper />} />
             <Route path='/admin/*' element={<AdminWrapper />} />
+            <Route path='/vendor/*' element={<VendorWrapper />} />
             {/* <Route path="*" element={<h1>404 Not Found</h1>}/> */}
           </Routes>
         </GoogleOAuthProvider>;

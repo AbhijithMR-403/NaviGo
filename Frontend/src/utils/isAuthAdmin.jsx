@@ -30,7 +30,7 @@ const fetchisAdmin = async () => {
     const token = localStorage.getItem('access');
     
     try {
-        const res = await axios.get(API_BASE_URL + '/auth/details/', {
+        const res = await axios.get(API_BASE_URL + '/auth/details', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json',
