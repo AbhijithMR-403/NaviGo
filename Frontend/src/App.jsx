@@ -2,11 +2,13 @@ import React, { useEffect } from 'react'
 import Authenticator from './pages/userPartition/Authenticator'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
-import Home from './pages/userPartition/Home';
-import reduxStore from './redux/reduxStore';
+// import Home from './pages/userPartition/Home';
+// import reduxStore from './redux/reduxStore';
 import UserWrapper from './wrapper/UserWrapper';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GOOGLE_AUTH_API } from './constant/api';
+import { persistor, store } from './redux/reduxStore';
+import { PersistGate } from 'redux-persist/integration/react';
 import AdminWrapper from './wrapper/AdminWrapper';
 import VendorWrapper from './wrapper/VendorWrapper';
 import { ToastContainer } from 'react-toastify';
