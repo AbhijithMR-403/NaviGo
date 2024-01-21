@@ -14,16 +14,15 @@ const updateUserToken = async ()=>{
           localStorage.setItem('access', res.data.access)
           localStorage.setItem('refresh', res.data.refresh)
           let decoded = jwtDecode(res.data.access);
-          return {'name':decoded.name,isAuthenticated:true}
+          return {'name':decoded.name,isAuthenticated:true,is_vendor:false}
         }
         else
         {
-            return {'name':null,isAuthenticated:false}
+            return {'name':null,isAuthenticated:false,is_vendor:false}
         }  
-        
       }
       catch (error) {
-         return {'name':null,isAuthenticated:false}
+         return {'name':null,isAuthenticated:false,is_vendor:false}
       }
 }
 

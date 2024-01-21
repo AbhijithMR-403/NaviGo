@@ -26,7 +26,7 @@ function UserRoute({ children }) {
   }
   if (!isAuthenticated) {
     // If not authenticated, redirect to login page with the return URL
-    return <Navigate to="/auth/login" />;
+    return <Navigate to="/login" />;
   }
 
   // If authenticated, render the child components

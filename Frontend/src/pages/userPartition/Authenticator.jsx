@@ -1,15 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import NET from 'vanta/dist/vanta.net.min'
 import * as THREE from "three";
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import Login from '../../components/auth/Login';
-import Signup from '../../components/auth/signup';
 import "../../Style/auth.scss"
 
 
 
-function Authenticator() {
-    
+function Authenticator({ children }) {
+
   const [vantaEffect, setVantaEffect] = useState(0);
   const vantaRef = useRef(null);
 
@@ -40,16 +37,17 @@ function Authenticator() {
   }, [vantaEffect]);
   return (
     <div className='auth' ref={vantaRef}>
-      <p style={{ color: "#fff", paddingTop: "20px" }}>
-        
-        <Routes>
-          
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup /> } />
-            
-        </Routes>
-     
-      </p>
+      <div className='vantojsdiv' style={{ color: "#fff"}}>
+
+        {children}
+
+        {/* <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<ThemeProvider><Signup /></ThemeProvider>} />
+          <Route path="/*" element={<h1>Page not there</h1>} />
+        </Routes> */}
+
+      </div>
     </div>
   );
 }
