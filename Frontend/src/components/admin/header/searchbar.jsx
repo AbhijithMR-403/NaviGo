@@ -8,9 +8,9 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 
-import { bgBlur } from '../theme/css';
+import { bgBlur } from '../elements/theme/css';
 
-import Iconify from '../iconify';
+import Iconify from '../elements/iconify';
 
 // ----------------------------------------------------------------------
 

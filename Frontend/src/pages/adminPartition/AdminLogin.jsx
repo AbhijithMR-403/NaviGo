@@ -15,10 +15,10 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 // import { useRouter } from 'src/routes/hooks';
 
-import { bgGradient } from '../../components/admin/theme/css';
+import { bgGradient } from '../../components/admin/elements/theme/css';
 
 // import Logo from 'src/components/logo';
-import Iconify from '../../components/admin/iconify';
+import Iconify from '../../components/admin/elements/iconify';
 import { useRouter } from '../../components/admin/navbar/hooks';
 import { API_BASE_URL } from '../../constant/api';
 import { useNavigate } from 'react-router-dom';

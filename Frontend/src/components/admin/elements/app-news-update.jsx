@@ -11,8 +11,8 @@ import CardHeader from '@mui/material/CardHeader';
 
 import { fToNow } from '../../../utils/format-time';
 
-import Iconify from '../iconify';
-import Scrollbar from '../scrollbar';
+import Iconify from './iconify';
+import Scrollbar from './scrollbar';
 
 // ----------------------------------------------------------------------
 

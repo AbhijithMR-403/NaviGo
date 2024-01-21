@@ -67,7 +67,7 @@ class UserSerializer(serializers.ModelSerializer):
 #             raise serializers.ValidationError(
 #                 {"password": "password is not valid"})
 
-class LoginVendorSerializer(serializers.ModelSerializer):
+class RegVendorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = VendorDetails

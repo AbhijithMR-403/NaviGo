@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Authenticator from './pages/userPartition/Authenticator'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
@@ -9,24 +9,36 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GOOGLE_AUTH_API } from './constant/api';
 import AdminWrapper from './wrapper/AdminWrapper';
 import VendorWrapper from './wrapper/VendorWrapper';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
-      <Provider store={reduxStore}>
-        <GoogleOAuthProvider clientId={GOOGLE_AUTH_API}>
+    <Provider store={reduxStore}>
+      <GoogleOAuthProvider clientId={GOOGLE_AUTH_API}>
 
-          <Routes>
+        <ToastContainer
+          position="top-center"
+          autoClose={4000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition:Bounce />
+        <Routes>
+          {/* <Route path="/auth/*" element={<Authenticator />} /> */}
+          <Route path="*" element={<UserWrapper />} />
+          <Route path='/admin/*' element={<AdminWrapper />} />
+          <Route path='/vendor/*' element={<VendorWrapper />} />
+          {/* <Route path="*" element={<h1>404 Not Found</h1>}/> */}
+        </Routes>
+      </GoogleOAuthProvider>;
 
-            <Route path="/auth/*" element={<Authenticator />} />
-            <Route path="*" element={<UserWrapper />} />
-            <Route path='/admin/*' element={<AdminWrapper />} />
-            <Route path='/vendor/*' element={<VendorWrapper />} />
-            {/* <Route path="*" element={<h1>404 Not Found</h1>}/> */}
-          </Routes>
-        </GoogleOAuthProvider>;
-
-      </Provider>
+    </Provider>
   )
 }
 

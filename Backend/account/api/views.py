@@ -6,7 +6,7 @@ from account.models import Account
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.exceptions import AuthenticationFailed, ParseError
 from django.contrib.auth import authenticate
-from .serializers import UserRegisterSerializer, UserSerializer, LoginVendorSerializer
+from .serializers import UserRegisterSerializer, UserSerializer, RegVendorSerializer
 import random
 from django.core.mail import send_mail
 
@@ -41,7 +41,7 @@ class UserLogin(APIView):
 
         refresh["name"] = str(user.username)
         refresh["is_admin"] = str(user.is_superuser)
-        refresh["is_vendor"] = str(False)
+        refresh["is_vendor"] = False
 
         content = {
             'refresh': str(refresh),
@@ -151,20 +151,17 @@ class VendorRegister(APIView):
 
     def post(self, request):
         serializer = UserRegisterSerializer(data=request.data)
-        print(serializer)
         if serializer.is_valid():
             serializer.save()
 
         print(serializer.data)
         user = Account.objects.get(email=serializer.data['email'])
-        print(user)
         request.data['user'] = user.id
+        request.data['is_vendor'] = True
         print(request.data)
 
-        vendor_serializer = LoginVendorSerializer(data=request.data)
+        vendor_serializer = RegVendorSerializer(data=request.data)
 
-        print('\n\n\n')
-        print(vendor_serializer)
         if vendor_serializer.is_valid():
             print(vendor_serializer)
             vendor_serializer.save()

@@ -8,11 +8,11 @@ import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 
 // import { useResponsive } from 'src/hooks/use-responsive';
-import { useResponsive } from '../../../hooks/use-responsive';
+import { useResponsive } from '../elements/hooks/use-responsive';
 
-import { bgBlur } from '../theme/css';
+import { bgBlur } from '../elements/theme/css';
 
-import Iconify from '../iconify';
+import Iconify from '../elements/iconify';
 
 import Searchbar from './searchbar';
 import { NAV, HEADER } from '../../../constant/admin-layout'; 

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 
 import { Navigate, Outlet, Route, Routes, useRoutes } from 'react-router-dom';
 import DashboardLayout from '../pages/adminPartition/Dashboard';
-import ThemeProvider from '../components/admin/theme';
+import ThemeProvider from '../components/admin/elements/theme';
 import Dashboard from '../components/admin/view/dashboard';
 import NotFoundView from '../pages/error/NotFoundView';
 import Loginpage from '../pages/adminPartition/AdminLogin';
@@ -12,7 +12,7 @@ import isAuthAdmin from '../utils/isAuthAdmin';
 import AdminRouter from '../routes/AdminRouter';
 
 function AdminWrapper() {
-  
+
   const dispatch = useDispatch()
   const authentication_user = useSelector(state => state.authentication_user);
 
@@ -57,42 +57,36 @@ function AdminWrapper() {
   }, []);
 
 
-
-
-
-
-    const routes = useRoutes([
-      {
-        element: (
-          <ThemeProvider>
+  const routes = useRoutes([
+    {
+      element: (
+        <ThemeProvider>
           <DashboardLayout>
-            {/* <Suspense> */}
             <AdminRouter >
               <Outlet />
             </AdminRouter>
-            {/* </Suspense> */}
           </DashboardLayout>
-          </ThemeProvider>
-        ),
-        children: [
-          { element: <Dashboard />, index: true },
-        ],
-      },
-      {
-        path: 'login',
-        element: <Loginpage />,
-      },
-      {
-        path: '404',
-        element: <NotFoundView />,
-      },
-      {
-        path: '*',
-        element: <Navigate to="/admin/404" replace />,
-      },
-    ]);
-  
-    return routes;
+        </ThemeProvider>
+      ),
+      children: [
+        { element: <Dashboard />, index: true },
+      ],
+    },
+    {
+      path: 'login',
+      element: <Loginpage />,
+    },
+    {
+      path: '404',
+      element: <NotFoundView />,
+    },
+    {
+      path: '*',
+      element: <Navigate to="/admin/404" replace />,
+    },
+  ]);
+
+  return routes;
 }
 
 export default AdminWrapper

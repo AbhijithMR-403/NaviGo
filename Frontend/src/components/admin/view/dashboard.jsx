@@ -15,7 +15,7 @@ import AppWidgetSummary from '../elements/app-widget-summary';
 import AppTrafficBySite from '../elements/app-traffic-by-site';
 // import AppCurrentSubject from '../elements/app-current-subject';
 // import AppConversionRates from '../elements/app-conversion-rates';
-import Iconify from '../iconify/iconify';
+import Iconify from '../elements/iconify/iconify';
 
 // ----------------------------------------------------------------------
 

@@ -35,7 +35,7 @@ class CustomUserManager(BaseUserManager):
 
 class Account(AbstractBaseUser):
     name = models.CharField(max_length=60, null=True)
-    username = models.CharField(max_length=30)
+    username = models.CharField(max_length=30, unique=True)
     password = models.CharField(blank=True)
     email = models.EmailField(max_length=254, unique=True)
     DOB = models.DateField(null=True)
@@ -60,5 +60,5 @@ class VendorDetails(models.Model):
     is_vendor = models.BooleanField(default=False)
     user = models.OneToOneField(
         Account, on_delete=models.CASCADE, null=True, blank=True)
-    company_name = models.CharField(max_length=50)
+    company_name = models.CharField(max_length=50, unique=True)
     approve = models.BooleanField(default=False)

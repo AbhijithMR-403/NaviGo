@@ -124,7 +124,7 @@ function Signup() {
             console.log(res);
             if (res.status === 201) {
                 console.log("Saved successfully man");
-                navigate('/auth/login',
+                navigate('/login',
                     {
                         state: res.data.Message
                     })

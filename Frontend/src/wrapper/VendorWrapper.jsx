@@ -1,7 +1,7 @@
 import React from 'react'
-import FormRegistration from '../pages/vendorPartition/Authentication';
 import { Navigate, Outlet, useRoutes } from 'react-router-dom';
 import Approval from '../components/vendor/Approval';
+import VendorAuth from '../pages/vendorPartition/Authentication';
 
 function VendorWrapper() {
   
@@ -16,7 +16,7 @@ function VendorWrapper() {
         },
         {
           path: '/*',
-          element: <FormRegistration />,
+          element: <VendorAuth />,
         },
         {
           path: '/wating',

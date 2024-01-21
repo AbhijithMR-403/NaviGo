@@ -1,21 +1,28 @@
 .auth {
+
   .vanta { 
     min-height: 3000px;
     color: white;
     padding: 20px;
     font-size: 24px;
   }
+  .vantojsdiv{
+    padding-top: 4rem;
+  }
   
   .form {
     display: flex;
     flex-direction: column;
+    // padding: 2rem;
     gap: 10px;
+
     background-color: #ffffff;
     color: black;
     padding-top: 4%;
-    padding: 2.5%;
+    // padding: 2.5%;
     max-width: 400px;
     border-radius: 20px;
+    padding: 2rem;
     margin: 0 auto;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
@@ -23,7 +30,11 @@
       margin-left: auto;
       margin-right: auto;
     }
+    @media all and (min-width:0px) and (max-width: 480px) {
+      margin: 1.5rem;
+    }
   }
+
 
   ::placeholder {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;

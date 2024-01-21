@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import CardHeader from '@mui/material/CardHeader';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import Iconify from '../iconify';
+import Iconify from './iconify';
 
 // ----------------------------------------------------------------------
 
