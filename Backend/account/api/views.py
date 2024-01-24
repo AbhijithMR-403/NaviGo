@@ -29,19 +29,17 @@ class UserLogin(APIView):
                             status=status.HTTP_401_UNAUTHORIZED)
 
         if not Account.objects.filter(email=email, is_active=True).exists():
-            return Response({'error': 'Email Needs activation'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'error': 'Incorrect Email'}, status=status.HTTP_403_FORBIDDEN)
 
         user = authenticate(username=email, password=password)
         if user is None:
             raise AuthenticationFailed('Invalid Password')
         vendor = VendorDetails.objects.filter(user=user)
         refresh = RefreshToken.for_user(user)
-
+        vendor_active = False
         if vendor.exists():
-            refresh["is_vendor"] = vendor[0].is_vendor
-        else:
-            refresh["is_vendor"] = False
-
+            vendor_active = vendor[0].approve
+        refresh["is_vendor"] = str(user.is_vendor)
         refresh["name"] = str(user.username)
         refresh["is_admin"] = str(user.is_superuser)
 
@@ -49,6 +47,8 @@ class UserLogin(APIView):
             'refresh': str(refresh),
             'access': str(refresh.access_token),
             'isAdmin': user.is_superuser,
+            "is_vendor": user.is_vendor,
+            "is_vendor_active": vendor_active
         }
         print(content)
         return Response(content, status=status.HTTP_200_OK)
@@ -178,14 +178,20 @@ class UserDetails(APIView):
 class VendorRegister(APIView):
 
     def post(self, request):
-        request.data['is_vendor'] = True
+        # request.data['is_vendor'] = True
 
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
 
         print(serializer.data)
-        user = Account.objects.get(email=serializer.data['email'])
+        try:
+            user= Account.objects.get(
+                email=serializer.data['email'])
+        except:
+            print(serializer.errors)
+            return Response({'error': 'Email Does Not Exist'},
+                            status=status.HTTP_401_UNAUTHORIZED)
         request.data['user'] = user.id
         print(request.data)
 
@@ -195,8 +201,9 @@ class VendorRegister(APIView):
             print(vendor_serializer)
             vendor_serializer.save()
         else:
+            print(vendor_serializer.errors)
             return Response(vendor_serializer.errors,
                             status=status.HTTP_406_NOT_ACCEPTABLE)
         print(vendor_serializer)
-        content = {'Message': 'User Registered Successfully'}
+        content = {'error': 'User Registered Successfully'}
         return Response(content, status=status.HTTP_201_CREATED,)

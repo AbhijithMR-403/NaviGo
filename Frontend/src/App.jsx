@@ -36,7 +36,7 @@ function App() {
           <Route path='/vendor/*' element={<VendorWrapper />} />
           {/* <Route path="*" element={<h1>404 Not Found</h1>}/> */}
         </Routes>
-      </GoogleOAuthProvider>;
+      </GoogleOAuthProvider>
 
     </Provider>
   )

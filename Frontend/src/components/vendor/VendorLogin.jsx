@@ -1,7 +1,56 @@
+import axios from 'axios';
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../../constant/api';
+import { Set_Authentication } from '../../redux/authentication/AuthenticationSlice';
+import { jwtDecode } from 'jwt-decode';
+import { TError, TInfo, TSuccess, TWarning } from '../toastify/Toastify';
 
 function VendorLogin() {
+    const navigate = useNavigate()
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('')
+    const handleLogin = async() => {
+        const formData = {
+            'email': email,
+            'password': password
+        }
+        try {
+            const res = await axios.post(API_BASE_URL + '/auth/login', formData)
+            if (res.status === 200) {
+                console.log(res);
+                if (!res.data.is_vendor){
+                    TWarning('You are not an vendor')
+                    navigate('/vendor/login')
+                    return res
+                }
+                if (!res.data.is_vendor_active){
+                    TInfo('Your approval is under process')
+                    navigate('/vendor/wating')
+                    return res
+                }
+
+                localStorage.setItem('access', res.data.access)
+                localStorage.setItem('refresh', res.data.refresh)
+                dispatch(
+                    Set_Authentication({
+                        name: jwtDecode(res.data.access).name,
+                        isAuthenticated: true,
+                        isAdmin: res.data.isAdmin,
+                        isvendor: res.data.is_vendor
+                    })
+                );
+                TSuccess("You have successfully login")
+                navigate('/vendor/')
+                return res
+            }
+        }
+        catch (error) {
+            TError(error.response.data.error)
+        }
+        }
+
+    
     const [darkMode, setDarkMode] = useState(false);
     return (
         <div>
@@ -36,26 +85,30 @@ function VendorLogin() {
                 </h1>
                 <div className="w-full mt-8">
                     <div className="mx-auto max-w-xs sm:max-w-md md:max-w-lg flex flex-col gap-4">
-                    <div className="flex flex-col sm:flex-row gap-3">
-                    </div>
+                        <div className="flex flex-col sm:flex-row gap-3">
+                        </div>
                         <input
                             className={`w-full px-5 py-3 rounded-lg  font-medium border-2 border-transparent placeholder-gray-500 text-sm focus:outline-none focus:border-2  focus:outline ${darkMode
                                 ? "bg-[#302E30] text-white focus:border-white"
                                 : "bg-gray-100 text-black focus:border-black"
                                 }`}
                             type="email"
-                            placeholder="Enter your email"
+                            placeholder="Email Address"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
                         />
-                            <input
-                                className={`w-full px-5 py-3 rounded-lg  font-medium border-2 border-transparent placeholder-gray-500 text-sm focus:outline-none focus:border-2  focus:outline ${darkMode
-                                    ? "bg-[#302E30] text-white focus:border-white"
-                                    : "bg-gray-100 text-black focus:border-black"
-                                    }`}
-                                type="password"
-                                placeholder="Password"
-                            />
+                        <input
+                            className={`w-full px-5 py-3 rounded-lg  font-medium border-2 border-transparent placeholder-gray-500 text-sm focus:outline-none focus:border-2  focus:outline ${darkMode
+                                ? "bg-[#302E30] text-white focus:border-white"
+                                : "bg-gray-100 text-black focus:border-black"
+                                }`}
+                            type="password"
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                            placeholder="Password"
+                        />
 
-                        <button className="mt-5 tracking-wide font-semibold bg-[#E9522C] text-gray-100 w-full py-4 rounded-lg hover:bg-[#E9522C]/90 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
+                        <button onClick={handleLogin} className="mt-5 tracking-wide font-semibold bg-[#E9522C] text-gray-100 w-full py-4 rounded-lg hover:bg-[#E9522C]/90 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
                             <svg
                                 className="w-6 h-6 -ml-2"
                                 fill="none"

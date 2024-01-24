@@ -11,7 +11,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import isAuthAdmin from '../utils/isAuthAdmin';
 import AdminRouter from '../routes/AdminRouter';
 import UserManagement from '../components/admin/view/UserManagement';
-import BusStop from '../components/admin/view/BusStop';
+import { Set_Authentication } from '../redux/authentication/AuthenticationSlice';
+import axios from 'axios';
+import BusStop from '../components/admin/view/busStop';
 
 function AdminWrapper() {
 
@@ -24,29 +26,29 @@ function AdminWrapper() {
     try {
       const isAuthenticated = await isAuthAdmin();
       dispatch(
-        set_Authentication({
+        Set_Authentication({
           name: isAuthenticated.name,
           isAuthenticated: isAuthenticated.isAuthenticated,
           isAdmin: isAuthenticated.isAdmin,
         })
       );
 
-      if (isAuthenticated.isAuthenticated) {
-        const res = await axios.get(API_BASE_URL + '/auth/details/', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-        });
+      // if (isAuthenticated.isAuthenticated) {
+      //   const res = await axios.get(API_BASE_URL + '/auth/details', {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //       Accept: 'application/json',
+      //       'Content-Type': 'application/json',
+      //     },
+      //   });
 
-        dispatch(
-          set_user_basic_details({
-            name: res.data.first_name,
-            profile_pic: res.data.profile_pic,
-          })
-        );
-      }
+      //   dispatch(
+      //     set_user_basic_details({
+      //       name: res.data.first_name,
+      //       profile_pic: res.data.profile_pic,
+      //     })
+      //   );
+      // }
     } catch (error) {
       console.log(error);
     }

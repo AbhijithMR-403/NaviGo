@@ -1,7 +1,8 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../../constant/api';
+import { TSuccess } from '../toastify/Toastify';
 
 function VendorRegister() {
     const [error, setFormError] = useState('');
@@ -14,17 +15,11 @@ function VendorRegister() {
     const [confirmPassword, setconfirmPassword] = useState('')
     const [company, setcompany] = useState('')
     const [phone, setphone] = useState('')
+    const navigate = useNavigate()
 
     const handleRegSubmit = async (event) => {
         event.preventDefault();
         
-        // const name = event.target.name.value
-        // const username = event.target.username.value
-        // const email = event.target.email.value
-        // const password = event.target.password.value
-        // const confirmPassword = event.target.cpassword.value
-        // const company = event.target.company.value
-        // const phone = event.target.phone.value
 
         if (!username) {
             setFormError(['Please enter a username'])
@@ -50,28 +45,32 @@ function VendorRegister() {
         }
         else {
             const formData = {
-                name: name,
-                username: username,
-                email: email,
-                password: password,
-                phone: phone,
-                company: company
+                'name': name,
+                'username': username,
+                'email': email,
+                'password': password,
+                'phone': phone,
+                'company_name': company,
+                'is_vendor': true,
+                'is_active': true
             }
 
             //add user to database here
             setFormError([])
-        
-        try {
-            const res = await axios.post(API_BASE_URL + '/auth/VendorRegister', formData)
-            if (res.status === 201) {
-                console.log("Saved successfully man");
-                return res
+
+            try {
+                const res = await axios.post(API_BASE_URL + '/auth/vendor/reg', formData)
+                if (res.status === 201) {
+                    console.log("Saved successfully man");
+                    TSuccess('Successfully Registered')
+                    navigate('/vendor/login')
+                    return res
+                }
+            }
+            catch (error) {
+                alert(error)
             }
         }
-        catch (error) {
-            alert(error)
-        }
-    }
     }
 
 
@@ -128,9 +127,9 @@ function VendorRegister() {
                                         }`}
                                     type="text"
                                     value={company}
-                                    onChange={(e)=> setcompany(e.target.value)}
+                                    onChange={(e) => setcompany(e.target.value)}
                                     placeholder="Company name"
-                                    name = "company"
+                                    name="company"
                                 />
                             </div>
                             <input
@@ -161,7 +160,7 @@ function VendorRegister() {
                                     : "bg-gray-100 text-black focus:border-black"
                                     }`}
                                 type="tel"
-                                
+
                                 value={phone}
                                 onChange={(e) => setphone(e.target.value)}
                                 placeholder="Enter your phone"
