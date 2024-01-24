@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { Set_Authentication } from '../../redux/authentication/AuthenticationSlice';
 import { GoogleLogin } from '@react-oauth/google';
 import { ToastContainer, toast } from 'react-toastify';
+import { TError, TSuccess } from '../toastify/Toastify';
 
 
 function Login() {
@@ -17,7 +18,6 @@ function Login() {
 
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
-    // setFormError([])
     const formData = new FormData();
     formData.append("email", event.target.email.value);
     formData.append("password", event.target.password.value);
@@ -33,28 +33,25 @@ function Login() {
             isAdmin: res.data.isAdmin
           })
         );
+        TSuccess("You have successfully login")
         navigate('/')
         return res
       }
-
     }
     catch (error) {
-      console.log("yooooo");
-      console.log(error);
+      TError(error)
     }
   }
 
   const Google_login = async (user_detail) => {
+    console.log(user_detail);
     const formData = new FormData();
     formData.append("email", user_detail.email)
     formData.append("username", user_detail.name)
     formData.append("password", "1704974569")
-    console.log("formData");
-    console.log(Object.fromEntries(formData))
 
     try {
       const res = await axios.post(API_BASE_URL + '/auth/login', formData)
-      console.log(res);
       if (res.status === 200) {
         localStorage.setItem('access', res.data.access)
         localStorage.setItem('refresh', res.data.refresh)
@@ -62,35 +59,27 @@ function Login() {
           Set_Authentication({
             name: jwtDecode(res.data.access).name,
             isAuthenticated: true,
-            isAdmin: res.data.isAdmin
+            isAdmin: res.data.isAdmin,
+            is_vendor: res.data.is_vendor
           })
         );
+        TSuccess("You have successfully login")
         navigate('/')
         return res
       }
 
-      if (res.response.status === 401) {
-        navigate('/auth/signup')
-      }
-
     }
     catch (error) {
-      console.log(error);
+      if (error.response.status === 401) {
+        TError('Not signup')
+        navigate('/signup')
+      }
+      if (error.response.status === 403) {
+        TError('Your mail needs activation')
+        navigate('/signup')
+      }
     }
   }
-  // useEffect(()=>{
-
-  //   toast("Wow so easy!", {
-  //     position: "top-center",
-  //     autoClose: 5000,
-  //     hideProgressBar: false,
-  //     closeOnClick: true,
-  //     pauseOnHover: true,
-  //     draggable: true,
-  //     progress: undefined,
-  //     theme: "light",
-  //     });
-  // },[])
 
   const PasswordIcon = () => {
     return <svg height="20" viewBox="-64 0 512 512" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m336 512h-288c-26.453125 0-48-21.523438-48-48v-224c0-26.476562 21.546875-48 48-48h288c26.453125 0 48 21.523438 48 48v224c0 26.476562-21.546875 48-48 48zm-288-288c-8.8125 0-16 7.167969-16 16v224c0 8.832031 7.1875 16 16 16h288c8.8125 0 16-7.167969 16-16v-224c0-8.832031-7.1875-16-16-16zm0 0"></path><path d="m304 224c-8.832031 0-16-7.167969-16-16v-80c0-52.929688-43.070312-96-96-96s-96 43.070312-96 96v80c0 8.832031-7.167969 16-16 16s-16-7.167969-16-16v-80c0-70.59375 57.40625-128 128-128s128 57.40625 128 128v80c0 8.832031-7.167969 16-16 16zm0 0"></path></svg>
@@ -143,8 +132,7 @@ function Login() {
 
           <GoogleLogin
             onSuccess={credentialResponse => {
-              const user_detail = jwtDecode(credentialResponse.credential)
-              console.log('User detail: ', user_detail);
+              const user_detail = jwtDecode(credentialResponse.credential) 
               Google_login(user_detail)
             }}
             onError={() => {

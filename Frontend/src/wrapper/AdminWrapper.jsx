@@ -10,6 +10,8 @@ import { API_BASE_URL } from '../constant/api';
 import { useDispatch, useSelector } from 'react-redux';
 import isAuthAdmin from '../utils/isAuthAdmin';
 import AdminRouter from '../routes/AdminRouter';
+import UserManagement from '../components/admin/view/UserManagement';
+import BusStop from '../components/admin/view/BusStop';
 
 function AdminWrapper() {
 
@@ -70,6 +72,9 @@ function AdminWrapper() {
       ),
       children: [
         { element: <Dashboard />, index: true },
+        { element: <UserManagement />, path:'/user' },
+        { element: <BusStop />, path:'/busstop' },
+
       ],
     },
     {

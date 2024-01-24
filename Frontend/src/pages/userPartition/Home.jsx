@@ -21,7 +21,7 @@ export default function Home() {
 
   return (
     <div className="bg-white">
-      <Header />
+      {/* <Header /> */}
 
 
       <div className="relative isolate px-6 pt-14 lg:px-8">
@@ -49,7 +49,7 @@ export default function Home() {
           </div>
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              Hey {authentication_user.name}..., <br />
+              Hey {authentication_user.name}...{authentication_user.isvendor}, <br />
               Find Your Best Route <br />
               To Your Best Place
             </h1>

@@ -17,7 +17,6 @@ function VendorRegister() {
 
     const handleRegSubmit = async (event) => {
         event.preventDefault();
-        console.log("submitted");
         
         // const name = event.target.name.value
         // const username = event.target.username.value
@@ -27,7 +26,6 @@ function VendorRegister() {
         // const company = event.target.company.value
         // const phone = event.target.phone.value
 
-        // console.log(formData, email.indexOf('@'), name.indexOf(' '));
         if (!username) {
             setFormError(['Please enter a username'])
         }
@@ -62,19 +60,9 @@ function VendorRegister() {
 
             //add user to database here
             setFormError([])
-            // formData.append("email", email)
-            // console.log(name,username,email,password)
-
-            // formData.append("password", password);
-            // formData.append("username", username)
-            // // formData.append("company", company)
-            // // formData.append("name", name)
-            // // formData.append("phone", phone)
-            // console.log(formData);
         
         try {
             const res = await axios.post(API_BASE_URL + '/auth/VendorRegister', formData)
-            console.log(res);
             if (res.status === 201) {
                 console.log("Saved successfully man");
                 return res
