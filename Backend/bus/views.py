@@ -8,9 +8,15 @@ from rest_framework import status
 # Create your views here.
 
 
+class BusStopDelete(generics.RetrieveUpdateDestroyAPIView):
+    queryset = BusStop.objects.all()
+    serializer_class = BusStopSerializer
+
+
 class BusStopLocation(generics.ListCreateAPIView):
     queryset = BusStop.objects.all()
     serializer_class = BusStopSerializer
+    
     # def post(self, request):
     #     serializer = BusStopSerializer(data=request.data)
     #     if serializer.is_valid():
@@ -18,3 +24,4 @@ class BusStopLocation(generics.ListCreateAPIView):
     #         return Response({'message': 'success'}, status=status.HTTP_201_CREATED)
     #     else:
     #         return Response({'message': 'success'}, status=status.HTTP_406_NOT_ACCEPTABLE)
+

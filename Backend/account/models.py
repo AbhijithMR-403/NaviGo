@@ -37,6 +37,7 @@ class Account(AbstractBaseUser):
     name = models.CharField(max_length=60, null=True)
     username = models.CharField(max_length=30, unique=True)
     password = models.CharField(blank=True)
+    phone_number = models.CharField(blank=True, null=True)
     email = models.EmailField(max_length=254, unique=True)
     DOB = models.DateField(null=True)
     profile_img = models.ImageField(upload_to='profile_pics/', null=True)

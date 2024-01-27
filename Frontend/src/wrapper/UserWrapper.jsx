@@ -82,6 +82,7 @@ function UserWrapper() {
       ),
       children: [
         { element: <Home />, index: true },
+        // { element: <Map />, index: true },
       ],
     },
     {

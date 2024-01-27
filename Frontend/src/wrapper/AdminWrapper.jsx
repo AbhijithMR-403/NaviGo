@@ -14,6 +14,7 @@ import UserManagement from '../components/admin/view/UserManagement';
 import { Set_Authentication } from '../redux/authentication/AuthenticationSlice';
 import axios from 'axios';
 import BusStop from '../components/admin/view/busStop';
+import StopList from '../components/admin/view/StopList';
 
 function AdminWrapper() {
 
@@ -76,6 +77,7 @@ function AdminWrapper() {
         { element: <Dashboard />, index: true },
         { element: <UserManagement />, path:'/user' },
         { element: <BusStop />, path:'/busstop' },
+        { element: <StopList />, path:'/stoplist' },
 
       ],
     },

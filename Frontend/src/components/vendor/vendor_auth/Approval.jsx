@@ -1,5 +1,5 @@
 import React from 'react'
-import '../../Style/vendor.scss'
+import '../../../Style/vendor.scss'
 
 function Approval() {
     return (

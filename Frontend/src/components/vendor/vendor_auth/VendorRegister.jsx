@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import { API_BASE_URL } from '../../constant/api';
-import { TSuccess } from '../toastify/Toastify';
+import { API_BASE_URL } from '../../../constant/api';
+import { TSuccess } from '../../toastify/Toastify';
 
 function VendorRegister() {
     const [error, setFormError] = useState('');
