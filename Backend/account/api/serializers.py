@@ -17,7 +17,7 @@ from account.models import Account, VendorDetails
 class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ['id', 'username', 'email', 'password', 'is_active']
+        fields = ['id', 'username', 'email', 'password', 'is_active', 'is_vendor']
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -25,7 +25,6 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data['password'] = make_password(
             validated_data.get('password'))
-        validated_data['is_active'] = False
         return super(UserRegisterSerializer, self).create(validated_data)
 
 
@@ -71,7 +70,7 @@ class RegVendorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = VendorDetails
-        fields = ['id', 'is_vendor', 'user', 'company_name', 'approve']
+        fields = ['id', 'user', 'company_name', 'approve']
 
     def create(self, validated_data):
         print('inside create fun \n\n', validated_data.get('user'))

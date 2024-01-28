@@ -9,6 +9,7 @@ import Login from '../components/auth/Login';
 import Signup from '../components/auth/Signup';
 import Authenticator from '../pages/userPartition/Authenticator';
 import axios from 'axios';
+import Header from '../components/home/Header';
 
 
 function UserWrapper() {
@@ -73,12 +74,15 @@ function UserWrapper() {
   const routes = useRoutes([
     {
       element: (
+        
         <UserRoute>
+          <Header />
           <Outlet />
         </UserRoute>
       ),
       children: [
         { element: <Home />, index: true },
+        // { element: <Map />, index: true },
       ],
     },
     {
@@ -92,14 +96,6 @@ function UserWrapper() {
         { element: <Signup />, path: "/signup" },
       ],
     },
-    // {
-    //   path: '404',
-    //   element: <div>Not Found</div>
-    // },
-    // {
-    //   path: '*',
-    //   element: <Navigate to="/admin/404" replace />,
-    // },
   ]);
 
   return routes;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import VendorRegister from "../../components/vendor/VendorRegister";
-import VendorLogin from "../../components/vendor/VendorLogin";
+import VendorRegister from "../../components/vendor/vendor_auth/VendorRegister";
+import VendorLogin from "../../components/vendor/vendor_auth/VendorLogin";
 const VendorAuth = () => {
   return (
     <div className="flex flex-col justify-center items-center w-full h-[100vh] bg-[#282D2D] px-5">

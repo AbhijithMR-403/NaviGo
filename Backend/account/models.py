@@ -37,15 +37,17 @@ class Account(AbstractBaseUser):
     name = models.CharField(max_length=60, null=True)
     username = models.CharField(max_length=30, unique=True)
     password = models.CharField(blank=True)
+    phone_number = models.CharField(blank=True, null=True)
     email = models.EmailField(max_length=254, unique=True)
     DOB = models.DateField(null=True)
     profile_img = models.ImageField(upload_to='profile_pics/', null=True)
     date_joined = models.DateTimeField(auto_now_add=True, null=True)
     last_login = models.DateTimeField(auto_now_add=True, null=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_email_verified = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
+    is_vendor = models.BooleanField(default=False)
 
     objects = CustomUserManager()
 
@@ -57,7 +59,7 @@ class Account(AbstractBaseUser):
 
 
 class VendorDetails(models.Model):
-    is_vendor = models.BooleanField(default=False)
+    # is_vendor = models.BooleanField(default=False)
     user = models.OneToOneField(
         Account, on_delete=models.CASCADE, null=True, blank=True)
     company_name = models.CharField(max_length=50, unique=True)

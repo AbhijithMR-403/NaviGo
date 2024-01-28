@@ -26,27 +26,27 @@ const icon = (name) => (
 const navConfig = [
   {
     title: 'dashboard',
-    path: '/',
+    path: '/admin',
     icon: icon('ic_analytics'),
   },
   {
     title: 'user',
-    path: '/user',
+    path: '/admin/user',
     icon: icon('ic_user'),
   },
   {
-    title: 'product',
-    path: '/products',
+    title: 'Bus Stop',
+    path: '/admin/busstop',
     icon: icon('ic_cart'),
   },
   {
-    title: 'blog',
-    path: '/blog',
+    title: 'Stop List',
+    path: '/admin/stoplist',
     icon: icon('ic_blog'),
   },
   {
-    title: 'login',
-    path: '/login',
+    title: 'Approval',
+    path: '/admin/approval',
     icon: icon('ic_lock'),
   },
   {

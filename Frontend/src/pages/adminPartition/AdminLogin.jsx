@@ -26,6 +26,7 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode'
 import { Set_Authentication } from '../../redux/authentication/AuthenticationSlice';
+import { TError } from '../../components/toastify/Toastify';
 
 
 
@@ -46,6 +47,10 @@ export default function LoginView() {
     formData.append("password", event.target.password.value);
     try {
       const res = await axios.post(API_BASE_URL+'/auth/login', formData)
+      if( ! res.data.isAdmin){
+        TError("User is not an admin")
+        return navigate('/login')
+      }
       if(res.status === 200){
         localStorage.setItem('access', res.data.access)
         localStorage.setItem('refresh', res.data.refresh)
@@ -65,7 +70,7 @@ export default function LoginView() {
       console.log(error);
       if (error.response.status===401)
       {
-       
+        TError("Account doesn't exist")
         setFormError(error.response.data)
       }
       else

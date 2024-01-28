@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from account.models import Account
+from account.models import Account, VendorDetails
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.exceptions import AuthenticationFailed, ParseError
 from django.contrib.auth import authenticate
@@ -23,30 +23,32 @@ class UserLogin(APIView):
 
         except KeyError:
             raise ParseError('All Fields Are Required')
-
         if not Account.objects.filter(email=email).exists():
-            # raise AuthenticationFailed('Invalid Email Address')
-            return Response({'error': 'Email Does Not Exist'}, status=status.HTTP_401_UNAUTHORIZED)
+            print('yoooooooo')
+            return Response({'error': 'Email Does Not Exist'},
+                            status=status.HTTP_401_UNAUTHORIZED)
 
         if not Account.objects.filter(email=email, is_active=True).exists():
-            raise AuthenticationFailed(
-                'You are blocked by admin ! Please contact admin')
+            return Response({'error': 'Incorrect Email'}, status=status.HTTP_403_FORBIDDEN)
 
         user = authenticate(username=email, password=password)
         if user is None:
             raise AuthenticationFailed('Invalid Password')
-
+        vendor = VendorDetails.objects.filter(user=user)
         refresh = RefreshToken.for_user(user)
-        print(request.data)
-
+        vendor_active = False
+        if vendor.exists():
+            vendor_active = vendor[0].approve
+        refresh["is_vendor"] = str(user.is_vendor)
         refresh["name"] = str(user.username)
         refresh["is_admin"] = str(user.is_superuser)
-        refresh["is_vendor"] = False
 
         content = {
             'refresh': str(refresh),
             'access': str(refresh.access_token),
             'isAdmin': user.is_superuser,
+            "is_vendor": user.is_vendor,
+            "is_vendor_active": vendor_active
         }
         print(content)
         return Response(content, status=status.HTTP_200_OK)
@@ -79,12 +81,27 @@ class LogoutView(APIView):
 
 class RegisterView(APIView):
     def post(self, request):
+        request.data['is_active'] = True
         serializer = UserRegisterSerializer(data=request.data)
-        print(serializer)
         if serializer.is_valid():
             serializer.save()
-            print(serializer.data)
-            random_num = random.randint(1000, 9999)
+
+        else:
+            return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE,)
+        # serializer.is_valid(raise_exception=True)
+        # serializer.save()
+
+        content = {'Message': 'User Registered Successfully',
+                   "username": serializer.data['email']
+                   }
+        return Response(content, status=status.HTTP_201_CREATED,)
+
+
+class Send_OTP(APIView):
+    def get(self, request):
+        print('yoo you reach here man')
+        random_num = random.randint(1000, 9999)
+        try:
             send_mail(
                 "OTP AUTHENTICATING NaviGO",
                 f"{random_num} -OTP",
@@ -92,33 +109,44 @@ class RegisterView(APIView):
                 [request.data['email']],
                 fail_silently=False,
             )
+            context = {
+                "Message": "OTP send",
+                "OTP": str(random_num)
+            }
+            return Response(context, status=status.HTTP_200_OK)
+        except:
+            return Response({"Message": "Unknown error"}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+
+class GoogleRegisterView(APIView):
+    def post(self, request):
+        serializer = UserRegisterSerializer(data=request.data)
+        if Account.objects.filter(email=request.data['email']).exists():
+            return Response({'Message': 'email already exist'}, status=status.HTTP_409_CONFLICT)
+
+        print(serializer)
+        if serializer.is_valid():
+            serializer.save()
+            send_mail(
+                "NaviGO",
+                "Welcome \n Start you destination plan",
+                "luttapimalayali@gmail.com",
+                [request.data['email']],
+                fail_silently=False,
+            )
         else:
-            return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE,)
-        # serializer.is_valid(raise_exception=True)
-        # serializer.save()
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
 
         content = {'Message': 'User Registered Successfully',
-                   "otp": random_num,
                    "username": serializer.data['username']
                    }
         return Response(content, status=status.HTTP_201_CREATED,)
-
-    # def get(self, request, name):
-    #     user = Account.objects.get(username=name)
-    #     random_num = random.randint(1000, 9999)
-    #     send_mail(
-    #             "OTP AUTHENTICATING NaviGO",
-    #             f"{random_num} -OTP",
-    #             "luttapimalayali@gmail.com",
-    #             [user.email],
-    #             fail_silently=False,
-    #         )
 
 
 class OtpVerify(APIView):
     def put(self, request):
         uname = request.data['uname']
-        print("hereeeeeeee\n\n", uname)
         try:
             user = Account.objects.get(username=uname)
         except Account.DoesNotExist:
@@ -150,14 +178,21 @@ class UserDetails(APIView):
 class VendorRegister(APIView):
 
     def post(self, request):
+        # request.data['is_vendor'] = True
+
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
 
         print(serializer.data)
-        user = Account.objects.get(email=serializer.data['email'])
+        try:
+            user= Account.objects.get(
+                email=serializer.data['email'])
+        except:
+            print(serializer.errors)
+            return Response({'error': 'Email Does Not Exist'},
+                            status=status.HTTP_401_UNAUTHORIZED)
         request.data['user'] = user.id
-        request.data['is_vendor'] = True
         print(request.data)
 
         vendor_serializer = RegVendorSerializer(data=request.data)
@@ -166,8 +201,9 @@ class VendorRegister(APIView):
             print(vendor_serializer)
             vendor_serializer.save()
         else:
+            print(vendor_serializer.errors)
             return Response(vendor_serializer.errors,
                             status=status.HTTP_406_NOT_ACCEPTABLE)
         print(vendor_serializer)
-        content = {'Message': 'User Registered Successfully'}
+        content = {'error': 'User Registered Successfully'}
         return Response(content, status=status.HTTP_201_CREATED,)

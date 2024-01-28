@@ -1,17 +1,19 @@
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Dialog } from '@headlessui/react'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const navigation = [
-  { name: 'Product', href: '#' },
+  { name: 'Map', href: '/user/map' },
   { name: 'Features', href: '#' },
-  { name: 'Marketplace', href: '#' },
-  { name: 'Company', href: '#' },
+  { name: 'Buses', href: '#' },
+  { name: 'upcoming', href: '#' },
 ]
 
 
 function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const navigate = useNavigate()
   const logout = () =>{
     localStorage.removeItem("access");
     window.location.reload();
@@ -45,7 +47,7 @@ function Header() {
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
           {navigation.map((item) => (
-              <a key={item.name} href={item.href} className="text-sm font-semibold leading-6 text-gray-900">
+              <a key={item.name} onClick={()=>navigate(`${item.href}`)} className="text-sm font-semibold leading-6 text-gray-900">
                 {item.name}
               </a>
             ))}
