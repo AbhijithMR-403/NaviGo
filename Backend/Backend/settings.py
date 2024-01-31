@@ -42,11 +42,10 @@ INSTALLED_APPS = [
     'bus',
     'admin_management',
     'account',
-
+    'rest_framework_simplejwt.token_blacklist',
 
     'corsheaders',
     'rest_framework',
-    'rest_framework_simplejwt.token_blacklist'
 ]
 
 MIDDLEWARE = [

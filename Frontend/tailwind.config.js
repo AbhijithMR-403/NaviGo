@@ -3,10 +3,13 @@ module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{html,jsx}",
+    // 'node_modules/flowbite-react/lib/esm/**/*.js'
     // './components/**/*.{html,js}',
   ],
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    // require('flowbite/plugin')
+  ],
 }

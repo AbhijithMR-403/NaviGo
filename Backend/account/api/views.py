@@ -6,8 +6,9 @@ from account.models import Account, VendorDetails
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.exceptions import AuthenticationFailed, ParseError
 from django.contrib.auth import authenticate
-from .serializers import UserRegisterSerializer, UserSerializer, RegVendorSerializer
+from .serializers import UserRegisterSerializer, UserSerializer, RegVendorSerializer, VendorDetailSerializer
 import random
+from rest_framework import generics
 from django.core.mail import send_mail
 
 
@@ -39,7 +40,7 @@ class UserLogin(APIView):
         vendor_active = False
         if vendor.exists():
             vendor_active = vendor[0].approve
-        refresh["is_vendor"] = str(user.is_vendor)
+        refresh["is_vendor"] = user.is_vendor
         refresh["name"] = str(user.username)
         refresh["is_admin"] = str(user.is_superuser)
 
@@ -81,25 +82,41 @@ class LogoutView(APIView):
 
 class RegisterView(APIView):
     def post(self, request):
-        request.data['is_active'] = True
+        # request.data['is_active'] = True
+        print(request.POST['email'])
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-
+            try:
+                random_num = random.randint(1000, 9999)
+                send_mail(
+                    "OTP AUTHENTICATING NaviGO",
+                    f"{random_num} -OTP",
+                    "luttapimalayali@gmail.com",
+                    [request.POST['email']],
+                    fail_silently=False,
+                )
+            except:
+                return Response({"Message": "Unknown error"})
         else:
-            return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE,)
-        # serializer.is_valid(raise_exception=True)
-        # serializer.save()
+            print('am here man', serializer['is_active'].value)
+            is_active = False
+            content = {
+                'message': 'Registration failed',
+                'errors': serializer.errors,
+                'is_active': is_active
+            }
+            return Response(content, status=status.HTTP_409_CONFLICT)
 
-        content = {'Message': 'User Registered Successfully',
-                   "username": serializer.data['email']
+        content = {"Message": "OTP send",
+                   "OTP": str(random_num), "username": serializer.data['email']
                    }
-        return Response(content, status=status.HTTP_201_CREATED,)
+        return Response(content, status=status.HTTP_201_CREATED)
 
 
 class Send_OTP(APIView):
-    def get(self, request):
-        print('yoo you reach here man')
+    def post(self, request):
+        print('yoo you reach here man', request.data['email'])
         random_num = random.randint(1000, 9999)
         try:
             send_mail(
@@ -146,16 +163,17 @@ class GoogleRegisterView(APIView):
 
 class OtpVerify(APIView):
     def put(self, request):
+        print(request.data)
+        print(request.data['uname'])
         uname = request.data['uname']
         try:
-            user = Account.objects.get(username=uname)
+            user = Account.objects.get(email=uname)
         except Account.DoesNotExist:
             return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        user = Account.objects.get(username=uname)
+        # user = Account.objects.get(username=uname)
         user.is_active = True
         user.save()
-        print(user)
 
         content = {
             'message': 'User is activated',
@@ -186,7 +204,7 @@ class VendorRegister(APIView):
 
         print(serializer.data)
         try:
-            user= Account.objects.get(
+            user = Account.objects.get(
                 email=serializer.data['email'])
         except:
             print(serializer.errors)
@@ -205,5 +223,11 @@ class VendorRegister(APIView):
             return Response(vendor_serializer.errors,
                             status=status.HTTP_406_NOT_ACCEPTABLE)
         print(vendor_serializer)
-        content = {'error': 'User Registered Successfully'}
+        content = {'message': 'User Registered Successfully'}
         return Response(content, status=status.HTTP_201_CREATED,)
+
+
+class vendorDetailsApi(generics.RetrieveAPIView):
+    queryset = VendorDetails.objects.all()
+    serializer_class = VendorDetailSerializer
+    lookup_field = 'user'

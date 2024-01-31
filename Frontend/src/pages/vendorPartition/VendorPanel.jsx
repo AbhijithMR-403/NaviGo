@@ -1,7 +1,7 @@
 import React from 'react'
 import VendorNav from '../../components/vendor/navbar/VendorNav'
 
-function AdminPanel({children}) {
+function VendorPanel({children}) {
   return (
     
     <>
@@ -11,4 +11,4 @@ function AdminPanel({children}) {
   )
 }
 
-export default AdminPanel
+export default VendorPanel

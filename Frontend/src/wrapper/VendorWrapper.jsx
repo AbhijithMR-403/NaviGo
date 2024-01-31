@@ -2,8 +2,9 @@ import React from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom';
 import Approval from '../components/vendor/vendor_auth/Approval';
 import VendorAuth from '../pages/vendorPartition/Authentication';
-import VendorHome from '../pages/vendorPartition/AdminPanel';
-import AdminPanel from '../pages/vendorPartition/AdminPanel';
+// import VendorHome from '../pages/vendorPartition/VendorPanel';
+import VendorPanel from '../pages/vendorPartition/VendorPanel';
+import VendorRoute from '../routes/VendorRouter';
 
 function VendorWrapper() {
 
@@ -11,9 +12,12 @@ function VendorWrapper() {
     {
       element: (
         <>
-          <AdminPanel>
-            <Outlet />
-          </AdminPanel>
+          <VendorRoute>
+            <VendorPanel>
+              <Outlet />
+            </VendorPanel>
+          </VendorRoute>
+
         </>
       ),
       children: [
@@ -26,7 +30,7 @@ function VendorWrapper() {
     },
     {
       path: '/wating',
-      element: <Approval />,
+      element: <VendorRoute><Approval /></VendorRoute>,
     },
 
     {

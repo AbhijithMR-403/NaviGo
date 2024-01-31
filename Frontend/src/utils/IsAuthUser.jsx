@@ -14,6 +14,7 @@ const updateUserToken = async ()=>{
           localStorage.setItem('access', res.data.access)
           localStorage.setItem('refresh', res.data.refresh)
           let decoded = jwtDecode(res.data.access);
+          console.log('decode', decoded)
           return {'name':decoded.name,isAuthenticated:true,is_vendor:false}
         }
         else
@@ -39,12 +40,11 @@ const IsAuthUser = async () => {
     const currentTime = Date.now() / 1000;
     let decoded = jwtDecode(accessToken);
     if (decoded.exp > currentTime) {
-        return {'name':decoded.name, isAuthenticated:true}
+        return {'name':decoded.name, isAuthenticated:true, is_vendor:decoded.is_vendor};
       } else {
         
         const updateSuccess = await updateUserToken();
         return updateSuccess;
       }
-
 }
 export default IsAuthUser ;

@@ -5,8 +5,10 @@ import { API_BASE_URL } from '../../../constant/api';
 import { Set_Authentication } from '../../../redux/authentication/AuthenticationSlice';
 import { jwtDecode } from 'jwt-decode';
 import { TError, TInfo, TSuccess, TWarning } from '../../toastify/Toastify';
+import { useDispatch } from 'react-redux';
 
 function VendorLogin() {
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('')
@@ -40,13 +42,14 @@ function VendorLogin() {
                         isvendor: res.data.is_vendor
                     })
                 );
-                TSuccess("You have successfully login")
-                navigate('/vendor/')
-                return res
             }
+            TSuccess("You have successfully login")
+            navigate('/vendor/')
+            return res
         }
         catch (error) {
-            TError(error.response.data.error)
+            console.log('error\n\n', error);
+            TError(error)
         }
         }
 
