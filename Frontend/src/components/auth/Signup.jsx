@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import InputField from './elements/inputField'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
-import { API_BASE_URL, GOOGLE_AUTH_API } from '../../constant/api'
+import { API_BASE_URL } from '../../constant/api'
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode'

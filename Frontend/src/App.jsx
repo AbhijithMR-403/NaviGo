@@ -5,7 +5,6 @@ import { Provider } from "react-redux";
 // import Home from './pages/userPartition/Home';
 import UserWrapper from './wrapper/UserWrapper';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { GOOGLE_AUTH_API } from './constant/api';
 import AdminWrapper from './wrapper/AdminWrapper';
 import VendorWrapper from './wrapper/VendorWrapper';
 import { ToastContainer } from 'react-toastify';
@@ -13,9 +12,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import reduxStore from './redux/reduxStore';
 
 function App() {
+  console.log(import.meta.env.VITE_GOOGLE_AUTH_API);
   return (
     <Provider store={reduxStore}>
-      <GoogleOAuthProvider clientId={GOOGLE_AUTH_API}>
+      <GoogleOAuthProvider clientId={ import.meta.env.VITE_GOOGLE_AUTH_API }>
 
         <ToastContainer
           position="top-center"

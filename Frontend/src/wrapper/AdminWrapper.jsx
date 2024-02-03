@@ -16,6 +16,7 @@ import axios from 'axios';
 import BusStop from '../components/admin/view/busStop';
 import StopList from '../components/admin/view/StopList';
 import Approval from '../components/admin/view/Approval';
+import AdminAuthRouter from '../routes/AdminAuthRouter';
 
 function AdminWrapper() {
 
@@ -85,7 +86,7 @@ function AdminWrapper() {
     },
     {
       path: 'login',
-      element: <Loginpage />,
+      element: <AdminAuthRouter> <Loginpage /> </AdminAuthRouter>, 
     },
     {
       path: '404',

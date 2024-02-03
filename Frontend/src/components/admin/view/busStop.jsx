@@ -1,33 +1,33 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { API_BASE_URL, GOOGLE_MAP_API } from '../../../constant/api';
+import { API_BASE_URL } from '../../../constant/api';
+// import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";
-import {
-  APIProvider,
-  Map,
-  AdvancedMarker,
-  Pin,
-  useAutocomplete,
-  InfoWindow,
-} from "@vis.gl/react-google-maps";
+import { Autocomplete, GoogleMap, MarkerF, useJsApiLoader } from '@react-google-maps/api';
 import axios from 'axios';
 import { TError, TSuccess } from '../../toastify/Toastify';
-
+const places = ["places"]
 
 function BusStop() {
-  
+
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: `${import.meta.env.VITE_GOOGLE_MAP_API}`,
+    libraries: places
+  })
+
   const center = {
     lat: 9.2905715,
     lng: 76.6337262,
   };
   const [Point, setPoint] = useState(null)
   const [stopName, setstopName] = useState('')
-  useEffect(()=>{
+  useEffect(() => {
     console.log('\n check this out\n');
     console.log(Point);
-  },[Point])
+  }, [Point])
 
   const handleRouteSubmit = async () => {
     if (!Point) {
@@ -49,50 +49,107 @@ function BusStop() {
 
     }).catch((err) => { TError("Something went wrong! Please try again.") })
   }
-  
+
+  const [map, setMap] = useState(null)
+
+  const setCoordinate = (event) => {
+    console.log(event);
+    setPoint({
+      lat: event.latLng.lat(),
+      lng: event.latLng.lng()
+    })
+  }
+
+
+//  ? For Searching purpose
+
+const [searchResult, setSearchResult] = useState("Result: none");
+
+  function onLoad(autocomplete) {
+    setSearchResult(autocomplete);
+  }
+
+  function onPlaceChanged() {
+    console.log(searchResult);
+    if (searchResult != null) {
+      const place = searchResult.getPlace();
+      const name = place.name;
+      const status = place.business_status;
+      const formattedAddress = place.formatted_address;
+      // console.log(place);
+      getGeocode({ address: name }).then((results) => {
+        const { lat, lng } = getLatLng(results[0]);
+        setPoint({lat, lng})
+        console.log("📍 Coordinates: ", { lat, lng });
+      }).catch((err)=>console.log(err))
+
+      console.log(`Name: ${name}`);
+      console.log(`Business Status: ${status}`);
+      console.log(`Formatted Address: ${formattedAddress}`);
+    } else {
+      alert("Please enter text");
+    }
+  }
+
+  // if (!isLoaded) {
+  //   return <div>Loading...</div>;
+  // }
+
+
+
+
   return (
     <>
-      <form action="" method="post">
-        <div className='p-10'>
+      <form>
+        <div className='p-10 w-full'>
           <div class="mb-4">
             <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
-              Stop name 
+              Stop name
             </label>
             <input value={stopName} onChange={(e) => setstopName(e.target.value)} class="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" />
           </div>
           <div>
 
           </div>
+          {isLoaded ? (
+            <>
+              <div id="searchColumn ">
+                <h2>Tide Forecast Options</h2>
+                <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
+                  <input
+                    type="text"
+                    placeholder="Search for Tide Information"
+                    style={{
+                      boxSizing: `border-box`,
+                      border: `1px solid transparent`,
+                      width: `240px`,
+                      height: `32px`,
+                      padding: `0 12px`,
+                      borderRadius: `3px`,
+                      boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+                      fontSize: `14px`,
+                      outline: `none`,
+                      textOverflow: `ellipses`
+                    }}
+                  />
+                </Autocomplete>
+              </div>
 
-          <APIProvider apiKey={GOOGLE_MAP_API} libraries={['places']} >
-          <label class="block text-gray-700 text-sm font-bold mb-2 mt-9" for="username">
-              Stop Location
-            </label>
-            <div className='text-center mb-6'>
-            <AutoComplete setPoint={setPoint} />
-            </div>
-            <div className='w-100 h-80' >
+              <GoogleMap
+                mapContainerStyle={{
+                  width: 'Auto',
+                  height: '400px'
+                }}
+                onClick={setCoordinate}
+                center={Point ? Point : center}
 
-              <Map zoom={16} center={Point?Point:center} mapId={'7eded6b9224bb80'} onClick={(e) => {
-                console.log(e.detail.latLng.lat);
-                setPoint({ lat: e.detail ? e.detail.latLng.lat : null, lng: e.detail ? e.detail.latLng.lng : null })
-              }}>
+                zoom={10}
+              >
 
-{/* <Marker position={{ lat: Point ? Point.lat : 51.5074, lng: Point ? Point.lng : -0.1278 }} */}
-                <AdvancedMarker position={Point} >
-                </AdvancedMarker>
-
-                {/* {open && (
-            <InfoWindow position={center} onCloseClick={() => setOpen(false)}>
-              <p>I'm in Hamburg</p>
-            </InfoWindow>
-          )} */}
-              </Map>
-              <button onClick={handleRouteSubmit} class="mt-10 flex-shrink-0 bg-red-500 hover:bg-red-700 border-red-600 hover:border-red-900 text-sm border-4 text-white py-1 px-2 rounded" type="button">
-                Add Stop
-              </button>
-            </div>
-          </APIProvider>
+                {Point && <MarkerF position={Point} />}
+              </GoogleMap>
+            </>
+          ) : <></>}
         </div>
 
       </form>
@@ -104,56 +161,3 @@ function BusStop() {
 export default BusStop
 
 
-
-const AutoComplete = ({setPoint}) => {
-  const inputRef = useRef(null);
-  const [inputValue, setInputValue] = useState('');
-  useEffect(() => {
-    console.log(inputValue);
-    handleSelect(inputValue)
-  },[inputValue])
-
-
-
-  const onPlaceChanged = place => {
-    // console.log('asdasd', place);
-    if (place) {
-      setInputValue(place.formatted_address || place.name);
-        }
-
-    // Keep focus on input element
-    inputRef.current && inputRef.current.focus();
-  };
-
-
-  useAutocomplete({
-    inputField: inputRef && inputRef.current,
-    onPlaceChanged
-  });
-
-  const handleSelect = async (address) => {
-    // setValue(address, false);
-    // clearSuggestions();
-
-    const results = await getGeocode({ address });
-    const { lat, lng } = await getLatLng(results[0]);
-    console.log({ lat, lng });
-    setPoint({ lat, lng });
-  };
-
-  const handleInputChange = event => {
-    setInputValue(event.target.value);
-  };
-
-  return (
-    // <input ref={inputRef} value={inputValue} onChange={handleInputChange} />
-    <div class="relative">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-            </svg>
-        </div>
-        <input ref={inputRef} value={inputValue} onChange={handleInputChange} type="search" id="default-search" class="block w-1/2 p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-200 dark:border-gray-400 dark:placeholder-gray-800 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Mockups, Logos..." />
-    </div>
-  );
-};

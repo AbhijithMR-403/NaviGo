@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.exceptions import ValidationError
 # Create your models here.
 
 
@@ -27,6 +27,17 @@ class connected_route(models.Model):
         BusStop, on_delete=models.CASCADE, related_name='stop2')
     distance = models.FloatField(blank=True, null=True)
     time = models.TimeField(blank=True, null=True)
+
+    def clean(self):
+        # Taking the count of stop and shall raise a error if a bus stop have more than 4 connection
+        count_stop1 = connected_route.objects.filter(
+            bus_stop_1=self.bus_stop_1).count()
+        count_stop2 = connected_route.objects.filter(
+            bus_stop_2=self.bus_stop_2).count()
+        
+        if count_stop1 + count_stop2 > 4:
+            raise ValidationError('Only 4 connections allowed.')
+
 
 
 # class Route(models.Model):
