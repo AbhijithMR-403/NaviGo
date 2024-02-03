@@ -51,7 +51,7 @@ function VendorLogin() {
             console.log('error\n\n', error);
             TError(error)
         }
-        }
+    }
 
     
     const [darkMode, setDarkMode] = useState(false);

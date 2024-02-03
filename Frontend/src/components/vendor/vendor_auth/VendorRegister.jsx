@@ -17,6 +17,8 @@ function VendorRegister() {
     const [confirmPassword, setconfirmPassword] = useState('')
     const [company, setcompany] = useState('')
     const [phone, setphone] = useState('')
+    const [file, setFile] = useState([]);
+
     const navigate = useNavigate()
 
     const handleRegSubmit = async (event) => {
@@ -60,7 +62,7 @@ function VendorRegister() {
             ).catch((err) => console.log(err))
         }
     }
-    const RegisterUser = async() => {
+    const RegisterUser = async(event) => {
         event.preventDefault()
         if (OtpTyped ==  OtpVerify){
         const formData = {
@@ -70,6 +72,7 @@ function VendorRegister() {
             'password': password,
             'phone': phone,
             'company_name': company,
+            'identify_img': file,
             'is_vendor': true,
             'is_active': true
         }
@@ -87,7 +90,7 @@ function VendorRegister() {
 
 
 
-    const [file, setFile] = useState([]);
+    // Store the validation Documentation image
     function handleChange(e) {
         console.log(e.target.files);
         setFile(URL.createObjectURL(e.target.files[0]));

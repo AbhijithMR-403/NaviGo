@@ -46,7 +46,8 @@ class UserSerializer(serializers.ModelSerializer):
 class VendorDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = VendorDetails
-        fields = ['id', 'user', 'company_name', 'approve']
+        fields = '__all__'
+        # fields = ['id', 'user', 'company_name', 'approve']
 
 
 class RegVendorSerializer(serializers.ModelSerializer):

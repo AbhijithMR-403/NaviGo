@@ -61,9 +61,9 @@ function BusStop() {
   }
 
 
-//  ? For Searching purpose
+  //  ? For Searching purpose
 
-const [searchResult, setSearchResult] = useState("Result: none");
+  const [searchResult, setSearchResult] = useState("Result: none");
 
   function onLoad(autocomplete) {
     setSearchResult(autocomplete);
@@ -79,9 +79,9 @@ const [searchResult, setSearchResult] = useState("Result: none");
       // console.log(place);
       getGeocode({ address: name }).then((results) => {
         const { lat, lng } = getLatLng(results[0]);
-        setPoint({lat, lng})
+        setPoint({ lat, lng })
         console.log("📍 Coordinates: ", { lat, lng });
-      }).catch((err)=>console.log(err))
+      }).catch((err) => console.log(err))
 
       console.log(`Name: ${name}`);
       console.log(`Business Status: ${status}`);
@@ -150,6 +150,10 @@ const [searchResult, setSearchResult] = useState("Result: none");
               </GoogleMap>
             </>
           ) : <></>}
+
+          <button onClick={handleRouteSubmit} class="mt-10 flex-shrink-0 bg-red-500 hover:bg-red-700 border-red-600 hover:border-red-900 text-sm border-4 text-white py-1 px-2 rounded" type="button">
+            Add Stop
+          </button>
         </div>
 
       </form>
