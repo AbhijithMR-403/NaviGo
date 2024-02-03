@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
-from django.utils.translation import gettext as _
+# from django.utils.translation import gettext as _
 
 
 class CustomUserManager(BaseUserManager):
@@ -40,7 +40,7 @@ class Account(AbstractBaseUser):
     phone_number = models.CharField(blank=True, null=True)
     email = models.EmailField(max_length=254, unique=True)
     DOB = models.DateField(null=True)
-    profile_img = models.ImageField(upload_to='profile_pics/', null=True)
+    profile_img = models.ImageField(upload_to='user/profile_pics/', null=True)
     date_joined = models.DateTimeField(auto_now_add=True, null=True)
     last_login = models.DateTimeField(auto_now_add=True, null=True)
     is_active = models.BooleanField(default=False)
@@ -62,5 +62,11 @@ class VendorDetails(models.Model):
     # is_vendor = models.BooleanField(default=False)
     user = models.OneToOneField(
         Account, on_delete=models.CASCADE, null=True, blank=True)
+    identify_img = models.ImageField(upload_to='vendor/identify/', null=True)
     company_name = models.CharField(max_length=50, unique=True)
     approve = models.BooleanField(default=False)
+    address = models.CharField(max_length=150, null=True)
+    city = models.CharField(max_length=50, null=True)
+    state = models.CharField(max_length=50, null=True)
+    country = models.CharField(max_length=50, null=True)
+    pincode = models.IntegerField(null=True)

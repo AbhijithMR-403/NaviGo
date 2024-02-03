@@ -1,4 +1,9 @@
 
+
+
+// ! Not in use
+
+
 import React, { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom';
 import IsAuthUser from '../utils/IsAuthUser';
@@ -28,11 +33,11 @@ function VendorRoute({ children }) {
     return <Loader />
   }
 
-  if (!isAuthenticated) {
+  if (isAuthenticated && isVendor) {
     // If not authenticated, redirect to login page with the return URL
-    return <Navigate to="login" />;
+    return <Navigate to="/vendor" />;
   }
-  if (!isVendor){
+  if (isAuthenticated && !isVendor){
     return <Navigate to='wating' />
   }
 

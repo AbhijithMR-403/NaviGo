@@ -29,14 +29,9 @@ function AdminRouter({ children }) {
     return <Loader />
   }
 
-  if(!isAuthenticated.is_authenticated)
+  if(isAuthenticated.is_authenticated)
   {
-    return <Navigate to="/admin/login" />;
-  }
-
-  if ((!isAuthenticated.is_admin)) {
-    // If not authenticated, redirect to login page with the return URL
-    return <Navigate to="/login" />;
+    return <Navigate to="/admin/" />;
   }
 
   // If authenticated, render the child components

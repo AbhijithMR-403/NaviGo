@@ -9,7 +9,8 @@ import Login from '../components/auth/Login';
 import Signup from '../components/auth/Signup';
 import Authenticator from '../pages/userPartition/Authenticator';
 import axios from 'axios';
-import Header from '../components/home/Header';
+import Header from '../components/user/Header';
+import UserMap from '../pages/userPartition/UserMap';
 
 
 function UserWrapper() {
@@ -69,26 +70,28 @@ function UserWrapper() {
   }, [authentication_user])
 
 
-  
+
 
   const routes = useRoutes([
     {
       element: (
+        <>
         
-        <UserRoute>
           <Header />
           <Outlet />
-        </UserRoute>
+        </>
       ),
       children: [
         { element: <Home />, index: true },
-        // { element: <Map />, index: true },
+        { element: <UserMap />, path: '/map' },
       ],
     },
     {
       element: (
         <Authenticator >
-          <Outlet />
+          <UserRoute>
+            <Outlet />
+          </UserRoute>
         </Authenticator>
       ),
       children: [

@@ -23,3 +23,8 @@ class VendorApproval(generics.ListCreateAPIView):
     queryset = VendorDetails.objects.select_related('user').all()
     serializer_class = VendorDetailsSerializer
 
+
+class vendorDetailsUpdateApi(generics.RetrieveUpdateAPIView):
+    queryset = VendorDetails.objects.all()
+    serializer_class = VendorDetailsSerializer
+    lookup_field = 'user'

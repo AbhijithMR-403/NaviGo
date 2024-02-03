@@ -15,6 +15,8 @@ import { Set_Authentication } from '../redux/authentication/AuthenticationSlice'
 import axios from 'axios';
 import BusStop from '../components/admin/view/busStop';
 import StopList from '../components/admin/view/StopList';
+import Approval from '../components/admin/view/Approval';
+import AdminAuthRouter from '../routes/AdminAuthRouter';
 
 function AdminWrapper() {
 
@@ -78,12 +80,13 @@ function AdminWrapper() {
         { element: <UserManagement />, path:'/user' },
         { element: <BusStop />, path:'/busstop' },
         { element: <StopList />, path:'/stoplist' },
+        { element: <Approval />, path:"/approval" },
 
       ],
     },
     {
       path: 'login',
-      element: <Loginpage />,
+      element: <AdminAuthRouter> <Loginpage /> </AdminAuthRouter>, 
     },
     {
       path: '404',

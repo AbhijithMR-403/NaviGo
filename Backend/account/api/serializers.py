@@ -17,7 +17,8 @@ from account.models import Account, VendorDetails
 class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ['id', 'username', 'email', 'password', 'is_active', 'is_vendor']
+        fields = ['id', 'username', 'email',
+                  'password', 'is_active', 'is_vendor']
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -42,29 +43,11 @@ class UserSerializer(serializers.ModelSerializer):
         exclude = ('password',)
 
 
-# class LoginVendorSerialzer(serializers.ModelSerializer):
-#     is_vendor = serializers.BooleanField()
-#     user = serializers.PrimaryKeyRelatedField(queryset=Account.objects.all())
-#     company_name = serializers.CharField(max_length=50)
-#     approve = serializers.BooleanField()
+class VendorDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VendorDetails
+        fields = ['id', 'user', 'company_name', 'approve']
 
-#     class Meta:
-#         model = Account
-#         fields = ['id', 'first_name', 'phone_number', 'email', 'password']
-#         extra_kwargs = {
-#             'password': {'write_only': True}
-#         }
-
-#     def create(self, validated_data):
-#         password = validated_data.pop('password', None)
-#         instance = self.Meta.model(**validated_data)
-#         if password is not None:
-#             instance.set_password(password)
-#             instance.save()
-#             return instance
-#         else:
-#             raise serializers.ValidationError(
-#                 {"password": "password is not valid"})
 
 class RegVendorSerializer(serializers.ModelSerializer):
 
