@@ -193,41 +193,49 @@ class UserDetails(APIView):
         return Response(content)
 
 
-class VendorRegister(APIView):
+# class VendorRegister(APIView):
+    
+#     def post(self, request):
+#         # request.data['is_vendor'] = True
 
-    def post(self, request):
-        # request.data['is_vendor'] = True
+#         serializer = UserRegisterSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
 
-        serializer = UserRegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
+#         print(serializer.data)
+#         try:
+#             user = Account.objects.get(
+#                 email=serializer.data['email'])
+#         except:
+#             print(serializer.errors)
+#             return Response({'error': 'Email Does Not Exist'},
+#                             status=status.HTTP_401_UNAUTHORIZED)
+#         request.data['user'] = user.id
+#         print(request.data)
 
-        print(serializer.data)
-        try:
-            user = Account.objects.get(
-                email=serializer.data['email'])
-        except:
-            print(serializer.errors)
-            return Response({'error': 'Email Does Not Exist'},
-                            status=status.HTTP_401_UNAUTHORIZED)
-        request.data['user'] = user.id
-        print(request.data)
+#         vendor_serializer = RegVendorSerializer(data=request.data)
 
-        vendor_serializer = RegVendorSerializer(data=request.data)
-
-        if vendor_serializer.is_valid():
-            print(vendor_serializer)
-            vendor_serializer.save()
-        else:
-            print(vendor_serializer.errors)
-            return Response(vendor_serializer.errors,
-                            status=status.HTTP_406_NOT_ACCEPTABLE)
-        print(vendor_serializer)
-        content = {'message': 'User Registered Successfully'}
-        return Response(content, status=status.HTTP_201_CREATED,)
+#         if vendor_serializer.is_valid():
+#             print(vendor_serializer)
+#             vendor_serializer.save()
+#         else:
+#             print(vendor_serializer.errors)
+#             return Response(vendor_serializer.errors,
+#                             status=status.HTTP_406_NOT_ACCEPTABLE)
+#         print(vendor_serializer)
+#         content = {'message': 'User Registered Successfully'}
+#         return Response(content, status=status.HTTP_201_CREATED,)
 
 
 class vendorDetailsApi(generics.RetrieveAPIView):
     queryset = VendorDetails.objects.all()
     serializer_class = VendorDetailSerializer
     lookup_field = 'user'
+
+
+
+class VendorRegister(generics.ListCreateAPIView):
+
+    queryset = VendorDetails.objects.all()
+    serializer_class = RegVendorSerializer
+    

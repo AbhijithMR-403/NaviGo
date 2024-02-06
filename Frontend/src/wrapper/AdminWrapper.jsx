@@ -17,6 +17,8 @@ import BusStop from '../components/admin/view/busStop';
 import StopList from '../components/admin/view/StopList';
 import Approval from '../components/admin/view/Approval';
 import AdminAuthRouter from '../routes/AdminAuthRouter';
+import DirectionsMap from '../utils/maps/DirectionsMap';
+import { useLoadScript } from '@react-google-maps/api';
 
 function AdminWrapper() {
 
@@ -36,22 +38,7 @@ function AdminWrapper() {
         })
       );
 
-      // if (isAuthenticated.isAuthenticated) {
-      //   const res = await axios.get(API_BASE_URL + '/auth/details', {
-      //     headers: {
-      //       Authorization: `Bearer ${token}`,
-      //       Accept: 'application/json',
-      //       'Content-Type': 'application/json',
-      //     },
-      //   });
 
-      //   dispatch(
-      //     set_user_basic_details({
-      //       name: res.data.first_name,
-      //       profile_pic: res.data.profile_pic,
-      //     })
-      //   );
-      // }
     } catch (error) {
       console.log(error);
     }
@@ -62,6 +49,17 @@ function AdminWrapper() {
       checkAuthAndFetchUserData();
     }
   }, []);
+
+
+  // const libraries = ['places']
+
+  // const { isLoaded, loadError } = useLoadScript({
+  //   googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAP_API,
+  //   libraries,
+  // });
+
+  // if(loadError) return 'Error loading maps';
+  // if(!isLoaded) return 'Loading Maps';
 
 
   const routes = useRoutes([
@@ -77,16 +75,22 @@ function AdminWrapper() {
       ),
       children: [
         { element: <Dashboard />, index: true },
-        { element: <UserManagement />, path:'/user' },
-        { element: <BusStop />, path:'/busstop' },
-        { element: <StopList />, path:'/stoplist' },
-        { element: <Approval />, path:"/approval" },
+        { element: <UserManagement />, path: '/user' },
+        { element: <BusStop />, path: '/busstop' },
+        { element: <StopList />, path: '/stoplist' },
+        { element: <Approval />, path: "/approval" },
+        // {
+        //   element: <DirectionsMap
+        //   origin={origin} 
+        //   destination={destination}
+        // />, path: "/map"
+        // },
 
       ],
     },
     {
       path: 'login',
-      element: <AdminAuthRouter> <Loginpage /> </AdminAuthRouter>, 
+      element: <AdminAuthRouter> <Loginpage /> </AdminAuthRouter>,
     },
     {
       path: '404',
