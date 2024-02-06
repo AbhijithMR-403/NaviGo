@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { API_BASE_URL } from '../../../constant/api';
-// import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import usePlacesAutocomplete, {
+import {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";
@@ -25,7 +24,6 @@ function BusStop() {
   const [Point, setPoint] = useState(null)
   const [stopName, setstopName] = useState('')
   useEffect(() => {
-    console.log('\n check this out\n');
     console.log(Point);
   }, [Point])
 
@@ -50,10 +48,8 @@ function BusStop() {
     }).catch((err) => { TError("Something went wrong! Please try again.") })
   }
 
-  const [map, setMap] = useState(null)
 
   const setCoordinate = (event) => {
-    console.log(event);
     setPoint({
       lat: event.latLng.lat(),
       lng: event.latLng.lng()
@@ -61,9 +57,9 @@ function BusStop() {
   }
 
 
-//  ? For Searching purpose
+  //  ? For Searching purpose
 
-const [searchResult, setSearchResult] = useState("Result: none");
+  const [searchResult, setSearchResult] = useState("Result: none");
 
   function onLoad(autocomplete) {
     setSearchResult(autocomplete);
@@ -79,9 +75,9 @@ const [searchResult, setSearchResult] = useState("Result: none");
       // console.log(place);
       getGeocode({ address: name }).then((results) => {
         const { lat, lng } = getLatLng(results[0]);
-        setPoint({lat, lng})
+        setPoint({ lat, lng })
         console.log("📍 Coordinates: ", { lat, lng });
-      }).catch((err)=>console.log(err))
+      }).catch((err) => console.log(err))
 
       console.log(`Name: ${name}`);
       console.log(`Business Status: ${status}`);
@@ -90,12 +86,9 @@ const [searchResult, setSearchResult] = useState("Result: none");
       alert("Please enter text");
     }
   }
-
   // if (!isLoaded) {
   //   return <div>Loading...</div>;
   // }
-
-
 
 
   return (
@@ -106,32 +99,40 @@ const [searchResult, setSearchResult] = useState("Result: none");
             <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
               Stop name
             </label>
-            <input value={stopName} onChange={(e) => setstopName(e.target.value)} class="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" />
-          </div>
-          <div>
-
+            <input value={stopName} onChange={(e) => setstopName(e.target.value)} class="shadow appearance-none border rounded sm:w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" />
           </div>
           {isLoaded ? (
-            <>
-              <div id="searchColumn ">
-                <h2>Tide Forecast Options</h2>
+            <div className='relative'>
+              <div className='absolute w-4 h-4 top-3 left-2 sm:left-1/3 mx-auto my-auto z-50' id="searchColumn ">
+                {/* <h2>Search for place</h2> */}
                 <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
+                  <div className='relative inline'>
+
                   <input
+                    className='rounded-lg w-48 sm:w-64 h-10 text-center'
                     type="text"
-                    placeholder="Search for Tide Information"
+                    placeholder="Search "
                     style={{
                       boxSizing: `border-box`,
-                      border: `1px solid transparent`,
-                      width: `240px`,
-                      height: `32px`,
+                      // border: `1px solid transparent`,
+                      // width: `240px`,
+                      // height: `32px`,
                       padding: `0 12px`,
-                      borderRadius: `3px`,
+                      // borderRadius: `3px`,
                       boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
                       fontSize: `14px`,
                       outline: `none`,
                       textOverflow: `ellipses`
                     }}
                   />
+                  <img
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Magnifying_glass_icon.svg/735px-Magnifying_glass_icon.svg.png"
+      className='w-5 h-5 left-3'
+      // alt="Search"
+      style={{ position: 'absolute', top: '60%', transform: 'translateY(-50%)', cursor: 'pointer' }}
+    />
+                  </div>
+
                 </Autocomplete>
               </div>
 
@@ -142,14 +143,24 @@ const [searchResult, setSearchResult] = useState("Result: none");
                 }}
                 onClick={setCoordinate}
                 center={Point ? Point : center}
+                options={{
+                  streetViewControl: false,
+                  mapTypeControl: false,
 
-                zoom={10}
+                }}
+
+                zoom={15}
               >
+
 
                 {Point && <MarkerF position={Point} />}
               </GoogleMap>
-            </>
+            </div>
           ) : <></>}
+
+          <button onClick={handleRouteSubmit} class="mt-10 flex-shrink-0 bg-red-500 hover:bg-red-700 border-red-600 hover:border-red-900 text-sm border-4 text-white py-1 px-2 rounded" type="button">
+            Add Stop
+          </button>
         </div>
 
       </form>
