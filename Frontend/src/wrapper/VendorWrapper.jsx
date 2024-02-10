@@ -4,7 +4,8 @@ import Approval from '../components/vendor/vendor_auth/Approval';
 import VendorAuth from '../pages/vendorPartition/Authentication';
 // import VendorHome from '../pages/vendorPartition/VendorPanel';
 import VendorPanel from '../pages/vendorPartition/VendorPanel';
-import VendorRoute from '../routes/VendorRouter';
+import VendorRoute from '../routes/Vendor/VendorRouter';
+import VendorWaiting from '../routes/Vendor/VendorWaiting';
 
 function VendorWrapper() {
 
@@ -29,8 +30,8 @@ function VendorWrapper() {
       element: <VendorAuth />,
     },
     {
-      path: '/wating',
-      element: <VendorRoute><Approval /></VendorRoute>,
+      path: '/waiting',
+      element: <VendorWaiting> <Approval /></VendorWaiting>,
     },
 
     {

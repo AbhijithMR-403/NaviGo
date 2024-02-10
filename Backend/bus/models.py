@@ -1,5 +1,8 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 # Create your models here.
 
 
@@ -20,7 +23,7 @@ class busStopImg(models.Model):
         return f"{self.stop}-{self.stop_img}"
 
 
-class connected_route(models.Model):
+class ConnectedRoute(models.Model):
     bus_stop_1 = models.ForeignKey(
         BusStop, on_delete=models.CASCADE, related_name='stop1')
     bus_stop_2 = models.ForeignKey(
@@ -29,19 +32,35 @@ class connected_route(models.Model):
     time = models.TimeField(blank=True, null=True)
 
     def clean(self):
-        # Taking the count of stop and shall raise a error if a bus stop have more than 4 connection
-        count_stop1 = connected_route.objects.filter(
+
+        if self.bus_stop_1 == self.bus_stop_2:
+            raise ValidationError('Both stop cannot to the same')
+        count_stop1 = ConnectedRoute.objects.filter(
             bus_stop_1=self.bus_stop_1).count()
-        count_stop2 = connected_route.objects.filter(
-            bus_stop_2=self.bus_stop_2).count()
-        
-        if count_stop1 + count_stop2 > 4:
+        check_stop = ConnectedRoute.objects.filter(
+            bus_stop_2=self.bus_stop_2, bus_stop_1=self.bus_stop_1).exists()
+        print(count_stop1, check_stop)
+        if check_stop:
+            raise ValidationError("This route already exists")
+
+        if count_stop1 > 4:
             raise ValidationError('Only 4 connections allowed.')
 
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 
-# class Route(models.Model):
-#     route_no = models.IntegerField(primary_key=True)
-#     route_name = models.CharField(max_length=32)
-#     start_time = models.TimeField()
-#     end_time = models.TimeField()
+@receiver(post_save, sender=ConnectedRoute)
+def trigger_reverse_route_creation(sender, instance, **kwargs):
+    if kwargs['created'] is True:
+        reverse_connected_route, created = sender.objects.get_or_create(
+            bus_stop_1=instance.bus_stop_2,
+            bus_stop_2=instance.bus_stop_1,
+            defaults={'distance': instance.distance, 'time': instance.time}
+        )
+        if (reverse_connected_route.distance, reverse_connected_route.time) != (instance.distance, instance.time):
+            reverse_connected_route.distance = instance.distance
+
+            reverse_connected_route.time = instance.time
+            reverse_connected_route.save(update_fields=['distance', 'time'])

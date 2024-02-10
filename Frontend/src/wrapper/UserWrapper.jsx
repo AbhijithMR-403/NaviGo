@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import Home from '../pages/userPartition/Home';
 import { Navigate, Outlet, Route, Routes, useRoutes } from 'react-router-dom';
-import UserRoute from '../routes/UserRoute';
+import UserRoute from '../routes/User/UserRoute';
 import { useDispatch, useSelector } from 'react-redux';
 import IsAuthUser from '../utils/IsAuthUser';
 import { Set_Authentication } from '../redux/authentication/AuthenticationSlice';

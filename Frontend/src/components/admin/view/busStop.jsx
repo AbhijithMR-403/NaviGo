@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { API_BASE_URL } from '../../../constant/api';
 import {
   getGeocode,
@@ -7,6 +7,7 @@ import {
 import { Autocomplete, GoogleMap, MarkerF, useJsApiLoader } from '@react-google-maps/api';
 import axios from 'axios';
 import { TError, TSuccess } from '../../toastify/Toastify';
+import DirectionsMap from '../../../utils/maps/DirectionsMap';
 const places = ["places"]
 
 function BusStop() {
@@ -57,6 +58,7 @@ function BusStop() {
   }
 
 
+
   //  ? For Searching purpose
 
   const [searchResult, setSearchResult] = useState("Result: none");
@@ -90,6 +92,12 @@ function BusStop() {
   //   return <div>Loading...</div>;
   // }
 
+  // const origin = {lat: 10.06150931200072, lng: 76.28861727291329}
+  // const destination = {lat: 10.025140305000505, lng: 76.30776363924106}
+  // const waypoints =[{ 
+  //   location: {lat: 10.064162058773753, lng: 76.32603780656946},
+  //   // stopover: true
+  // }]
 
   return (
     <>
@@ -146,12 +154,9 @@ function BusStop() {
                 options={{
                   streetViewControl: false,
                   mapTypeControl: false,
-
                 }}
-
                 zoom={15}
               >
-
 
                 {Point && <MarkerF position={Point} />}
               </GoogleMap>
