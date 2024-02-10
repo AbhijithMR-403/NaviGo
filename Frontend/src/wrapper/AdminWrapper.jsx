@@ -9,14 +9,14 @@ import Loginpage from '../pages/adminPartition/AdminLogin';
 import { API_BASE_URL } from '../constant/api';
 import { useDispatch, useSelector } from 'react-redux';
 import isAuthAdmin from '../utils/isAuthAdmin';
-import AdminRouter from '../routes/AdminRouter';
+import AdminRouter from '../routes/Admin/AdminRouter';
 import UserManagement from '../components/admin/view/UserManagement';
 import { Set_Authentication } from '../redux/authentication/AuthenticationSlice';
 import axios from 'axios';
 import BusStop from '../components/admin/view/busStop';
 import StopList from '../components/admin/view/StopList';
 import Approval from '../components/admin/view/Approval';
-import AdminAuthRouter from '../routes/AdminAuthRouter';
+import AdminAuthRouter from '../routes/Admin/AdminAuthRouter';
 import DirectionsMap from '../utils/maps/DirectionsMap';
 import { useLoadScript } from '@react-google-maps/api';
 
