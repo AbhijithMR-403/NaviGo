@@ -3,11 +3,11 @@ import React from 'react'
 function InputField(props) {
   return (
     <div className='mb-4' key={props.name}>
-        <div class="flex-column mb-2">
+        <div className="flex-column mb-2">
         <label > {props.name}</label></div>
-        <div class="inputForm">
+        <div className="inputForm">
           {props.Icon? <props.Icon />:<></>}
-            <input type={props.type} class="input" placeholder={props.placeholder} name={props.formName}/>
+            <input type={props.type} className="input" placeholder={props.placeholder} name={props.formName}/>
            
             {props.EyeIcon? <props.EyeIcon />:<></>}
             

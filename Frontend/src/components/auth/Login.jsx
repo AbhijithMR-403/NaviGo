@@ -110,11 +110,11 @@ function Login() {
   return (
     <div>
       <ToastContainer />
-      <form class="form" method='POST' onSubmit={handleLoginSubmit}>
+      <form className="form" method='POST' onSubmit={handleLoginSubmit}>
 
         {fields.map((field) => <InputField {...field} />)}
 
-        <div class="flex-row">
+        <div className="flex-row">
           <div>
             <input type="checkbox" />
             <label>Remember me </label>
@@ -122,13 +122,13 @@ function Login() {
           <span className="span">Forgot password?</span>
         </div>
         <button className="button-submit" type='submit'>Sign In</button>
-        <p class="p">Don't have an account? <Link to={'/signup'}>
+        <p className="p">Don't have an account? <Link to={'/signup'}>
           <span className="span">Sign Up</span></Link>
 
         </p>
-        <p class="p line">Or With</p>
+        <p className="p line">Or With</p>
 
-        <div class="flex-row">
+        <div className="flex-row">
 
           <GoogleLogin
             onSuccess={credentialResponse => {

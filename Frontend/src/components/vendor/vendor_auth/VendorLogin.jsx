@@ -60,7 +60,7 @@ function VendorLogin() {
             <div className=" flex flex-col items-end justify-start  overflow-hidden mb-2 xl:max-w-3xl w-full">
                 <div className="flex">
                     <h3 className="text-white">Dark Mode : &nbsp;</h3>
-                    <label class="inline-flex relative items-center mr-5 cursor-pointer">
+                    <label className="inline-flex relative items-center mr-5 cursor-pointer">
                         <input
                             type="checkbox"
                             className="sr-only peer"

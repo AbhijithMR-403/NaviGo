@@ -8,25 +8,49 @@ import { Autocomplete, GoogleMap, MarkerF, useJsApiLoader } from '@react-google-
 import axios from 'axios';
 import { TError, TSuccess } from '../../toastify/Toastify';
 import DirectionsMap from '../../../utils/maps/DirectionsMap';
+import { AdminBusAxios } from '../../api/api_instance';
 const places = ["places"]
 
 function BusStop() {
-
+  const [StopNames, setStopNames] = useState([])
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: `${import.meta.env.VITE_GOOGLE_MAP_API}`,
     libraries: places
   })
 
-  const center = {
+  const [center, setCenter] = useState({
     lat: 9.2905715,
     lng: 76.6337262,
-  };
+  });
   const [Point, setPoint] = useState(null)
   const [stopName, setstopName] = useState('')
+
+  // Fetching  all bus stops data
   useEffect(() => {
-    console.log(Point);
-  }, [Point])
+    const token = localStorage.getItem('access');
+    console.log(localStorage.getItem('access'), 'this is availble or not ');
+
+    AdminBusAxios.get('/bus/list').then(res => {
+        console.log(res.data);
+        const bus_stop_length = res.data.length
+        setStopNames(res.data)
+        let lat = 0
+        let  lng = 0;
+        res.data.forEach((val)=>{
+          lat += val.lat
+          lng += val.lon
+          console.log(val.lat, lat, lng);
+        })
+        setCenter({
+          lat: lat / bus_stop_length,
+          lng: lng / bus_stop_length,
+        })
+        
+    }).catch((err) => {
+        console.log("Error: " + err)
+    });
+}, [])
 
   const handleRouteSubmit = async () => {
     if (!Point) {
@@ -88,26 +112,20 @@ function BusStop() {
       alert("Please enter text");
     }
   }
-  // if (!isLoaded) {
-  //   return <div>Loading...</div>;
-  // }
-
-  // const origin = {lat: 10.06150931200072, lng: 76.28861727291329}
-  // const destination = {lat: 10.025140305000505, lng: 76.30776363924106}
-  // const waypoints =[{ 
-  //   location: {lat: 10.064162058773753, lng: 76.32603780656946},
-  //   // stopover: true
-  // }]
+  const customMarker = {
+    url: "/public/assets/Map/pointers/bus-station34.png",
+    scaledSize: { height: 30, width: 30 },
+  };
 
   return (
     <>
       <form>
         <div className='p-10 w-full'>
-          <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
               Stop name
             </label>
-            <input value={stopName} onChange={(e) => setstopName(e.target.value)} class="shadow appearance-none border rounded sm:w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" />
+            <input value={stopName} onChange={(e) => setstopName(e.target.value)} className="shadow appearance-none border rounded sm:w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" />
           </div>
           {isLoaded ? (
             <div className='relative'>
@@ -159,11 +177,18 @@ function BusStop() {
               >
 
                 {Point && <MarkerF position={Point} />}
+                {StopNames.map((data, index)=>{
+                  let pointer = { lat: data.lat, lng: data.lon }
+                  
+                  console.log(data.lat, data.lon);
+                  return (<MarkerF key={index} position={ pointer } 
+                    icon={customMarker}
+                    />)})}
               </GoogleMap>
             </div>
           ) : <></>}
 
-          <button onClick={handleRouteSubmit} class="mt-10 flex-shrink-0 bg-red-500 hover:bg-red-700 border-red-600 hover:border-red-900 text-sm border-4 text-white py-1 px-2 rounded" type="button">
+          <button onClick={handleRouteSubmit} className="mt-10 flex-shrink-0 bg-red-500 hover:bg-red-700 border-red-600 hover:border-red-900 text-sm border-4 text-white py-1 px-2 rounded" type="button">
             Add Stop
           </button>
         </div>

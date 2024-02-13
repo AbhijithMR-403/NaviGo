@@ -33,7 +33,7 @@ function VendorRoute({ children }) {
     return <Navigate to="login" />
   }
   if (!isVendor){
-    return <Navigate to='wating' />
+    return <Navigate to='waiting' />
   }
 
   // If authenticated, render the child components
