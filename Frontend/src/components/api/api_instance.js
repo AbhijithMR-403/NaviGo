@@ -17,7 +17,7 @@ export const AdminAxios = axios.create({
     baseURL: `${API_BASE_URL}/admin`,
     timeout: 3000,
     headers: {
-      Authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },

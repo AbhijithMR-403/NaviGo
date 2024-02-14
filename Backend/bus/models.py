@@ -2,6 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.validators import MaxValueValidator
 
 # Create your models here.
 
@@ -9,7 +10,7 @@ from django.dispatch import receiver
 class BusStop(models.Model):
     stop_name = models.CharField(max_length=256, blank=True)
     lat = models.FloatField()
-    lon = models.FloatField()
+    lng = models.FloatField()
 
     def __str__(self):
         return f'{self.stop_name}'
@@ -24,12 +25,19 @@ class busStopImg(models.Model):
 
 
 class ConnectedRoute(models.Model):
+
+    def validate_positive_duration(value):
+        if value < 0:
+            raise ValidationError('Duration must be positive.')
+        if value > 1200:  # twenty minutes in seconds
+            raise ValidationError("Duration is too long.")
+
     bus_stop_1 = models.ForeignKey(
         BusStop, on_delete=models.CASCADE, related_name='stop1')
     bus_stop_2 = models.ForeignKey(
         BusStop, on_delete=models.CASCADE, related_name='stop2')
     distance = models.FloatField(blank=True, null=True)
-    time = models.TimeField(blank=True, null=True)
+    time = models.IntegerField(validators=[validate_positive_duration], null=True)
 
     def clean(self):
 

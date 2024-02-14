@@ -39,7 +39,7 @@ function BusStop() {
         let  lng = 0;
         res.data.forEach((val)=>{
           lat += val.lat
-          lng += val.lon
+          lng += val.lng
           console.log(val.lat, lat, lng);
         })
         setCenter({
@@ -64,10 +64,10 @@ function BusStop() {
     const formData = {
       'stop_name': stopName,
       'lat': Point.lat,
-      'lon': Point.lng
+      'lng': Point.lng
     }
 
-    await axios.post(API_BASE_URL + '/bus/add', formData).then((res) => {
+    await AdminBusAxios.post(API_BASE_URL + '/bus/add', formData).then((res) => {
       TSuccess("Successfully added")
 
     }).catch((err) => { TError("Something went wrong! Please try again.") })
@@ -178,9 +178,9 @@ function BusStop() {
 
                 {Point && <MarkerF position={Point} />}
                 {StopNames.map((data, index)=>{
-                  let pointer = { lat: data.lat, lng: data.lon }
+                  let pointer = { lat: data.lat, lng: data.lng }
                   
-                  console.log(data.lat, data.lon);
+                  console.log(data.lat, data.lng);
                   return (<MarkerF key={index} position={ pointer } 
                     icon={customMarker}
                     />)})}

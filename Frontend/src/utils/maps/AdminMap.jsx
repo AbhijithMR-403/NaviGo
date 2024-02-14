@@ -20,8 +20,8 @@ function AdminMap({ PointA, PointB }) {
     // Fetching  all bus stops data
     useEffect(() => {
         if (PointA && PointB){
-            setPointACoordinate({lat:PointA.lat, lng:PointA.lon})
-            setPointBCoordinate({lat:PointB.lat, lng:PointB.lon})
+            setPointACoordinate({lat:PointA.lat, lng:PointA.lng})
+            setPointBCoordinate({lat:PointB.lat, lng:PointB.lng})
         }
         console.log('\n This reach here yoo');
         console.log(PointACoordinate, PointBCoordinate);
@@ -34,7 +34,7 @@ function AdminMap({ PointA, PointB }) {
             let lng = 0;
             res.data.forEach((val) => {
                 lat += val.lat
-                lng += val.lon
+                lng += val.lng
             })
             setCenter({
                 lat: lat / bus_stop_length,
@@ -81,7 +81,7 @@ function AdminMap({ PointA, PointB }) {
                         {PointBCoordinate  && 
                         <DirectionsMap  origin={PointACoordinate} destination= {PointBCoordinate}/>}
                         {stopNames.map((data, index) => {
-                            let pointer = { lat: data.lat, lng: data.lon }
+                            let pointer = { lat: data.lat, lng: data.lng }
 
                             return (<MarkerF key={index} position={pointer}
                                 icon={customMarker}

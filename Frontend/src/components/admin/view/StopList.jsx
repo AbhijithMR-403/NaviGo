@@ -2,11 +2,12 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { API_BASE_URL } from '../../../constant/api'
 import { Button } from '@mui/material'
+import { AdminBusAxios } from '../../api/api_instance'
 
 function StopList() {
     const [busStops, setBusStops] = useState([])
     const deleteStop = async (id) => {
-        await axios.delete(API_BASE_URL + `/bus/delete/${id}/`).then((res) => {
+        await AdminBusAxios.delete(API_BASE_URL + `/bus/delete/${id}/`).then((res) => {
             setBusStops((prevStops) => prevStops.filter(stop => stop.id !== id));
         }).catch((error) => {
             console.error("Error deleting bus stop:", error);
@@ -15,7 +16,7 @@ function StopList() {
 
     }
     useEffect(() => {
-        axios.get(API_BASE_URL + "/bus/list").then((res) => {
+        AdminBusAxios.get(API_BASE_URL + "/bus/list").then((res) => {
             setBusStops(res.data)
             console.log(res.data);
 
@@ -31,6 +32,9 @@ function StopList() {
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
 
                         <tr>
+                            <th scope="col" className="px-6 py-3">
+                                stop id
+                            </th>
                             <th scope="col" className="px-6 py-3">
                                 stop name
                             </th>
@@ -48,12 +52,15 @@ function StopList() {
                     <tbody>
                         {busStops.map((item, index) => {
                             return (
-                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={index}>
+                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {item.id}
+                                    </th>
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {item.stop_name}
                                     </th>
                                     <td className="px-6 py-4">
-                                        {item.lon}
+                                        {item.lng}
                                     </td>
                                     <td className="px-6 py-4">
                                         {item.lat}

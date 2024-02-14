@@ -194,7 +194,7 @@ class UserDetails(APIView):
 
 
 # class VendorRegister(APIView):
-    
+
 #     def post(self, request):
 #         # request.data['is_vendor'] = True
 
@@ -233,9 +233,14 @@ class vendorDetailsApi(generics.RetrieveAPIView):
     lookup_field = 'user'
 
 
-
 class VendorRegister(generics.ListCreateAPIView):
 
     queryset = VendorDetails.objects.all()
     serializer_class = RegVendorSerializer
-    
+
+
+class UserGoogleAuth(APIView):
+
+    def post(self, request):
+        print(request.data)
+        return Response('request.data yep mannn')

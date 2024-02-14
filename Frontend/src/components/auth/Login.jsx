@@ -39,12 +39,14 @@ function Login() {
       }
     }
     catch (error) {
-      TError(error)
+      TError(error.response.data.error)
     }
   }
+  
 
   const Google_login = async (user_detail) => {
     console.log(user_detail);
+
     const formData = new FormData();
     formData.append("email", user_detail.email)
     formData.append("username", user_detail.name)
@@ -132,6 +134,7 @@ function Login() {
 
           <GoogleLogin
             onSuccess={credentialResponse => {
+              console.log(credentialResponse)
               const user_detail = jwtDecode(credentialResponse.credential) 
               Google_login(user_detail)
             }}

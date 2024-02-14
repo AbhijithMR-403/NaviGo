@@ -11,4 +11,5 @@ class BusStopSerializer(serializers.ModelSerializer):
 class BusConnectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ConnectedRoute
+        # fields = ['bus_stop_1', 'bus_stop_2']
         fields = '__all__'
