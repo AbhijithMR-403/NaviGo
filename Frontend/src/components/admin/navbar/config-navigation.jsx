@@ -54,6 +54,11 @@ const navConfig = [
     path: '/admin/bus/connection',
     icon: icon('ic_disabled'),
   },
+  {
+    title: 'Connection List',
+    path: '/admin/bus/connection/list',
+    icon: icon('ic_disabled'),
+  },
 ];
 
 export default navConfig;

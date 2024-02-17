@@ -30,6 +30,7 @@ function UserManagement() {
 
     axios.get(API_BASE_URL + '/admin/listuser').then((res) => {
       setUsers(res.data)
+      console.log(res.data);
       // console.log(res.data, "dsfasdfa\n\n", listusers);
     }).catch((err) => {
       console.error(err)
@@ -178,11 +179,6 @@ function UserManagement() {
               </div>
             </div>
           </div>
-          <div className="flex flex-wrap -mx-3 mb-5">
-            <div className="w-full max-w-full sm:w-3/4 mx-auto text-center">
-              <p className="text-sm text-slate-500 py-1"> Tailwind CSS Component from <a href="https://www.loopple.com/theme/riva-dashboard-tailwind?ref=tailwindcomponents" className="text-slate-700 hover:text-slate-900" target="_blank">Riva Dashboard</a> by <a href="https://www.loopple.com" className="text-slate-700 hover:text-slate-900" target="_blank">Loopple Builder</a>. </p>
-            </div>
-          </div>
         </>
       )
         : (
@@ -277,7 +273,7 @@ function UserManagement() {
                     id="remember"
                     type="checkbox"
                     name='is_active'
-                    defaultChecked={is_active}
+                    checked={is_active}
                     onClick={()=>setIsActive(!is_active)}
                     className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
                     required=""

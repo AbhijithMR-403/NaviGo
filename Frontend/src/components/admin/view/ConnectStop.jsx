@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AdminMap from '../../../utils/maps/AdminMap'
 import axios from 'axios'
 import { AdminBusAxios } from '../../api/api_instance'
+import { TError, TSuccess } from '../../toastify/Toastify'
 
 function ConnectStop() {
     const [stopNames, setStopNames] = useState([])
@@ -27,14 +28,29 @@ function ConnectStop() {
         console.log(formData);
         if (stop1 === '' || stop2 ==='') return alert("Please enter both stops") 
         {
-        formData.append("stop", stop1);
-        formData.append("stop", stop2);
-
+        formData.append("bus_stop_1", stop1.id);
+        formData.append("bus_stop_2", stop2.id);
         }
-        //console.log(JSON.stringify(data));
-        // AdminBusAxios.post("/bus/connect", JSON.stringify(data)).then(response=>{
-        //    window.location.reload();    
-        // })
+
+        AdminBusAxios.post("/bus/connect", formData).then(response=>{
+            console.log(response);
+            TSuccess('Successful Connection')
+        }).catch((err)=>{
+            console.log(err);
+            if(err.response.status == 401){
+                TError('There is an issue with Refesh token');
+            }
+            else if(err.response.status == 400){
+                if(err.response.data.distance)
+                TError('Enter a valid distance');
+                if (err.response.data.time)
+                TError('Enter a valid time');
+
+            }
+            else{
+            console.log(err);
+            TError(err.response.data.error)}
+        })
     }
 
     return (
@@ -63,9 +79,9 @@ function ConnectStop() {
             </div>
             <AdminMap PointA={stop1} PointB={stop2} />
             <form onSubmit={submitBusConnection}>
-            <input className="ml-8 mt-8 shadow appearance-none border rounded sm:w-1/2 w-3/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name='distance' placeholder='Distance' id="distance" type="number" />
+            <input className="ml-8 mt-8 shadow appearance-none border rounded sm:w-1/2 w-3/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name='distance' placeholder='Distance' id="distance" type="number" step=".01" />
 
-            <input className="ml-8 mt-8 shadow appearance-none border rounded sm:w-1/2 w-3/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name='time' placeholder='Time' id="time" type="time" />
+            <input className="ml-8 mt-8 shadow appearance-none border rounded sm:w-1/2 w-3/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name='time' placeholder='Time(minute)' id="time" type="number" />
 
             <button className="ml-8 mt-10 w-1/12 flex-shrink-0 bg-red-500 hover:bg-red-700 border-red-600 hover:border-red-900 text-sm border-4 text-white py-1 px-2 rounded" type="submit">
             Add Stop

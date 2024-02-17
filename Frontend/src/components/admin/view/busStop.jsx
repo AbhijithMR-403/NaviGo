@@ -69,8 +69,9 @@ function BusStop() {
 
     await AdminBusAxios.post(API_BASE_URL + '/bus/add', formData).then((res) => {
       TSuccess("Successfully added")
-
-    }).catch((err) => { TError("Something went wrong! Please try again.") })
+    }).catch((err) => { 
+      console.log(err);
+      TError("Something went wrong! Please try again.") })
   }
 
 

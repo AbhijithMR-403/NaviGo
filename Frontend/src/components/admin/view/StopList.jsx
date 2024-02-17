@@ -13,8 +13,8 @@ function StopList() {
             console.error("Error deleting bus stop:", error);
 
         })
-
     }
+
     useEffect(() => {
         AdminBusAxios.get(API_BASE_URL + "/bus/list").then((res) => {
             setBusStops(res.data)
