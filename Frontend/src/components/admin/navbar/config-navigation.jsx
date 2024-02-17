@@ -36,7 +36,7 @@ const navConfig = [
   },
   {
     title: 'Bus Stop',
-    path: '/admin/busstop',
+    path: '/admin/bus/stop',
     icon: icon('ic_cart'),
   },
   {
@@ -50,8 +50,13 @@ const navConfig = [
     icon: icon('ic_lock'),
   },
   {
-    title: 'Not found',
-    path: '/404',
+    title: 'Stop Connection',
+    path: '/admin/bus/connection',
+    icon: icon('ic_disabled'),
+  },
+  {
+    title: 'Connection List',
+    path: '/admin/bus/connection/list',
     icon: icon('ic_disabled'),
   },
 ];

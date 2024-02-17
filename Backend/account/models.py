@@ -48,6 +48,7 @@ class Account(AbstractBaseUser):
     is_email_verified = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_vendor = models.BooleanField(default=False)
+    OTP = models.IntegerField(null=True)
 
     objects = CustomUserManager()
 

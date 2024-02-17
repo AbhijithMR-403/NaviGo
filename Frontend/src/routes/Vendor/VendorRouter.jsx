@@ -8,6 +8,7 @@ function VendorRoute({ children }) {
     
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isVendor, setisVendor] = useState(false)
+  const [isAdmin, setAdmin] = useState(false)
   const [isLoading, setLoading] = useState(true);
   
   useEffect(() => {
@@ -16,7 +17,9 @@ function VendorRoute({ children }) {
       const authInfo = await IsAuthUser();
       console.log(authInfo);
       setisVendor(authInfo.is_vendor)
+      console.log(isVendor);
       setIsAuthenticated(authInfo.isAuthenticated);
+      setAdmin(authInfo.is_admin);
       setTimeout(() => { setLoading(false); }, 2000);
     };
     fetchData();
@@ -24,8 +27,10 @@ function VendorRoute({ children }) {
   
 
   if (isLoading) {
-    // Handle loading state, you might show a loading spinner
     return <Loader />
+  }
+  if (isAdmin){
+    return <Navigate to='/admin' />
   }
 
   if (!isAuthenticated) {
@@ -33,7 +38,7 @@ function VendorRoute({ children }) {
     return <Navigate to="login" />
   }
   if (!isVendor){
-    return <Navigate to='wating' />
+    return <Navigate to='waiting' />
   }
 
   // If authenticated, render the child components

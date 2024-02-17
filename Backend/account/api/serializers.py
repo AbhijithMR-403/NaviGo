@@ -18,7 +18,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = ['id', 'username', 'email', 'name',
-                  'password', 'is_active', 'is_vendor', 'phone_number']
+                  'password', 'is_active', 'is_vendor', 'phone_number', 'profile_img']
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -27,14 +27,6 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         validated_data['password'] = make_password(
             validated_data.get('password'))
         return super(UserRegisterSerializer, self).create(validated_data)
-
-
-# class UserDetails(serializers.Serializer):
-#     is_vendor = serializers.BooleanField()
-
-#     class Meta:
-#         model = Account
-#         fields = ['id', 'username', 'email', 'password', 'profile_img']
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -61,3 +53,4 @@ class RegVendorSerializer(serializers.ModelSerializer):
         print('inside create fun \n\n', validated_data.get('user'))
         vendor_details = VendorDetails.objects.create(**validated_data)
         return vendor_details
+

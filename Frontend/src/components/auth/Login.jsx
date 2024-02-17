@@ -39,46 +39,35 @@ function Login() {
       }
     }
     catch (error) {
-      TError(error)
+      TError(error.response.data.error)
     }
   }
 
-  const Google_login = async (user_detail) => {
-    console.log(user_detail);
-    const formData = new FormData();
-    formData.append("email", user_detail.email)
-    formData.append("username", user_detail.name)
-    formData.append("password", "1704974569")
+  const GoogleTestlogin = async(user_detail) =>{
+    const formData = {
+      client_id: user_detail,
+    } 
+    await axios.post(API_BASE_URL + '/auth/google', formData).then((res)=>{
+      console.log(res)
+      dispatch(
+        Set_Authentication({
+          name: jwtDecode(res.data.access).name,
+          isAuthenticated: true,
+          isAdmin: res.data.isAdmin,
+          is_vendor: res.data.isVendor
+        })
+      );
+      TSuccess("You have successfully login")
+      if(!res.data.accountExist){
+      setTimeout(() => { TSuccess('Welcome To NaviGo') }, 3000);
+      }
+      navigate('/')
+      return res
+      
+    }).catch((err)=>{
+      console.log(err);
 
-    try {
-      const res = await axios.post(API_BASE_URL + '/auth/login', formData)
-      if (res.status === 200) {
-        localStorage.setItem('access', res.data.access)
-        localStorage.setItem('refresh', res.data.refresh)
-        dispatch(
-          Set_Authentication({
-            name: jwtDecode(res.data.access).name,
-            isAuthenticated: true,
-            isAdmin: res.data.isAdmin,
-            is_vendor: res.data.is_vendor
-          })
-        );
-        TSuccess("You have successfully login")
-        navigate('/')
-        return res
-      }
-
-    }
-    catch (error) {
-      if (error.response.status === 401) {
-        TError('Not signup')
-        navigate('/signup')
-      }
-      if (error.response.status === 403) {
-        TError('Your mail needs activation')
-        navigate('/signup')
-      }
-    }
+    })
   }
 
   const PasswordIcon = () => {
@@ -110,11 +99,11 @@ function Login() {
   return (
     <div>
       <ToastContainer />
-      <form class="form" method='POST' onSubmit={handleLoginSubmit}>
+      <form className="form" method='POST' onSubmit={handleLoginSubmit}>
 
         {fields.map((field) => <InputField {...field} />)}
 
-        <div class="flex-row">
+        <div className="flex-row">
           <div>
             <input type="checkbox" />
             <label>Remember me </label>
@@ -122,18 +111,19 @@ function Login() {
           <span className="span">Forgot password?</span>
         </div>
         <button className="button-submit" type='submit'>Sign In</button>
-        <p class="p">Don't have an account? <Link to={'/signup'}>
+        <p className="p">Don't have an account? <Link to={'/signup'}>
           <span className="span">Sign Up</span></Link>
 
         </p>
-        <p class="p line">Or With</p>
+        <p className="p line">Or With</p>
 
-        <div class="flex-row">
+        <div className="flex-row">
 
           <GoogleLogin
             onSuccess={credentialResponse => {
-              const user_detail = jwtDecode(credentialResponse.credential) 
-              Google_login(user_detail)
+              console.log(credentialResponse);
+              // GoogleTestlogin(credentialResponse.credential)
+              // Google_login(user_detail)
             }}
             onError={() => {
               console.log('Login Failed');

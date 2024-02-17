@@ -2,10 +2,11 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../../../constant/api';
-import { TError, TSuccess } from '../../toastify/Toastify';
+import { TError, TSuccess, TWarning } from '../../toastify/Toastify';
 import OTPModal from './element/OTPModal';
 
 function VendorRegister() {
+    const navigator = useNavigate()
     const [darkMode, setDarkMode] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
@@ -16,9 +17,9 @@ function VendorRegister() {
     const [email, setemail] = useState('')
     const [password, setpassword] = useState('')
     const [confirmPassword, setconfirmPassword] = useState('')
-    const [company, setcompany] = useState('')
     const [phone, setphone] = useState('')
     const [file, setFile] = useState([]);
+    const [FileImg, setFileImg] = useState([])
 
     const navigate = useNavigate()
 
@@ -47,9 +48,7 @@ function VendorRegister() {
             TError(['Invalid email address'])
         }
         else {
-
             sent_otp()
-
         }
     }
 
@@ -60,31 +59,40 @@ function VendorRegister() {
                 setOtpVerify(res.data['OTP'])
                 setShowModal(true)
             }
-            ).catch((err) => console.log(err))
+            ).catch((err) => {
+                console.log(err)
+                TError(err.response.data.error)
+            })
         }
     }
-    const RegisterUser = async(event) => {
+    const RegisterUser = async (event) => {
         event.preventDefault()
-        if (OtpTyped ==  OtpVerify){
-        const formData = {
-            'name': name,
-            'username': username,
-            'email': email,
-            'password': password,
-            'phone': phone,
-            'company_name': company,
-            'identify_img': file,
-            'is_vendor': true,
-            'is_active': true
-        }
-        await axios.post(API_BASE_URL + '/auth/vendor/reg', formData).then((res) => {
-            console.log(res);
-            navigate('/vendor/login')
+        if (OtpTyped == OtpVerify) {
 
-        }).catch((err) => {
-            console.log(err);
-        })}
-        else{
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('username', username);
+            formData.append('email', email);
+            formData.append('password', password);
+            formData.append('phone', phone);
+            formData.append('is_vendor', true);
+            formData.append('is_active', true);
+            formData.append('profile_img', file);
+            await axios.post(API_BASE_URL + '/auth/vendor/reg', formData).then((res) => {
+                console.log(res);
+                navigate('/vendor/login')
+            }).catch((err) => {
+                
+                if (err.response.status == 409){
+                TWarning(err.response.data.error.email)
+                navigator('/vendor/register');
+
+            }
+                console.log(err);
+            })
+        }
+        else {
+
             TError('Wrong OTP')
         }
     }
@@ -94,7 +102,8 @@ function VendorRegister() {
     // Store the validation Documentation image
     function handleChange(e) {
         console.log(e.target.files);
-        setFile(URL.createObjectURL(e.target.files[0]));
+        setFile(e.target.files[0]);
+        setFileImg(URL.createObjectURL(file))
     }
 
     return (
@@ -102,64 +111,58 @@ function VendorRegister() {
 
             {showModal ? (
                 <>
-                <div
-                    className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-                >
-                    <div className="relative w-auto my-6 mx-auto max-w-3xl">
-                        {/*content*/}
-                        <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                            {/*header*/}
-                            <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                                <h3 className="text-3xl font-semibold">
-                                    OTP
-                                </h3>
-                                <button
-                                    className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                >
-                                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                                        ×
-                                    </span>
-                                </button>
-                            </div>
-                            {/*body*/}
-                            <div className="relative p-6 flex-auto">
-                                <form class="p-4 md:p-5">
-                                    <div class="grid gap-4 mb-4 grid-cols-2">
-                                        <div class="col-span-2">
-                                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Enter OTP:  </label><p>{email}</p>
-                                            <input value={OtpTyped} onChange={(e)=>setOtpTyped(e.target.value)} type="text" name="otp" id="name" class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="OTP" required="" />
+                    <div
+                        className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+                    >
+                        <div className="relative w-auto my-6 mx-auto max-w-3xl">
+                            {/*content*/}
+                            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                                {/*header*/}
+                                <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                                    <h3 className="text-3xl font-semibold">
+                                        OTP
+                                    </h3>
+                                    <button
+                                        className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                                    >
+                                        <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                                            ×
+                                        </span>
+                                    </button>
+                                </div>
+                                {/*body*/}
+                                <div className="relative p-6 flex-auto">
+                                    <form className="p-4 md:p-5">
+                                        <div className="grid gap-4 mb-4 grid-cols-2">
+                                            <div className="col-span-2">
+                                                <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Enter OTP:  </label><p>{email}</p>
+                                                <input value={OtpTyped} onChange={(e) => setOtpTyped(e.target.value)} type="text" name="otp" id="name" className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="OTP" required="" />
+                                            </div>
+
+                                            <a href="">
+                                                <span className="text-[#E9522C] font-semibold">Resend otp?</span>
+
+                                            </a>
                                         </div>
 
-                                        <a href="">
-                                            <span className="text-[#E9522C] font-semibold">Resend otp?</span>
+                                    </form>
+                                </div>
+                                {/*footer*/}
+                                <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
 
-                                        </a>
-                                    </div>
-
-                                </form>
-                            </div>
-                            {/*footer*/}
-                            <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                                {/* <button
-                                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                    type="button"
-                                    onClick={() => setShowModal(false)}
-                                >
-                                    Close
-                                </button> */}
-                                <button
-                                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                    type="button"
-                                    onClick={RegisterUser}
-                                >
-                                    Continue
-                                </button>
+                                    <button
+                                        className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                        type="button"
+                                        onClick={RegisterUser}
+                                    >
+                                        Continue
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-            </>
+                    <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                </>
             ) : null}
 
 
@@ -167,7 +170,7 @@ function VendorRegister() {
             <div className=" flex flex-col items-end justify-start  overflow-hidden mb-2 xl:max-w-3xl w-full">
                 <div className="flex">
                     <h3 className="text-white">Dark Mode : &nbsp;</h3>
-                    <label class="inline-flex relative items-center mr-5 cursor-pointer">
+                    <label className="inline-flex relative items-center mr-5 cursor-pointer">
                         <input
                             type="checkbox"
                             className="sr-only peer"
@@ -194,7 +197,7 @@ function VendorRegister() {
                     Register for a free account
                 </h1>
                 <div className="w-full mt-8">
-                    <form class="form" method='POST' onSubmit={handleRegSubmit}>
+                    <form className="form" method='POST' onSubmit={handleRegSubmit}>
                         <div className="mx-auto max-w-xs sm:max-w-md md:max-w-lg flex flex-col gap-4">
                             <div className="flex flex-col sm:flex-row gap-2">
                                 <input
@@ -208,17 +211,6 @@ function VendorRegister() {
                                     onChange={(e) => setusername(e.target.value)}
                                     name='username'
                                 />
-                                {/* <input
-                                    className={`w-full px-5 py-3 rounded-lg  font-medium border-2 border-transparent placeholder-gray-500 text-sm focus:outline-none focus:border-2  focus:outline ${darkMode
-                                        ? "bg-[#302E30] text-white focus:border-white"
-                                        : "bg-gray-100 text-black focus:border-black"
-                                        }`}
-                                    type="text"
-                                    value={company}
-                                    onChange={(e) => setcompany(e.target.value)}
-                                    placeholder="Company name"
-                                    name="company"
-                                /> */}
                             </div>
                             <input
                                 className={`w-full px-5 py-3 rounded-lg  font-medium border-2 border-transparent placeholder-gray-500 text-sm focus:outline-none focus:border-2  focus:outline ${darkMode
@@ -281,8 +273,9 @@ function VendorRegister() {
                                 />
 
                             </div>
+                            <label className='font-mono text-sm mt-2 -mb-3'>Upload profile pic</label>
                             <input type="file" onChange={handleChange} />
-                            <img className='max-w-56 max-h-44' src={file} />
+                            <img className='max-w-56 max-h-44' src={FileImg} />
 
                             {/* <ul className='text-red-700'>
                                 <li>{error}</li>

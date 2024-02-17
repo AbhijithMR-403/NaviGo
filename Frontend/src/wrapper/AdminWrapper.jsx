@@ -19,6 +19,8 @@ import Approval from '../components/admin/view/Approval';
 import AdminAuthRouter from '../routes/Admin/AdminAuthRouter';
 import DirectionsMap from '../utils/maps/DirectionsMap';
 import { useLoadScript } from '@react-google-maps/api';
+import ConnectStop from '../components/admin/view/ConnectStop';
+import ListBusConnection from '../components/admin/view/ListBusConnection';
 
 function AdminWrapper() {
 
@@ -51,17 +53,6 @@ function AdminWrapper() {
   }, []);
 
 
-  // const libraries = ['places']
-
-  // const { isLoaded, loadError } = useLoadScript({
-  //   googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAP_API,
-  //   libraries,
-  // });
-
-  // if(loadError) return 'Error loading maps';
-  // if(!isLoaded) return 'Loading Maps';
-
-
   const routes = useRoutes([
     {
       element: (
@@ -76,9 +67,11 @@ function AdminWrapper() {
       children: [
         { element: <Dashboard />, index: true },
         { element: <UserManagement />, path: '/user' },
-        { element: <BusStop />, path: '/busstop' },
+        { element: <BusStop />, path: '/bus/stop' },
         { element: <StopList />, path: '/stoplist' },
         { element: <Approval />, path: "/approval" },
+        { element: <ConnectStop />, path: "/bus/connection" },
+        { element: <ListBusConnection />, path: "/bus/connection/list" },
         // {
         //   element: <DirectionsMap
         //   origin={origin} 

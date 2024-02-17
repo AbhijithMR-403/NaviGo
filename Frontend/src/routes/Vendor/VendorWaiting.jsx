@@ -37,8 +37,8 @@ function VendorWaiting({ children }) {
     // If not authenticated, redirect to login page with the return URL
     return <Navigate to="/vendor" />
   }
-  if (isAuthenticated && !isVendor){
-    return <Navigate to='waiting' />
+  if (isAuthenticated ){
+    return <Navigate to='/vendor/login' />
   }
 
   // If authenticated, render the child components

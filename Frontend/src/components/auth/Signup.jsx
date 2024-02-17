@@ -121,13 +121,9 @@ function Signup() {
             } )
     }
 
-    const handleOTPChange = (val) => {
-        setOtp(val)
-    }
-
     const sendotp = async () =>{
         var data={"email": uname}
-        await axios.post(API_BASE_URL+'/auth/otp', data).then((res)=>{
+        await axios.patch(API_BASE_URL+'/auth/otp', data).then((res)=>{
             setdjangootp(res.data['OTP'])
         }
         ).catch((err)=>console.log(err))
@@ -164,7 +160,7 @@ function Signup() {
         e.preventDefault()
         console.log('asdfasd');
         if (djangootp == otp) {
-            await axios.put(API_BASE_URL + `/auth/otpverify`,{"uname":uname}).then(
+            await axios.patch(API_BASE_URL + `/auth/otpverify`,{"uname":uname}).then(
                 (res) => {
                     TSuccess('Verified Successfully')
                     navigate('/login',
@@ -183,19 +179,11 @@ function Signup() {
         }
     }
 
-    // const resent_otp = () =>{
-    //     axios.get(API_BASE_URL + `/auth/register/${uname}`).then(
-    //         (res) => {
-    //             setOtp(res.data.OTP)
-
-    //         }
-    //     )
-    // }
 
     return (
         <div>
             {sign_up ?
-                (<form class="form" method='POST' onSubmit={handleLoginSubmit}>
+                (<form className="form" method='POST' onSubmit={handleLoginSubmit}>
 
                     {fields.map((field) => <InputField {...field} />)}
 
@@ -205,19 +193,19 @@ function Signup() {
                             {formError}
                         </li>}
                     </ul>
-                    <div class="flex-row">
+                    <div className="flex-row">
                         <div>
                             <input type="checkbox" />
                             <label>Remember me </label>
                         </div>
-                        <span class="span">Forgot password?</span>
+                        <span className="span">Forgot password?</span>
                     </div>
-                    <button class="button-submit" type='submit'>Sign Up</button>
-                    <p class="p">Don't have an account? <Link to={'/login'}><span class="span">Log in</span></Link>
+                    <button className="button-submit" type='submit'>Sign Up</button>
+                    <p className="p">Don't have an account? <Link to={'/login'}><span className="span">Log in</span></Link>
 
-                    </p><p class="p line">Or With</p>
+                    </p><p className="p line">Or With</p>
 
-                    <div class="flex-row">
+                    <div className="flex-row">
 
                         <GoogleLogin
                             onSuccess={credentialResponse => {
@@ -233,15 +221,15 @@ function Signup() {
                 </form>)
                 : (
                     <div className='m-40 p-10 bg-slate-50' >
-                        <div class="flex-column mb-5">
+                        <div className="flex-column mb-5">
                             <label >OTP </label></div>
-                        <MuiOtpInput className='mb-5' value={otp} onChange={handleOTPChange} />
-                        <div class="flex-row">
+                        <MuiOtpInput className='mb-5' value={otp} onChange={(val)=>setOtp(val)} />
+                        <div className="flex-row">
                             
-                            <span class="span" onClick={() => sendotp()}>Resent otp?</span>
-                            <span class="span" onClick={() => setsignup(true)}>re-enter email</span>
+                            <span className="span" onClick={() => sendotp()}>Resent otp?</span>
+                            <span className="span" onClick={() => setsignup(true)}>re-enter email</span>
                         </div>
-                        <button class="button-submit" onClick={verify_otp}>Sign Up</button>
+                        <button className="button-submit" onClick={verify_otp}>Sign Up</button>
 
                     </div>
                 )

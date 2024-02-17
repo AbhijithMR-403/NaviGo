@@ -10,12 +10,17 @@ from .serializers import UserRegisterSerializer, UserSerializer, RegVendorSerial
 import random
 from rest_framework import generics
 from django.core.mail import send_mail
+from django.core.files.base import ContentFile
+from urllib.request import urlopen
+from rest_framework.parsers import MultiPartParser, FormParser
+from decouple import config
+from google.oauth2 import id_token
+from google.auth.transport import requests
 
 
 class UserLogin(APIView):
 
     def post(self, request):
-        print(request.data)
 
         try:
             email = request.data['email']
@@ -25,7 +30,6 @@ class UserLogin(APIView):
         except KeyError:
             raise ParseError('All Fields Are Required')
         if not Account.objects.filter(email=email).exists():
-            print('yoooooooo')
             return Response({'error': 'Email Does Not Exist'},
                             status=status.HTTP_401_UNAUTHORIZED)
 
@@ -42,7 +46,7 @@ class UserLogin(APIView):
             vendor_active = vendor[0].approve
         refresh["is_vendor"] = user.is_vendor
         refresh["name"] = str(user.username)
-        refresh["is_admin"] = str(user.is_superuser)
+        refresh["is_admin"] = user.is_superuser
 
         content = {
             'refresh': str(refresh),
@@ -115,9 +119,11 @@ class RegisterView(APIView):
 
 
 class Send_OTP(APIView):
-    def post(self, request):
+    def patch(self, request):
         print('yoo you reach here man', request.data['email'])
         random_num = random.randint(1000, 9999)
+        if Account.objects.filter(email=request.data['email']).exists():
+            return Response({'error': 'This mail already exist'}, status=status.HTTP_409_CONFLICT)
         try:
             send_mail(
                 "OTP AUTHENTICATING NaviGO",
@@ -132,7 +138,10 @@ class Send_OTP(APIView):
             }
             return Response(context, status=status.HTTP_200_OK)
         except:
-            return Response({"Message": "Unknown error"}, status=status.HTTP_406_NOT_ACCEPTABLE)
+            return Response({"error": "Unknown error"}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+    # def get(self, request):
+    #     user = User.objects.get(id=request.user.id)
 
 
 class GoogleRegisterView(APIView):
@@ -162,7 +171,7 @@ class GoogleRegisterView(APIView):
 
 
 class OtpVerify(APIView):
-    def put(self, request):
+    def patch(self, request):
         print(request.data)
         print(request.data['uname'])
         uname = request.data['uname']
@@ -193,38 +202,30 @@ class UserDetails(APIView):
         return Response(content)
 
 
-# class VendorRegister(APIView):
-    
-#     def post(self, request):
-#         # request.data['is_vendor'] = True
+class VendorRegister(APIView):
+    parser_classes = (MultiPartParser, FormParser)
 
-#         serializer = UserRegisterSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
+    def post(self, request):
+        print(request.data['email'])
+        serializer = UserRegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            user = Account.objects.get(email=request.data['email'])
+            VendorDetails.objects.create(user=user)
+        else:
+            print('am here man', serializer['is_active'].value)
+            is_active = False
+            content = {
+                'message': 'Registration failed',
+                'error': serializer.errors,
+                'is_active': is_active
+            }
+            return Response(content, status=status.HTTP_409_CONFLICT)
 
-#         print(serializer.data)
-#         try:
-#             user = Account.objects.get(
-#                 email=serializer.data['email'])
-#         except:
-#             print(serializer.errors)
-#             return Response({'error': 'Email Does Not Exist'},
-#                             status=status.HTTP_401_UNAUTHORIZED)
-#         request.data['user'] = user.id
-#         print(request.data)
-
-#         vendor_serializer = RegVendorSerializer(data=request.data)
-
-#         if vendor_serializer.is_valid():
-#             print(vendor_serializer)
-#             vendor_serializer.save()
-#         else:
-#             print(vendor_serializer.errors)
-#             return Response(vendor_serializer.errors,
-#                             status=status.HTTP_406_NOT_ACCEPTABLE)
-#         print(vendor_serializer)
-#         content = {'message': 'User Registered Successfully'}
-#         return Response(content, status=status.HTTP_201_CREATED,)
+        content = {"Message": "OTP send",
+                   "username": serializer.data['email']
+                   }
+        return Response(content, status=status.HTTP_201_CREATED)
 
 
 class vendorDetailsApi(generics.RetrieveAPIView):
@@ -233,9 +234,52 @@ class vendorDetailsApi(generics.RetrieveAPIView):
     lookup_field = 'user'
 
 
+# class VendorRegister(generics.ListCreateAPIView):
 
-class VendorRegister(generics.ListCreateAPIView):
+#     queryset = VendorDetails.objects.all()
+#     serializer_class = RegVendorSerializer
 
-    queryset = VendorDetails.objects.all()
-    serializer_class = RegVendorSerializer
-    
+
+
+class UserGoogleAuth(APIView):
+
+    def post(self, request):
+        accountExist = True
+        try:
+            google_request = requests.Request()
+            id_info = id_token.verify_oauth2_token(
+                request.data['client_id'], google_request,  audience=None)
+            email = id_info['email']
+            
+        except KeyError:
+            raise ParseError('Check credential')
+
+        if not Account.objects.filter(email=email).exists():
+            accountExist = False
+            username = id_info['given_name'] + id_info['jti'][-4:]
+            name = id_info['name']
+            user = Account.objects.create(email=email, username=username,
+                                          name=name, is_active=True, is_email_verified=True)
+
+            user.save()
+
+        user = Account.objects.get(email=email)
+
+        if VendorDetails.objects.filter(user=user).exists():
+            return Response({"error": "This account has already been registered as a seller."},)
+        
+        refresh = RefreshToken.for_user(user)
+        refresh["is_vendor"] = False
+        refresh["name"] = str(user.username)
+        refresh["is_admin"] = str(False)
+
+        content = {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+            'isAdmin': False,
+            "isVendor": False,
+            'accountExist': accountExist,
+        }
+        print(content)
+
+        return Response(content, status=status.HTTP_200_OK)

@@ -42,7 +42,7 @@ function Header() {
 
   return (
     <div>
-      <header className="absolute inset-x-0 top-0 z-50">
+      <header className="user-header-div fixed inset-x-0 top-0 z-50">
         <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
             {/* <a href="#" className="-m-1.5 p-1.5">
@@ -66,7 +66,7 @@ function Header() {
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
-              <a key={item.name} onClick={() => navigate(`${item.href}`)} className="cursor-pointer text-sm font-semibold leading-6 text-gray-900">
+              <a key={item.name} onClick={() => navigate(`${item.href}`)} className="cursor-pointer hover:underline underline-offset-4 decoration-2 text-sm font-semibold leading-6 text-gray-900">
                 {item.name}
               </a>
             ))}

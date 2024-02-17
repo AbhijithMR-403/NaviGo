@@ -6,6 +6,7 @@ import VendorAuth from '../pages/vendorPartition/Authentication';
 import VendorPanel from '../pages/vendorPartition/VendorPanel';
 import VendorRoute from '../routes/Vendor/VendorRouter';
 import VendorWaiting from '../routes/Vendor/VendorWaiting';
+import VendorAuthRouter from '../routes/Vendor/VendorAuthRouter';
 
 function VendorWrapper() {
 
@@ -27,6 +28,7 @@ function VendorWrapper() {
     },
     {
       path: '/*',
+      // element: <VendorAuthRouter> <VendorAuth /> </VendorAuthRouter>,
       element: <VendorAuth />,
     },
     {
