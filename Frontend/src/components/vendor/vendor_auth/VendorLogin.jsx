@@ -28,7 +28,7 @@ function VendorLogin() {
                 }
                 if (!res.data.is_vendor_active){
                     TInfo('Your approval is under process')
-                    navigate('/vendor/wating')
+                    navigate('/vendor/waiting')
                     return res
                 }
 
@@ -49,7 +49,7 @@ function VendorLogin() {
         }
         catch (error) {
             console.log('error\n\n', error);
-            TError(error)
+            TError(error.response.data.error)
         }
     }
 

@@ -15,15 +15,15 @@ const updateUserToken = async ()=>{
           localStorage.setItem('refresh', res.data.refresh)
           let decoded = jwtDecode(res.data.access);
           console.log('decode', decoded)
-          return {'name':decoded.name,isAuthenticated:true,is_vendor:false}
+          return {'name':decoded.name,isAuthenticated:true,is_vendor:false, is_admin:decoded.is_admin}
         }
         else
         {
-            return {'name':null,isAuthenticated:false,is_vendor:false}
+            return {'name':null,isAuthenticated:false,is_vendor:false,is_admin:false}
         }  
       }
       catch (error) {
-         return {'name':null,isAuthenticated:false,is_vendor:false}
+         return {'name':null,isAuthenticated:false,is_vendor:false, is_admin:false}
       }
 }
 
@@ -40,7 +40,7 @@ const IsAuthUser = async () => {
     const currentTime = Date.now() / 1000;
     let decoded = jwtDecode(accessToken);
     if (decoded.exp > currentTime) {
-        return {'name':decoded.name, isAuthenticated:true, is_vendor:decoded.is_vendor};
+        return {'name':decoded.name, isAuthenticated:true, is_vendor:decoded.is_vendor, is_admin:decoded.is_admin};
       } else {
         
         const updateSuccess = await updateUserToken();

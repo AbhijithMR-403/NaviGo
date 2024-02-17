@@ -121,13 +121,9 @@ function Signup() {
             } )
     }
 
-    const handleOTPChange = (val) => {
-        setOtp(val)
-    }
-
     const sendotp = async () =>{
         var data={"email": uname}
-        await axios.post(API_BASE_URL+'/auth/otp', data).then((res)=>{
+        await axios.patch(API_BASE_URL+'/auth/otp', data).then((res)=>{
             setdjangootp(res.data['OTP'])
         }
         ).catch((err)=>console.log(err))
@@ -164,7 +160,7 @@ function Signup() {
         e.preventDefault()
         console.log('asdfasd');
         if (djangootp == otp) {
-            await axios.put(API_BASE_URL + `/auth/otpverify`,{"uname":uname}).then(
+            await axios.patch(API_BASE_URL + `/auth/otpverify`,{"uname":uname}).then(
                 (res) => {
                     TSuccess('Verified Successfully')
                     navigate('/login',
@@ -183,14 +179,6 @@ function Signup() {
         }
     }
 
-    // const resent_otp = () =>{
-    //     axios.get(API_BASE_URL + `/auth/register/${uname}`).then(
-    //         (res) => {
-    //             setOtp(res.data.OTP)
-
-    //         }
-    //     )
-    // }
 
     return (
         <div>
@@ -235,7 +223,7 @@ function Signup() {
                     <div className='m-40 p-10 bg-slate-50' >
                         <div className="flex-column mb-5">
                             <label >OTP </label></div>
-                        <MuiOtpInput className='mb-5' value={otp} onChange={handleOTPChange} />
+                        <MuiOtpInput className='mb-5' value={otp} onChange={(val)=>setOtp(val)} />
                         <div className="flex-row">
                             
                             <span className="span" onClick={() => sendotp()}>Resent otp?</span>

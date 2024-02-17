@@ -20,6 +20,7 @@ import AdminAuthRouter from '../routes/Admin/AdminAuthRouter';
 import DirectionsMap from '../utils/maps/DirectionsMap';
 import { useLoadScript } from '@react-google-maps/api';
 import ConnectStop from '../components/admin/view/ConnectStop';
+import ListBusConnection from '../components/admin/view/ListBusConnection';
 
 function AdminWrapper() {
 
@@ -70,6 +71,7 @@ function AdminWrapper() {
         { element: <StopList />, path: '/stoplist' },
         { element: <Approval />, path: "/approval" },
         { element: <ConnectStop />, path: "/bus/connection" },
+        { element: <ListBusConnection />, path: "/bus/connection/list" },
         // {
         //   element: <DirectionsMap
         //   origin={origin} 

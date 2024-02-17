@@ -1,6 +1,7 @@
 import React, { useState, memo} from 'react';
 import { DirectionsRenderer, DirectionsService } from '@react-google-maps/api';
 import isEqual from 'lodash/isEqual';
+import { TInfo, TWarning } from '../../components/toastify/Toastify';
 
 
 function DirectionsMap({origin, destination, waypoints}) {
@@ -20,16 +21,19 @@ function DirectionsMap({origin, destination, waypoints}) {
       if(response) {
         if (googleResponse.status === 'OK' && googleResponse.routes[0].overview_polyline !== response.routes[0].overview_polyline) {
           setResponse(() => googleResponse)
+          TInfo(`It is ${googleResponse.routes[0].legs[0].distance.text}`)
         } else {
           console.log('response: ', googleResponse)
         }
       } else {
         if (googleResponse.status === 'OK') {
           setResponse(() => googleResponse)
+          TInfo(`It is ${googleResponse.routes[0].legs[0].distance.text}`)
         } else {
           console.log('response: ', googleResponse)
         }
       }
+
     } 
   }
 
