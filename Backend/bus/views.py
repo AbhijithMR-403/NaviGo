@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import generics
 from .models import BusStop, ConnectedRoute
-from .serializers import BusStopSerializer, BusConnectionSerializer
+from .serializers import BusStopSerializer, BusConnectionSerializer, BusConnectionListSerializer
 from rest_framework.response import Response
 from rest_framework import status
 import googlemaps
@@ -32,6 +32,9 @@ class ConnectBus(generics.ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
+        print(request.data)
+        print('\n\n\n')
+        print(serializer)
         if serializer.is_valid():
             print('yep here atleast pepsi\n\n\n')
             # For example, check if the bus stops are valid or not
@@ -62,16 +65,22 @@ class ConnectBus(generics.ListCreateAPIView):
             print(serializer, '\n\n')
             print('yep this is it man', headers)
             # The distance between two bus stop should be less than 5 km
-            if distance > 5:
+            if distance > 4:
                 return Response({"error": f"The two bus stops are too far a part {distance}km"}, status=status.HTTP_400_BAD_REQUEST)
 
             return Response({"message": "successfully connected."},
-                                status=status.HTTP_200_OK)
+                            status=status.HTTP_200_OK)
 
             # return super().create(request, *args, **kwargs)
-        
+
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Deleete this after ward as there is alread a view for both list and create
+class ConnectBusList(generics.ListCreateAPIView):
+    queryset = ConnectedRoute.objects.all()
+    serializer_class = BusConnectionListSerializer
 
 
 class UpdateConnectBus(generics.RetrieveUpdateDestroyAPIView):
