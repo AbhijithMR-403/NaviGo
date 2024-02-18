@@ -8,10 +8,7 @@ import OTPModal from './element/OTPModal';
 function VendorRegister() {
     const navigator = useNavigate()
     const [darkMode, setDarkMode] = useState(false);
-    const [showModal, setShowModal] = useState(false);
 
-    const [OtpVerify, setOtpVerify] = useState(null)
-    const [OtpTyped, setOtpTyped] = useState(null)
     const [name, setname] = useState('')
     const [username, setusername] = useState('')
     const [email, setemail] = useState('')
@@ -48,27 +45,6 @@ function VendorRegister() {
             TError(['Invalid email address'])
         }
         else {
-            sent_otp()
-        }
-    }
-
-    const sent_otp = async () => {
-        {
-            var data = { "email": email }
-            await axios.post(API_BASE_URL + '/auth/otp', data).then((res) => {
-                setOtpVerify(res.data['OTP'])
-                setShowModal(true)
-            }
-            ).catch((err) => {
-                console.log(err)
-                TError(err.response.data.error)
-            })
-        }
-    }
-    const RegisterUser = async (event) => {
-        event.preventDefault()
-        if (OtpTyped == OtpVerify) {
-
             const formData = new FormData();
             formData.append('name', name);
             formData.append('username', username);
@@ -91,10 +67,6 @@ function VendorRegister() {
                 console.log(err);
             })
         }
-        else {
-
-            TError('Wrong OTP')
-        }
     }
 
 
@@ -103,69 +75,11 @@ function VendorRegister() {
     function handleChange(e) {
         console.log(e.target.files);
         setFile(e.target.files[0]);
-        setFileImg(URL.createObjectURL(file))
+        setFileImg(URL.createObjectURL(e.target.files[0]))
     }
 
     return (
         <div>
-
-            {showModal ? (
-                <>
-                    <div
-                        className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-                    >
-                        <div className="relative w-auto my-6 mx-auto max-w-3xl">
-                            {/*content*/}
-                            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                {/*header*/}
-                                <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                                    <h3 className="text-3xl font-semibold">
-                                        OTP
-                                    </h3>
-                                    <button
-                                        className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                    >
-                                        <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                                            ×
-                                        </span>
-                                    </button>
-                                </div>
-                                {/*body*/}
-                                <div className="relative p-6 flex-auto">
-                                    <form className="p-4 md:p-5">
-                                        <div className="grid gap-4 mb-4 grid-cols-2">
-                                            <div className="col-span-2">
-                                                <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Enter OTP:  </label><p>{email}</p>
-                                                <input value={OtpTyped} onChange={(e) => setOtpTyped(e.target.value)} type="text" name="otp" id="name" className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="OTP" required="" />
-                                            </div>
-
-                                            <a href="">
-                                                <span className="text-[#E9522C] font-semibold">Resend otp?</span>
-
-                                            </a>
-                                        </div>
-
-                                    </form>
-                                </div>
-                                {/*footer*/}
-                                <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-
-                                    <button
-                                        className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                        type="button"
-                                        onClick={RegisterUser}
-                                    >
-                                        Continue
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-                </>
-            ) : null}
-
-
 
             <div className=" flex flex-col items-end justify-start  overflow-hidden mb-2 xl:max-w-3xl w-full">
                 <div className="flex">
