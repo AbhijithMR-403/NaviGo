@@ -65,6 +65,7 @@ class VendorDetails(models.Model):
         Account, on_delete=models.CASCADE, null=True, blank=True)
     identify_img = models.ImageField(upload_to='vendor/identify/', null=True)
     company_name = models.CharField(max_length=50, unique=True)
+    GSTIN = models.CharField(max_length=15, unique=True)
     approve = models.BooleanField(default=False)
     address = models.CharField(max_length=150, null=True)
     city = models.CharField(max_length=50, null=True)

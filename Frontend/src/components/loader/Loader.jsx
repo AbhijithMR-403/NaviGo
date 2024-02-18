@@ -1,5 +1,4 @@
 import React from 'react'
-import "../../Style/loader.scss"
 function Loader() {
     return (
         <div className='loader_div'>

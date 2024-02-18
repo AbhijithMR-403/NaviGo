@@ -54,7 +54,7 @@ function VendorRegister() {
             formData.append('is_vendor', true);
             formData.append('is_active', true);
             formData.append('profile_img', file);
-            await axios.post(API_BASE_URL + '/auth/vendor/reg', formData).then((res) => {
+            await axios.post(API_BASE_URL + '/auth/register', formData).then((res) => {
                 console.log(res);
                 navigate('/vendor/login')
             }).catch((err) => {

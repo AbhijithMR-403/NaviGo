@@ -19,6 +19,5 @@ urlpatterns = [
     path("details", views.UserDetails.as_view(), name="user-details"),
     path("vendor/reg", views.VendorRegister.as_view(), name="VendorRegister"),
     path("logout", views.LogoutView.as_view(), name="LogoutView"),
-    path("vendor/detail/<int:user>", views.vendorDetailsApi.as_view(), name="VendorDetails"),
     path("google", views.UserGoogleAuth.as_view(), name="UserGoogleAuth"),
 ]

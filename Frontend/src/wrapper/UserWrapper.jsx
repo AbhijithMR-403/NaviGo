@@ -8,7 +8,6 @@ import { Set_Authentication } from '../redux/authentication/AuthenticationSlice'
 import Login from '../components/auth/Login';
 import Signup from '../components/auth/Signup';
 import Authenticator from '../pages/userPartition/Authenticator';
-import axios from 'axios';
 import Header from '../components/user/Header';
 import UserMap from '../pages/userPartition/UserMap';
 
@@ -18,33 +17,6 @@ function UserWrapper() {
 
   const authentication_user = useSelector(state => state.authentication_user)
 
-
-  // const fetchUserData = async () => {
-  //   try {
-  //     // const res = await axios.post(baseURL+'/api/accounts/user/details/',{headers: {Authorization: `Bearer ${token}`}})
-  //     const res = await axios.get(baseURL + '/api/accounts/user/details/', {
-  //       headers: {
-  //         'authorization': `Bearer ${token}`,
-  //         'Accept': 'application/json',
-  //         'Content-Type': 'application/json'
-  //       }
-  //     })
-  //       .then(res => {
-
-  //         dispatch(
-  //           set_user_basic_details({
-  //             name: res.data.first_name,
-  //             profile_pic: res.data.profile_pic
-  //           })
-  //         );
-  //       })
-  //   }
-  //   catch (error) {
-  //     console.log(error);
-
-  //   }
-
-  // };
 
   const checkAuth = async () => {
     const isAuthenticated = await IsAuthUser();
@@ -63,9 +35,6 @@ function UserWrapper() {
       checkAuth();
 
     }
-    // if (authentication_user.isAuthenticated) {
-    //   fetchUserData();
-    // }
 
   }, [authentication_user])
 

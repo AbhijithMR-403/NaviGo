@@ -87,12 +87,15 @@ class LogoutView(APIView):
 class RegisterView(APIView):
     def post(self, request):
         # request.data['is_active'] = True
-        print(request.POST['email'])
+        print(request.POST['email'], request.data['email'])
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            user = Account.objects.get(email=request.data['email'])
             try:
                 random_num = random.randint(1000, 9999)
+                user.OTP = random_num
+                user.save()
                 send_mail(
                     "OTP AUTHENTICATING NaviGO",
                     f"{random_num} -OTP",
@@ -122,8 +125,11 @@ class Send_OTP(APIView):
     def patch(self, request):
         print('yoo you reach here man', request.data['email'])
         random_num = random.randint(1000, 9999)
-        if Account.objects.filter(email=request.data['email']).exists():
+        user = Account.objects.filter(email=request.data['email'])
+        if user.exists():
             return Response({'error': 'This mail already exist'}, status=status.HTTP_409_CONFLICT)
+        user[0].otp = random_num
+        user[0].save()
         try:
             send_mail(
                 "OTP AUTHENTICATING NaviGO",
@@ -140,8 +146,11 @@ class Send_OTP(APIView):
         except:
             return Response({"error": "Unknown error"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
-    # def get(self, request):
-    #     user = User.objects.get(id=request.user.id)
+    def get(self, request):
+        try:
+            user = Account.objects.get(email=request.data['email'])
+        except:
+            return Response({'error': 'Email not found.'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class GoogleRegisterView(APIView):
@@ -210,8 +219,6 @@ class VendorRegister(APIView):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            user = Account.objects.get(email=request.data['email'])
-            VendorDetails.objects.create(user=user)
         else:
             print('am here man', serializer['is_active'].value)
             is_active = False
@@ -228,19 +235,6 @@ class VendorRegister(APIView):
         return Response(content, status=status.HTTP_201_CREATED)
 
 
-class vendorDetailsApi(generics.RetrieveAPIView):
-    queryset = VendorDetails.objects.all()
-    serializer_class = VendorDetailSerializer
-    lookup_field = 'user'
-
-
-# class VendorRegister(generics.ListCreateAPIView):
-
-#     queryset = VendorDetails.objects.all()
-#     serializer_class = RegVendorSerializer
-
-
-
 class UserGoogleAuth(APIView):
 
     def post(self, request):
@@ -250,7 +244,7 @@ class UserGoogleAuth(APIView):
             id_info = id_token.verify_oauth2_token(
                 request.data['client_id'], google_request,  audience=None)
             email = id_info['email']
-            
+
         except KeyError:
             raise ParseError('Check credential')
 
@@ -267,7 +261,7 @@ class UserGoogleAuth(APIView):
 
         if VendorDetails.objects.filter(user=user).exists():
             return Response({"error": "This account has already been registered as a seller."},)
-        
+
         refresh = RefreshToken.for_user(user)
         refresh["is_vendor"] = False
         refresh["name"] = str(user.username)

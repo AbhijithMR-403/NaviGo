@@ -1,26 +1,24 @@
-import React, { useEffect } from 'react'
-
-import { Navigate, Outlet, Route, Routes, useRoutes } from 'react-router-dom';
+import React, { lazy, useEffect } from 'react'
+import { Navigate, Outlet, useRoutes } from 'react-router-dom';
 import DashboardLayout from '../pages/adminPartition/Dashboard';
 import ThemeProvider from '../components/admin/elements/theme';
-import Dashboard from '../components/admin/view/dashboard';
-import NotFoundView from '../pages/error/NotFoundView';
-import Loginpage from '../pages/adminPartition/AdminLogin';
-import { API_BASE_URL } from '../constant/api';
 import { useDispatch, useSelector } from 'react-redux';
 import isAuthAdmin from '../utils/isAuthAdmin';
 import AdminRouter from '../routes/Admin/AdminRouter';
-import UserManagement from '../components/admin/view/UserManagement';
 import { Set_Authentication } from '../redux/authentication/AuthenticationSlice';
-import axios from 'axios';
-import BusStop from '../components/admin/view/busStop';
-import StopList from '../components/admin/view/StopList';
-import Approval from '../components/admin/view/Approval';
 import AdminAuthRouter from '../routes/Admin/AdminAuthRouter';
-import DirectionsMap from '../utils/maps/DirectionsMap';
-import { useLoadScript } from '@react-google-maps/api';
-import ConnectStop from '../components/admin/view/ConnectStop';
-import ListBusConnection from '../components/admin/view/ListBusConnection';
+
+
+const NotFoundView = lazy(() => import('../pages/error/NotFoundView'));
+const Loginpage = lazy(() => import('../pages/adminPartition/AdminLogin'));
+const UserManagement = lazy(() => import('../components/admin/view/UserManagement'));
+const BusStop = lazy(() => import('../components/admin/view/busStop'));
+const StopList = lazy(() => import('../components/admin/view/StopList'));
+const Approval = lazy(() => import('../components/admin/view/Approval'));
+const ConnectStop = lazy(() => import('../components/admin/view/ConnectStop'));
+const ListBusConnection = lazy(() => import('../components/admin/view/ListBusConnection'));
+const Dashboard = lazy(() => import('../components/admin/view/dashboard'));
+
 
 function AdminWrapper() {
 
