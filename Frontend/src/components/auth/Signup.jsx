@@ -17,6 +17,7 @@ function Signup() {
 
     const [sign_up, setsignup] = useState(true)
     const [uname, setuname] = useState("")
+    const [UserID, setUserID] = useState(null)
     const [otp, setOtp] = useState("")
     const [djangootp, setdjangootp] = useState(null)
     const EyeIcon = () => {
@@ -97,6 +98,7 @@ function Signup() {
                 console.log(res);
             if (res.status === 201) {
                 setuname(res.data.username)
+                setUserID(res.data.user_id)
                 console.log("yep otp is here", res.data['otp']);
                 setdjangootp(res.data['otp'])
                 setsignup(false)
@@ -122,7 +124,7 @@ function Signup() {
     }
 
     const sendotp = async () =>{
-        var data={"email": uname}
+        var data={"userID": UserID}
         await axios.patch(API_BASE_URL+'/auth/otp', data).then((res)=>{
             setdjangootp(res.data['OTP'])
         }
@@ -160,7 +162,7 @@ function Signup() {
         e.preventDefault()
         console.log('asdfasd');
         if (djangootp == otp) {
-            await axios.patch(API_BASE_URL + `/auth/otpverify`,{"uname":uname}).then(
+            await axios.patch(API_BASE_URL + `/auth/otp/verify`,{"uname":uname, 'UserID':UserID}).then(
                 (res) => {
                     TSuccess('Verified Successfully')
                     navigate('/login',

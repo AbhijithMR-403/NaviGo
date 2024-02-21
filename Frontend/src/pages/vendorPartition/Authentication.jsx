@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import VendorRegister from "../../components/vendor/vendor_auth/VendorRegister";
 import VendorLogin from "../../components/vendor/vendor_auth/VendorLogin";
-import OTP from "../../components/vendor/vendor_auth/VendorDetails";
+import VendorDetails from "../../components/vendor/vendor_auth/VendorDetails";
 
 const VendorAuth = () => {
   return (
@@ -10,7 +10,7 @@ const VendorAuth = () => {
         <Routes>
             <Route path="/register" element={<VendorRegister/>} />
             <Route path="/login" element={<VendorLogin/>} />
-            <Route path="/otp" element={<OTP/>} />
+            <Route path="/details" element={<VendorDetails/>} />
         </Routes>
 
     </div>

@@ -18,7 +18,6 @@ function App() {
   return (
     <Provider store={reduxStore}>
       <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_AUTH_API}>
-
         <ToastContainer
           position="top-center"
           autoClose={4000}

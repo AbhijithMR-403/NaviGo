@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../../../constant/api';
 import { Set_Authentication } from '../../../redux/authentication/AuthenticationSlice';
@@ -12,6 +12,8 @@ function VendorLogin() {
     const navigate = useNavigate()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('')
+
+
     const handleLogin = async() => {
         const formData = {
             'email': email,
@@ -19,7 +21,21 @@ function VendorLogin() {
         }
         try {
             const res = await axios.post(API_BASE_URL + '/auth/login', formData)
-            if (res.status === 200) {
+            if(res.data.is_vendor){
+                TInfo('Only for Vendors')
+                navigate('/')
+            }
+            else if(!res.data.vendor_details){
+                TInfo('Complete your Detail')
+                localStorage.setItem('userID', res.data.user_id);
+                dispatch(
+                    set_vendor({
+                        userID: res.data.user_id,
+                    })
+                )
+                navigate('/vendor/details')
+            }
+            else if (res.status === 200) {
                 console.log(res);
                 if (!res.data.is_vendor){
                     TWarning('You are not an vendor')
@@ -31,7 +47,6 @@ function VendorLogin() {
                     navigate('/vendor/waiting')
                     return res
                 }
-
                 localStorage.setItem('access', res.data.access)
                 localStorage.setItem('refresh', res.data.refresh)
                 dispatch(
@@ -42,9 +57,9 @@ function VendorLogin() {
                         isvendor: res.data.is_vendor
                     })
                 );
+                TSuccess("You have successfully login")
+                navigate('/vendor/')
             }
-            TSuccess("You have successfully login")
-            navigate('/vendor/')
             return res
         }
         catch (error) {
