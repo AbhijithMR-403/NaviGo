@@ -4,10 +4,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../../../constant/api';
 import { TError, TSuccess, TWarning } from '../../toastify/Toastify';
 import OTPModal from './element/OTPModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { set_vendor } from '../../../redux/authentication/VendorSlice';
 
 function VendorRegister() {
-    const navigator = useNavigate()
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
     const [darkMode, setDarkMode] = useState(false);
+    const{userID} = useSelector(state => state.vendor_id)
+    console.log(userID);
 
     const [name, setname] = useState('')
     const [username, setusername] = useState('')
@@ -15,10 +20,9 @@ function VendorRegister() {
     const [password, setpassword] = useState('')
     const [confirmPassword, setconfirmPassword] = useState('')
     const [phone, setphone] = useState('')
-    const [file, setFile] = useState([]);
+    const [file, setFile] = useState(null);
     const [FileImg, setFileImg] = useState([])
 
-    const navigate = useNavigate()
 
     const handleRegSubmit = async (event) => {
         event.preventDefault();
@@ -44,6 +48,10 @@ function VendorRegister() {
         else if (email.indexOf('@') == -1 || email.indexOf('.') == -1) {
             TError(['Invalid email address'])
         }
+        else if(!file){
+            console.log(file);
+            TError('Upload your image')
+        }
         else {
             const formData = new FormData();
             formData.append('name', name);
@@ -52,17 +60,27 @@ function VendorRegister() {
             formData.append('password', password);
             formData.append('phone', phone);
             formData.append('is_vendor', true);
-            formData.append('is_active', true);
+            formData.append('is_active', false);
             formData.append('profile_img', file);
-            await axios.post(API_BASE_URL + '/auth/vendor/reg', formData).then((res) => {
+            await axios.post(API_BASE_URL + '/auth/register', formData).then((res) => {
                 console.log(res);
-                navigate('/vendor/login')
-            }).catch((err) => {
+                localStorage.setItem('userID', res.data.user_id);
+                dispatch(
+                    set_vendor({
+                        userID: res.data.user_id,
+                    })
+                )
+                navigate('/vendor/details')
                 
+            }).catch((err) => {
+                console.log(err);
                 if (err.response.status == 409){
-                TWarning(err.response.data.error.email)
-                navigator('/vendor/register');
+                    if(err.response.data.errors.email)
+                        TWarning('This email already exist')
+                    else if (err.response.data.errors.username)
+                        TWarning('This  username is already taken')
 
+                navigate('/vendor/register');
             }
                 console.log(err);
             })

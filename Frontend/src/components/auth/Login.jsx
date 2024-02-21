@@ -122,7 +122,7 @@ function Login() {
           <GoogleLogin
             onSuccess={credentialResponse => {
               console.log(credentialResponse);
-              // GoogleTestlogin(credentialResponse.credential)
+              GoogleTestlogin(credentialResponse.credential)
               // Google_login(user_detail)
             }}
             onError={() => {

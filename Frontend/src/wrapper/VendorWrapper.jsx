@@ -28,7 +28,6 @@ function VendorWrapper() {
     },
     {
       path: '/*',
-      // element: <VendorAuthRouter> <VendorAuth /> </VendorAuthRouter>,
       element: <VendorAuth />,
     },
     {
