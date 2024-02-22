@@ -172,7 +172,8 @@ class OtpVerify(APIView):
             user = Account.objects.get(id=UserID)
         except Account.DoesNotExist:
             return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-        
+        if user.is_active:
+            return Response({'message': 'user is already active'}, status=status.HTTP_200_OK)
         user.is_active = True
         if user.is_vendor:
             print('\n/nthe request data is otp\n',
@@ -186,7 +187,7 @@ class OtpVerify(APIView):
         content = {
             'message': 'User is activated',
         }
-        return Response(content, status=status.HTTP_200_OK)
+        return Response(content, status=status.HTTP_201_CREATED)
 
 
 class UserDetails(APIView):

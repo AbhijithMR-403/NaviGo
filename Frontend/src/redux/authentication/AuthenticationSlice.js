@@ -10,6 +10,7 @@ export const authenticationSlice = createSlice(
       isAdmin: false,
       otp: null,
       isvendor: null,
+      userid: null,
     },
     reducers: {
       Set_Authentication: (state, action) => {

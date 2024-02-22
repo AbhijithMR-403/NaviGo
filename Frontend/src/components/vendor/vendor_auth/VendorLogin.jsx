@@ -21,7 +21,8 @@ function VendorLogin() {
         }
         try {
             const res = await axios.post(API_BASE_URL + '/auth/login', formData)
-            if(res.data.is_vendor){
+            console.log(res);
+            if(!res.data.is_vendor){
                 TInfo('Only for Vendors')
                 navigate('/')
             }
