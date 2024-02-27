@@ -7,7 +7,10 @@ import DirectionsMap from './DirectionsMap'
 
 const libraries = ['places',]
 
-function AdminMap({ PointA, PointB }) {
+function Map({ PointA, PointB, dimension = {
+    width: 'Auto',
+    height: '400px'
+} }) {
     const [stopNames, setstopNames] = useState([])
     const [PointACoordinate, setPointACoordinate] = useState('')
     const [PointBCoordinate, setPointBCoordinate] = useState('')
@@ -19,9 +22,9 @@ function AdminMap({ PointA, PointB }) {
 
     // Fetching  all bus stops data
     useEffect(() => {
-        if (PointA && PointB){
-            setPointACoordinate({lat:PointA.lat, lng:PointA.lng})
-            setPointBCoordinate({lat:PointB.lat, lng:PointB.lng})
+        if (PointA && PointB) {
+            setPointACoordinate({ lat: PointA.lat, lng: PointA.lng })
+            setPointBCoordinate({ lat: PointB.lat, lng: PointB.lng })
         }
         console.log('\n This reach here yoo');
         console.log(PointACoordinate, PointBCoordinate);
@@ -62,15 +65,12 @@ function AdminMap({ PointA, PointB }) {
 
 
     return (
-        <div className='mx-7'>
+        <div>
             {isLoaded ? (
                 <div>
 
                     <GoogleMap
-                        mapContainerStyle={{
-                            width: 'Auto',
-                            height: '400px'
-                        }}
+                        mapContainerStyle={dimension}
                         center={center}
                         options={{
                             streetViewControl: false,
@@ -78,8 +78,8 @@ function AdminMap({ PointA, PointB }) {
                         }}
                         zoom={14}
                     >
-                        {PointBCoordinate  && 
-                        <DirectionsMap  origin={PointACoordinate} destination= {PointBCoordinate}/>}
+                        {PointBCoordinate &&
+                            <DirectionsMap origin={PointACoordinate} destination={PointBCoordinate} />}
                         {stopNames.map((data, index) => {
                             let pointer = { lat: data.lat, lng: data.lng }
 
@@ -106,4 +106,4 @@ function areEqual(prevProps, nextProps) {
         return true
     }
 }
-export default memo(AdminMap, areEqual)
+export default memo(Map, areEqual)

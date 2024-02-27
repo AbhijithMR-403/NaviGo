@@ -1,7 +1,7 @@
 /venv
 .env
 /media
-
+dump.rdb
 
 # Django #
 *.log

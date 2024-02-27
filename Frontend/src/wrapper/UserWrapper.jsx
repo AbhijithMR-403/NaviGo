@@ -45,13 +45,13 @@ function UserWrapper() {
   const routes = useRoutes([
     {
       element: (
-        <div>
+        <div className='h-full w-full'>
         
           <Header />
-          <div className='p-8 pt-16'>
+          {/* <div className=''> */}
             
           <Outlet />
-          </div>
+          {/* </div> */}
         </div>
       ),
       children: [

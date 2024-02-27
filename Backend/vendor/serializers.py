@@ -23,4 +23,5 @@ class BusRouteSerializer(serializers.ModelSerializer):
 class RouteWayPointSerializer(serializers.ModelSerializer):
     class Meta:
         model = wayPoints
-        exclude = ["order"]
+        fields = '__all__'
+        # exclude = ["order"]

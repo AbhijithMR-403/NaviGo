@@ -185,3 +185,9 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kolkata'
 CELERY_RESULT_BACKEND = 'django-db'
+
+# # set the celery result backend 
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+  
+# # set the celery timezone 
+# CELERY_TIMEZONE = 'UTC'

@@ -43,11 +43,7 @@ function VendorLogin() {
                     navigate('/vendor/login')
                     return res
                 }
-                if (!res.data.is_vendor_active){
-                    TInfo('Your approval is under process')
-                    navigate('/vendor/waiting')
-                    return res
-                }
+
                 localStorage.setItem('access', res.data.access)
                 localStorage.setItem('refresh', res.data.refresh)
                 dispatch(
@@ -58,6 +54,11 @@ function VendorLogin() {
                         isvendor: res.data.is_vendor
                     })
                 );
+                if (!res.data.is_vendor_active){
+                    TInfo('Your approval is under process')
+                    navigate('/vendor/waiting')
+                    return res
+                }
                 TSuccess("You have successfully login")
                 navigate('/vendor/')
             }

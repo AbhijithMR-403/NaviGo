@@ -18,7 +18,7 @@ class BusDetail(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.bus_number + "-" + self.bus_name  # TODO: Add more details if needed
+        return self.bus_number + "-" + self.bus_name
 
 
 class Route(models.Model):
