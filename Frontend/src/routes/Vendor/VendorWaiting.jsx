@@ -13,16 +13,17 @@ function VendorWaiting({ children }) {
     
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isVendor, setisVendor] = useState(false)
+  const [isVendorActive, setisVendorActive] = useState(false)
   const [isLoading, setLoading] = useState(true);
   
   useEffect(() => {
-    console.log('yooo man');
     const fetchData = async () => {
       const authInfo = await IsAuthUser();
       console.log(authInfo);
+      setisVendorActive(authInfo.is_vendorActive)
       setisVendor(authInfo.is_vendor)
       setIsAuthenticated(authInfo.isAuthenticated);
-      setTimeout(() => { setLoading(false); }, 2000);
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -33,11 +34,11 @@ function VendorWaiting({ children }) {
     return <Loader />
   }
 
-  if (isAuthenticated && isVendor) {
+  if (isAuthenticated && isVendor && isVendorActive) {
     // If not authenticated, redirect to login page with the return URL
     return <Navigate to="/vendor" />
   }
-  if (isAuthenticated ){
+  else if (!isAuthenticated ){
     return <Navigate to='/vendor/login' />
   }
 

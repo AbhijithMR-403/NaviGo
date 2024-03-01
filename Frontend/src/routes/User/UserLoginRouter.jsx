@@ -13,7 +13,7 @@ function UserLoginRouter({ children }) {
     const fetchData = async () => {
       const authInfo = await IsAuthUser();
       setIsAuthenticated(authInfo.isAuthenticated);
-      setTimeout(() => { setLoading(false); }, 2000);
+      setTimeout(() => { setLoading(false); }, 600);
       
     };
     fetchData();

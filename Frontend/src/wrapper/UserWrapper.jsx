@@ -10,6 +10,7 @@ import Signup from '../components/auth/Signup';
 import Authenticator from '../pages/userPartition/Authenticator';
 import Header from '../components/user/Header';
 import UserMap from '../pages/userPartition/UserMap';
+import UserBus from '../components/user/views/UserBus';
 
 
 function UserWrapper() {
@@ -44,15 +45,19 @@ function UserWrapper() {
   const routes = useRoutes([
     {
       element: (
-        <>
+        <div className='h-full w-full'>
         
           <Header />
+          {/* <div className=''> */}
+            
           <Outlet />
-        </>
+          {/* </div> */}
+        </div>
       ),
       children: [
         { element: <Home />, index: true },
         { element: <UserMap />, path: '/map' },
+        { element: <UserBus />, path: '/bus' },
       ],
     },
     {

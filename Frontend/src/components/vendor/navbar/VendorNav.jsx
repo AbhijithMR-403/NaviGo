@@ -1,6 +1,7 @@
 import React from 'react'
 import NavConfig from './config-navigation'
 import { AuthAxios } from '../../api/api_instance';
+import { Link } from 'react-router-dom';
 
 const VendorNav = () => {
     const token = localStorage.getItem('access');
@@ -32,10 +33,12 @@ const VendorNav = () => {
                         {NavConfig.map((item, index) => {
                             return (
                                 <li key={index}>
-                                    <a href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                    <Link to={item.path}>
+                                    <a className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                                         {item.img()}
                                         <span className="ms-3">{item.title}</span>
                                     </a>
+                                    </Link>
                                 </li>)
                         })}
                         <li onClick={logout}>

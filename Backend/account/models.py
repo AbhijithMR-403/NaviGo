@@ -69,5 +69,5 @@ class VendorDetails(models.Model):
     address = models.CharField(max_length=150, null=True)
     city = models.CharField(max_length=50, null=True)
     state = models.CharField(max_length=50, null=True)
-    country = models.CharField(max_length=50, null=True)
+    country = models.CharField(max_length=50, null=True, default='India')
     pincode = models.IntegerField(null=True)

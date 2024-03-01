@@ -32,11 +32,7 @@ class ConnectBus(generics.ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        print(request.data)
-        print('\n\n\n')
-        print(serializer)
         if serializer.is_valid():
-            print('yep here atleast pepsi\n\n\n')
             # For example, check if the bus stops are valid or not
             bus_stop_1 = serializer.validated_data.get('bus_stop_1')
             bus_stop_2 = serializer.validated_data.get('bus_stop_2')
@@ -50,11 +46,10 @@ class ConnectBus(generics.ListCreateAPIView):
             now = datetime.now()
             gmaps = googlemaps.Client(key=config('GOOGLE_MAP_API'))
             directions_result = gmaps.directions((bus_stop_1.lat, bus_stop_1.lng), (bus_stop_2.lat, bus_stop_2.lng),
-                                                 mode="driving", departure_time=now)
+                                                 mode="", departure_time=now)
             # Decoding time and distance
             distance = directions_result[0]['legs'][0]['distance']['value']/1000
             time = directions_result[0]['legs'][0]['duration']['value']
-            print(time, '-time \n\n\n')
 
             serializer.validated_data['distance'] = distance
             serializer.validated_data['time'] = time

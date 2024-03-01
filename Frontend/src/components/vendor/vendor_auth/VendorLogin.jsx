@@ -21,7 +21,8 @@ function VendorLogin() {
         }
         try {
             const res = await axios.post(API_BASE_URL + '/auth/login', formData)
-            if(res.data.is_vendor){
+            console.log(res);
+            if(!res.data.is_vendor){
                 TInfo('Only for Vendors')
                 navigate('/')
             }
@@ -42,11 +43,7 @@ function VendorLogin() {
                     navigate('/vendor/login')
                     return res
                 }
-                if (!res.data.is_vendor_active){
-                    TInfo('Your approval is under process')
-                    navigate('/vendor/waiting')
-                    return res
-                }
+
                 localStorage.setItem('access', res.data.access)
                 localStorage.setItem('refresh', res.data.refresh)
                 dispatch(
@@ -57,6 +54,11 @@ function VendorLogin() {
                         isvendor: res.data.is_vendor
                     })
                 );
+                if (!res.data.is_vendor_active){
+                    TInfo('Your approval is under process')
+                    navigate('/vendor/waiting')
+                    return res
+                }
                 TSuccess("You have successfully login")
                 navigate('/vendor/')
             }

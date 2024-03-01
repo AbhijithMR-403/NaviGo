@@ -31,26 +31,28 @@ function BusStop() {
     const token = localStorage.getItem('access');
     console.log(localStorage.getItem('access'), 'this is availble or not ');
 
+    MarkPoint()
+  }, [])
+
+  const MarkPoint = () => {
     AdminBusAxios.get('/bus/list').then(res => {
-        console.log(res.data);
-        const bus_stop_length = res.data.length
-        setStopNames(res.data)
-        let lat = 0
-        let  lng = 0;
-        res.data.forEach((val)=>{
-          lat += val.lat
-          lng += val.lng
-          console.log(val.lat, lat, lng);
-        })
-        setCenter({
-          lat: lat / bus_stop_length,
-          lng: lng / bus_stop_length,
-        })
-        
+      const bus_stop_length = res.data.length
+      setStopNames(res.data)
+      let lat = 0
+      let lng = 0;
+      res.data.forEach((val) => {
+        lat += val.lat
+        lng += val.lng
+      })
+      setCenter({
+        lat: lat / bus_stop_length,
+        lng: lng / bus_stop_length,
+      })
+
     }).catch((err) => {
-        console.log("Error: " + err)
+      console.log("Error: " + err)
     });
-}, [])
+  }
 
   const handleRouteSubmit = async () => {
     if (!Point) {
@@ -69,9 +71,12 @@ function BusStop() {
 
     await AdminBusAxios.post(API_BASE_URL + '/bus/add', formData).then((res) => {
       TSuccess("Successfully added")
-    }).catch((err) => { 
+      setstopName('')
+      MarkPoint()
+    }).catch((err) => {
       console.log(err);
-      TError("Something went wrong! Please try again.") })
+      TError("Something went wrong! Please try again.")
+    })
   }
 
 
@@ -93,13 +98,11 @@ function BusStop() {
   }
 
   function onPlaceChanged() {
-    console.log(searchResult);
     if (searchResult != null) {
       const place = searchResult.getPlace();
       const name = place.name;
       const status = place.business_status;
       const formattedAddress = place.formatted_address;
-      // console.log(place);
       getGeocode({ address: name }).then((results) => {
         const { lat, lng } = getLatLng(results[0]);
         setPoint({ lat, lng })
@@ -135,29 +138,29 @@ function BusStop() {
                 <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
                   <div className='relative inline'>
 
-                  <input
-                    className='rounded-lg w-48 sm:w-64 h-10 text-center'
-                    type="text"
-                    placeholder="Search "
-                    style={{
-                      boxSizing: `border-box`,
-                      // border: `1px solid transparent`,
-                      // width: `240px`,
-                      // height: `32px`,
-                      padding: `0 12px`,
-                      // borderRadius: `3px`,
-                      boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-                      fontSize: `14px`,
-                      outline: `none`,
-                      textOverflow: `ellipses`
-                    }}
-                  />
-                  <img
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Magnifying_glass_icon.svg/735px-Magnifying_glass_icon.svg.png"
-      className='w-5 h-5 left-3'
-      // alt="Search"
-      style={{ position: 'absolute', top: '60%', transform: 'translateY(-50%)', cursor: 'pointer' }}
-    />
+                    <input
+                      className='rounded-lg w-48 sm:w-64 h-10 text-center'
+                      type="text"
+                      placeholder="Search "
+                      style={{
+                        boxSizing: `border-box`,
+                        // border: `1px solid transparent`,
+                        // width: `240px`,
+                        // height: `32px`,
+                        padding: `0 12px`,
+                        // borderRadius: `3px`,
+                        boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+                        fontSize: `14px`,
+                        outline: `none`,
+                        textOverflow: `ellipses`
+                      }}
+                    />
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Magnifying_glass_icon.svg/735px-Magnifying_glass_icon.svg.png"
+                      className='w-5 h-5 left-3'
+                      // alt="Search"
+                      style={{ position: 'absolute', top: '60%', transform: 'translateY(-50%)', cursor: 'pointer' }}
+                    />
                   </div>
 
                 </Autocomplete>
@@ -178,13 +181,14 @@ function BusStop() {
               >
 
                 {Point && <MarkerF position={Point} />}
-                {StopNames.map((data, index)=>{
+                {StopNames.map((data, index) => {
                   let pointer = { lat: data.lat, lng: data.lng }
-                  
+
                   console.log(data.lat, data.lng);
-                  return (<MarkerF key={index} position={ pointer } 
+                  return (<MarkerF key={index} position={pointer}
                     icon={customMarker}
-                    />)})}
+                  />)
+                })}
               </GoogleMap>
             </div>
           ) : <></>}

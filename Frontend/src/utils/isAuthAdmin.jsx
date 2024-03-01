@@ -10,7 +10,7 @@ const updateAdminToken = async () => {
 
     try {
         const res = await axios.post(API_BASE_URL + '/auth/token/refresh/', {
-            refresh: refreshToken
+            refresh: localStorage.getItem("refresh")
         }, { headers: {'Content-Type': 'application/json'}},{withCredentials: true});
         console.log('from updateAdminToken\n\n\n', res);
         if (res.status === 200) {
@@ -32,7 +32,7 @@ const fetchisAdmin = async () => {
     try {
         const res = await axios.get(API_BASE_URL + '/auth/details', {
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${localStorage.getItem("access")}`,
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }

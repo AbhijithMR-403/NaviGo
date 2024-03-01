@@ -61,6 +61,7 @@ class ConnectedRoute(models.Model):
 
 @receiver(post_save, sender=ConnectedRoute)
 def trigger_reverse_route_creation(sender, instance, **kwargs):
+    print('this is inside of  post save signal \n\n\n\n')
     if kwargs['created'] is True:
         reverse_connected_route, created = sender.objects.get_or_create(
             bus_stop_1=instance.bus_stop_2,

@@ -6,7 +6,13 @@ function VendorPanel({children}) {
     
     <>
     <VendorNav />
+    <div className='sm:pl-64 pt-8'>
+      <div className='p-8'>
+
     {children}
+
+      </div>
+    </div>
     </>
   )
 }

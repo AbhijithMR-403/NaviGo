@@ -3,9 +3,10 @@ import { Navigate } from 'react-router-dom';
 import IsAuthUser from '../../utils/IsAuthUser';
 import Loader from '../../components/loader/loader';
 
-function VendorAuthRouter() {
+function VendorAuthRouter({children}) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isVendor, setisVendor] = useState(false)
+  const [isVendorActive, setisVendorActive] = useState(false)
   const [isAdmin, setisAdmin] = useState(false)
   const [isLoading, setLoading] = useState(true);
   
@@ -15,23 +16,24 @@ function VendorAuthRouter() {
       const authInfo = await IsAuthUser();
       console.log(authInfo);
       setisVendor(authInfo.is_vendor)
+      setisVendorActive(authInfo.is_vendorActive)
       setIsAuthenticated(authInfo.isAuthenticated);
       setisAdmin(authInfo.is_admin)
-      setTimeout(() => { setLoading(false); }, 2000);
+      setTimeout(() => { setLoading(false); }, 600);
     };
     fetchData();
   }, []);
   
 
-    if (isAdmin){
-    return <Navigate to='/admin' />
-  }
   if (isLoading) {
     // Handle loading state, you might show a loading spinner
     return <Loader />
   }
+  if (isAdmin){
+  return <Navigate to='/admin' />
+}
 
-  if (isAuthenticated && isVendor) {
+  if (isAuthenticated && isVendor && isVendorActive) {
     // If not authenticated, redirect to login page with the return URL
     return <Navigate to="/vendor" />
   }

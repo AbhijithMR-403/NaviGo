@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'bus',
+    'vendor',
     'admin_management',
     'account',
     'rest_framework_simplejwt.token_blacklist',
@@ -152,7 +153,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 CORS_ORIGIN_ALLOW_ALL = True
-
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:5173',
+# ]
 
 REST_FRAMEWORK = {
      'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -182,3 +185,9 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kolkata'
 CELERY_RESULT_BACKEND = 'django-db'
+
+# # set the celery result backend 
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+  
+# # set the celery timezone 
+# CELERY_TIMEZONE = 'UTC'

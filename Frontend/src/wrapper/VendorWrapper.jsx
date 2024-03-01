@@ -7,8 +7,12 @@ import VendorPanel from '../pages/vendorPartition/VendorPanel';
 import VendorRoute from '../routes/Vendor/VendorRouter';
 import VendorWaiting from '../routes/Vendor/VendorWaiting';
 import VendorAuthRouter from '../routes/Vendor/VendorAuthRouter';
+import VendorProfile from '../components/vendor/view/VendorProfile';
+import BusListCreate from '../components/vendor/view/BusListCreate';
+import RouteManagement from '../components/vendor/view/RouteManagement';
 
 function VendorWrapper() {
+  
 
   const routes = useRoutes([
     {
@@ -23,18 +27,20 @@ function VendorWrapper() {
         </>
       ),
       children: [
-        { element: <div>Hellooo</div>, index: true },
+        { element: <VendorProfile/>, index: true },
+        { element: <BusListCreate/>, path: '/bus' },
+        { element: <RouteManagement/>, path: '/route' },
+
       ],
     },
     {
       path: '/*',
-      element: <VendorAuth />,
+      element: <VendorAuthRouter> <VendorAuth /> </VendorAuthRouter>,
     },
     {
       path: '/waiting',
-      element: <VendorWaiting> <Approval /></VendorWaiting>,
+      element: <VendorWaiting> <Approval /> </VendorWaiting>,
     },
-
     {
       path: '404',
       element: <div>Not Found</div>

@@ -101,13 +101,14 @@ class RegisterView(APIView):
                     random_num = random.randint(1000, 9999)
                     user.OTP = random_num
                     user.save()
-                    send_mail(
-                        "OTP AUTHENTICATING NaviGO",
-                        f"{random_num} -OTP",
-                        "luttapimalayali@gmail.com",
-                        [request.POST['email']],
-                        fail_silently=False,
-                    )
+                    send_notification_mail.delay(request.POST['email'], f"{random_num} -OTP")
+                    # send_mail(
+                    #     "OTP AUTHENTICATING NaviGO",
+                    #     f"{random_num} -OTP",
+                    #     "luttapimalayali@gmail.com",
+                    #     [request.POST['email']],
+                    #     fail_silently=False,
+                    # )
                 except:
                     return Response({"Message": "Unknown error"})
         else:
@@ -122,7 +123,7 @@ class RegisterView(APIView):
 
         content = {"Message": "OTP send",
                    'user_id': serializer.data['id'],
-                   "OTP": str(random_num), "username": serializer.data['email']
+                   "username": serializer.data['email']
                    }
         return Response(content, status=status.HTTP_201_CREATED)
 
@@ -141,15 +142,18 @@ class Send_OTP(APIView):
             return Response({'error': 'This user is already active'}, status=status.HTTP_208_ALREADY_REPORTED)
         user.OTP = random_num
         user.save()
-
+        
+        print('OTP :-\n\n\n\n', random_num)
         try:
-            send_mail(
-                "OTP AUTHENTICATING NaviGO",
-                f"{random_num} -OTP",
-                "luttapimalayali@gmail.com",
-                [user.email],
-                fail_silently=False,
-            )
+            send_notification_mail.delay(request.POST['email'], f"{random_num} -OTP")
+
+            # send_mail(
+            #     "OTP AUTHENTICATING NaviGO",
+            #     f"{random_num} -OTP",
+            #     "luttapimalayali@gmail.com",
+            #     [user.email],
+            #     fail_silently=False,
+            # )
             context = {
                 "Message": "OTP send",
                 "OTP": str(random_num)
@@ -172,21 +176,19 @@ class OtpVerify(APIView):
             user = Account.objects.get(id=UserID)
         except Account.DoesNotExist:
             return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-        
+        if user.is_active:
+            return Response({'message': 'user is already active'}, status=status.HTTP_200_OK)
         user.is_active = True
-        if user.is_vendor:
-            print('\n/nthe request data is otp\n',
-                  int(request.data['OTP']), user.OTP)
-            user.is_active = (int(request.data['OTP']) == user.OTP)
-            if int(request.data['OTP']) != user.OTP:
-                return Response({'error': 'Not a valid OTP'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        user.is_active = (int(request.data['OTP']) == user.OTP)
+        if int(request.data['OTP']) != user.OTP:
+            return Response({'error': 'Not a valid OTP'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
         user.save()
         print('check is it active or not', user.is_active)
         content = {
             'message': 'User is activated',
         }
-        return Response(content, status=status.HTTP_200_OK)
+        return Response(content, status=status.HTTP_201_CREATED)
 
 
 class UserDetails(APIView):
@@ -236,9 +238,10 @@ class UserGoogleAuth(APIView):
                 request.data['client_id'], google_request,  config('GOOGLE_AUTH_API'))
             email = id_info['email']
             print(' maankajfakdj\n\nthen next')
-            val = send_notification_mail.delay(
-                'abhijithmr581329@gmail.com', "this what the -OTP")
-            print(val)
+
+
+            val = send_notification_mail.delay('abhijithmr581329@gmail.com', "this what the -OTP")
+
         except KeyError:
             raise ParseError('Check credential')
 

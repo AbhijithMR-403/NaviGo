@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import AdminMap from '../../../utils/maps/AdminMap'
+import Map from '../../../utils/maps/Map'
 import axios from 'axios'
 import { AdminBusAxios } from '../../api/api_instance'
 import { TError, TSuccess } from '../../toastify/Toastify'
@@ -20,10 +20,7 @@ function ConnectStop() {
 
     const submitBusConnection = (event) =>{
         event.preventDefault();
-        const formData = new FormData(event.target);
-        // formData.append("distance", event.target.distance.value);
-        // formData.append("time", event.target.time.value);
-        console.log(Object.fromEntries(formData))
+        const formData = new FormData();
 
         console.log(formData);
         if (stop1 === '' || stop2 ==='') return alert("Please enter both stops") 
@@ -41,11 +38,7 @@ function ConnectStop() {
                 TError('There is an issue with Refesh token');
             }
             else if(err.response.status == 400){
-                if(err.response.data.distance)
-                TError('Enter a valid distance');
-                if (err.response.data.time)
-                TError('Enter a valid time');
-
+                console.log(err);
             }
             else{
             console.log(err);
@@ -77,7 +70,9 @@ function ConnectStop() {
                     </div>
                 </div>
             </div>
-            <AdminMap PointA={stop1} PointB={stop2} />
+            <div className='mx-7'>
+            <Map PointA={stop1} PointB={stop2} />
+            </div>
             <form onSubmit={submitBusConnection}>
             <input className="ml-8 mt-8 shadow appearance-none border rounded sm:w-1/2 w-3/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name='distance' placeholder='Distance' id="distance" type="number" step=".01" />
 
