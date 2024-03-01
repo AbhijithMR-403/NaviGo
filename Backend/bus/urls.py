@@ -9,5 +9,4 @@ urlpatterns = [
     path('connect/list', views.ConnectBusList.as_view(), name="ConnectBus"),
     path('connect/update/<int:id>', views.UpdateConnectBus.as_view(), name="UpdateConnectBus"),
     path('connect/delete/<int:id>', views.UpdateConnectBus.as_view(), name="UpdateConnectBus")
-
 ]

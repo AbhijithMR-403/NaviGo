@@ -20,10 +20,7 @@ function ConnectStop() {
 
     const submitBusConnection = (event) =>{
         event.preventDefault();
-        const formData = new FormData(event.target);
-        // formData.append("distance", event.target.distance.value);
-        // formData.append("time", event.target.time.value);
-        console.log(Object.fromEntries(formData))
+        const formData = new FormData();
 
         console.log(formData);
         if (stop1 === '' || stop2 ==='') return alert("Please enter both stops") 
@@ -41,11 +38,7 @@ function ConnectStop() {
                 TError('There is an issue with Refesh token');
             }
             else if(err.response.status == 400){
-                if(err.response.data.distance)
-                TError('Enter a valid distance');
-                if (err.response.data.time)
-                TError('Enter a valid time');
-
+                console.log(err);
             }
             else{
             console.log(err);

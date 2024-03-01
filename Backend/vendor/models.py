@@ -5,8 +5,8 @@ from bus.models import BusStop
 
 
 class BusDetail(models.Model):
-    bus_number = models.CharField(max_length=10)
-    bus_name = models.CharField(max_length=30, blank=True)
+    bus_number = models.CharField(max_length=10, unique=True)
+    bus_name = models.CharField(max_length=30, blank=True, unique=True)
     # route = models.ForeignKey('Route', on_delete=models.CASCADE)
     seating_capacity = models.PositiveIntegerField()
     available_seats = models.PositiveIntegerField()
@@ -14,11 +14,12 @@ class BusDetail(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.available_seats:
+            print(type(self), 'this part is for self\n\n\n\n\n', type(self.available_seats))
             self.available_seats = self.seating_capacity
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.bus_number + "-" + self.bus_name
+        return f"{self.bus_number} - {self.bus_name}"
 
 
 class Route(models.Model):
@@ -30,7 +31,7 @@ class Route(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2)
     bus_detail = models.ForeignKey(
         BusDetail, on_delete=models.CASCADE, blank=False)
-    wayPointCount = models.PositiveIntegerField()
+    wayPointCount = models.PositiveIntegerField(null=True)
 
     class Meta:
         unique_together = ['origin', 'destination']

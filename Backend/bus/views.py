@@ -33,7 +33,6 @@ class ConnectBus(generics.ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            print('yep here atleast pepsi\n\n\n')
             # For example, check if the bus stops are valid or not
             bus_stop_1 = serializer.validated_data.get('bus_stop_1')
             bus_stop_2 = serializer.validated_data.get('bus_stop_2')
