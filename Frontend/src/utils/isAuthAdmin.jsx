@@ -47,7 +47,7 @@ const fetchisAdmin = async () => {
 
 const isAuthAdmin = async () => {
     const accessToken = localStorage.getItem("access");
-
+    console.log(accessToken, 'kanakona kanakona/n/n/n\n\n\n\n');
     if (!accessToken) {
         return { 'name': null, isAuthenticated: false, isAdmin: false };
     }

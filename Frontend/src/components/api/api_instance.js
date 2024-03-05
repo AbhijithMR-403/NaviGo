@@ -41,6 +41,17 @@ export const AdminBusAxios = axios.create({
     },
   });
 
+
+  export const VendorImgAxios = axios.create({
+    baseURL: `${API_BASE_URL}`,
+    // timeout: 3000,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('access')}`,
+      Accept: 'application/json',
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
 // export const AdminUserListAxios = axios.create({
 //     baseURL: `${API_BASE_URL}/admin`,
 //     timeout: 3000,

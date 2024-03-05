@@ -91,7 +91,7 @@ function VendorRegister() {
 
     // Store the validation Documentation image
     function handleChange(e) {
-        console.log(e.target.files);
+        console.log(e.target.files[0]);
         setFile(e.target.files[0]);
         setFileImg(URL.createObjectURL(e.target.files[0]))
     }

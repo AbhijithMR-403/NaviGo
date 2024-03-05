@@ -1,8 +1,10 @@
+import json
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import generics
 from .models import BusStop, ConnectedRoute
 from .serializers import BusStopSerializer, BusConnectionSerializer, BusConnectionListSerializer
+from .algorithm import algorithmAllPaths
 from rest_framework.response import Response
 from rest_framework import status
 import googlemaps
@@ -82,3 +84,22 @@ class UpdateConnectBus(generics.RetrieveUpdateDestroyAPIView):
     queryset = ConnectedRoute.objects.all()
     serializer_class = BusConnectionSerializer
     lookup_field = 'id'
+
+
+class AvailableRoutes(APIView):
+    def get(self, request):
+        print(request.query_params)
+        if 'origin' not in request.query_params:
+            return Response({'origin': 'origin is not available'})
+        if 'destination' not in request.query_params:
+            return Response({'destination': 'destination is not available'})
+        origin = request.query_params['origin']
+        destination = request.query_params['destination']
+        directions = algorithmAllPaths(origin, destination)
+        print(directions)
+
+        if origin and destination:
+            print(origin, destination)
+            return Response({'origin': origin, 'destination': destination, "directions": directions})
+        else:
+            return Response({'error': 'No stops provided'})

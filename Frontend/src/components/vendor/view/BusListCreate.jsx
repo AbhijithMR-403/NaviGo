@@ -1,35 +1,37 @@
 import React, { useEffect, useState } from 'react'
-import { VendorAxios } from '../../api/api_instance'
+import { VendorAxios, VendorImgAxios } from '../../api/api_instance'
 import { TSuccess } from '../../toastify/Toastify';
 
 function BusListCreate() {
     const [BusList, setBusList] = useState([])
     const [showModal, setShowModal] = useState(false);
     const [Capacity, setCapacity] = useState('')
-    const [busName, setbusName] = useState('')
+    const [busName, setBusName] = useState('')
     const [BusNumber, setBusNumber] = useState('')
-    const [busPic, setbusPic] = useState(null);
+    const [busPic, setBusPic] = useState(null);
 
 
     const [file, setFile] = useState([]);
 
+    const FetchBusLists = () =>{
+    VendorAxios.get('/vendor/bus/list').then((res) => {
+        setBusList(res.data)
+        console.log(res);
+    }).catch((err) => {
+        console.log(err)
+    })}
     useEffect(() => {
-        VendorAxios.get('/vendor/bus/list').then((res) => {
-            setBusList(res.data)
-            console.log(res);
-        }).catch((err) => {
-            console.log(err)
-        })
+        FetchBusLists()
     }, [])
 
-    function handleimgChange(e) {
-        setbusPic(e.target.files[0])
-        console.log(e.target.files[0])
+    function handleImgChange(e) {
+        setBusPic(e.target.files[0])
+        console.log(e.target.files)
         setFile(URL.createObjectURL(e.target.files[0]));
     }
 
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         let isValid = true;
         if (!Capacity) {
             console.error('Capacity is required');
@@ -56,12 +58,16 @@ function BusListCreate() {
             formData.append('seating_capacity', Capacity);
             formData.append('bus_name', busName);
             formData.append('bus_number', BusNumber);
-            // formData.append('identify_img', busPic)
             formData.append('identify_img', busPic);
+            console.log(busPic);
             console.log(formData);
             
-            VendorAxios.post('/vendor/bus/create', formData).then((res) => {
-                TSuccess('Created successfullt')
+            await VendorImgAxios.post('/vendor/bus/create', formData).then((res) => {
+                TSuccess('Created successfully')
+                setShowModal(false);
+                setBusName('')
+                setBusPic({})
+                FetchBusLists()
             }).catch((err) => {
                 console.log(err);
             })
@@ -89,28 +95,28 @@ return (
                             </div>
                             {/*body*/}
                             <div className="relative p-6 flex-auto">
-                                <form class="p-4 md:p-5">
-                                    <div class="grid gap-4 mb-4 grid-cols-2">
-                                        <div class="col-span-2">
-                                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Bus Name:  </label><p></p>
-                                            <input defaultValue={busName} onChange={(e) => setbusName(e.target.value)} type="text" name="otp" id="name" class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Bus Name" required="" />
+                                <form className="p-4 md:p-5">
+                                    <div className="grid gap-4 mb-4 grid-cols-2">
+                                        <div className="col-span-2">
+                                            <label for="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Bus Name:  </label><p></p>
+                                            <input defaultValue={busName} onChange={(e) => setBusName(e.target.value)} type="text" name="otp" id="name" className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Bus Name" required="" />
                                         </div>
                                     </div>
-                                    <div class="grid gap-4 mb-4 grid-cols-2">
-                                        <div class="col-span-2">
-                                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Bus number:  </label><p></p>
-                                            <input defaultValue={BusNumber} onChange={(e) => setBusNumber(e.target.value)} type="text" name="otp" id="name" class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Bus Number" required="" />
+                                    <div className="grid gap-4 mb-4 grid-cols-2">
+                                        <div className="col-span-2">
+                                            <label for="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Bus number:  </label><p></p>
+                                            <input defaultValue={BusNumber} onChange={(e) => setBusNumber(e.target.value)} type="text" name="otp" id="name" className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Bus Number" required="" />
                                         </div>
                                     </div>
-                                    <div class="grid gap-4 mb-4 grid-cols-2">
-                                        <div class="col-span-2">
-                                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Seating Capacity:  </label><p></p>
+                                    <div className="grid gap-4 mb-4 grid-cols-2">
+                                        <div className="col-span-2">
+                                            <label for="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Seating Capacity:  </label><p></p>
                                             <input defaultValue={Capacity} onChange={(e) => setCapacity(e.target.value)} type="number" name="otp" id="name" class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Seating Capacity" required="" />
                                         </div>
                                     </div>
 
                                     <label className='font-mono text-sm mt-2 -mb-3'>Upload Bus Pic</label>
-                                    <input type="file" onChange={handleimgChange} />
+                                    <input type="file" onChange={handleImgChange} />
                                     <img className='max-w-56 max-h-44' src={file} />
 
                                 </form>

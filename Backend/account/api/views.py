@@ -7,12 +7,9 @@ from account.tasks import send_notification_mail
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.exceptions import AuthenticationFailed, ParseError
 from django.contrib.auth import authenticate
-from .serializers import UserRegisterSerializer, UserSerializer, RegVendorSerializer, VendorDetailSerializer
+from .serializers import UserRegisterSerializer, UserSerializer, VendorDetailSerializer
 import random
 from rest_framework import generics
-from django.core.mail import send_mail
-from django.core.files.base import ContentFile
-from urllib.request import urlopen
 from rest_framework.parsers import MultiPartParser, FormParser
 from decouple import config
 from google.oauth2 import id_token
@@ -92,6 +89,7 @@ class LogoutView(APIView):
 class RegisterView(APIView):
     def post(self, request):
         serializer = UserRegisterSerializer(data=request.data)
+        print(request.data)
         if serializer.is_valid():
             serializer.save()
             user = Account.objects.get(email=request.data['email'])

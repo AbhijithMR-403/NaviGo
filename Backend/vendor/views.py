@@ -1,5 +1,6 @@
-from django.shortcuts import render
-from .serializers import BusAddSerializer, BusDetailSerializer, BusRouteSerializer, RouteWayPointSerializer
+from rest_framework.views import APIView
+from rest_framework import status
+from .serializers import BusAddSerializer, BusDetailSerializer, BusCreateRouteSerializer, RouteWayPointSerializer, BusListRouteSerializer
 from rest_framework import generics
 from .models import BusDetail, Route, wayPoints
 from account.models import VendorDetails
@@ -12,15 +13,15 @@ from rest_framework.permissions import IsAuthenticated
 class BusCreateView(generics.CreateAPIView):
     queryset = BusDetail.objects.all()
     serializer_class = BusAddSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 
 # List all the Buses available
-# ? This needs to change as a vendor need not view all the buses but only their own
+# ? This needs to change, as a vendor need not view all the buses but only their own
 class BusListView(generics.ListAPIView):
     queryset = BusDetail.objects.all()
     serializer_class = BusDetailSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 
 class vendorDetailsView(generics.RetrieveUpdateAPIView):
@@ -29,10 +30,16 @@ class vendorDetailsView(generics.RetrieveUpdateAPIView):
     lookup_field = 'user'
 
 
-# Create Route View
-class BusRouteView(generics.ListCreateAPIView):
+# Create bus Route View
+class BusRouteCreateView(generics.ListCreateAPIView):
     queryset = Route.objects.all()
-    serializer_class = BusRouteSerializer
+    serializer_class = BusCreateRouteSerializer
+
+
+# List the route Bus is going to travel
+class BusRouteListView(generics.ListCreateAPIView):
+    queryset = Route.objects.all()
+    serializer_class = BusListRouteSerializer
 
 
 class RouteWayPointView(generics.ListCreateAPIView):

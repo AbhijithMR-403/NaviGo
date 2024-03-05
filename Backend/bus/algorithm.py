@@ -1,3 +1,6 @@
+from .models import ConnectedRoute
+
+
 def find_all_paths(graph, start, end, path=[]):
     path = path + [start]
     if start == end:
@@ -13,27 +16,19 @@ def find_all_paths(graph, start, end, path=[]):
     return paths
 
 
-connections = [
-    (1, 2),
-    (1, 3),
-    (2, 5),
-    (5, 9),
-    (3, 4),
-    (4, 8),
-    (7, 6),
-    (6, 9),
-    (8, 7),
-    (8, 9),
-]
+def algorithmAllPaths(start, end):
+    connections = []
+    for Route in ConnectedRoute.objects.all():
+        connections.append((Route.bus_stop_1.id, Route.bus_stop_2.id))
 
-# Construct graph representation
-graph = {}
-for src, dst in connections:
-    if src not in graph:
-        graph[src] = []
-    graph[src].append(dst)
-print(graph)
+    # Construct graph representation
+    graph = {}
+    for src, dst in connections:
+        if src not in graph:
+            graph[src] = []
+        graph[src].append(dst)
+    print(graph)
 
-
-print('\n\n\n')
-print(find_all_paths(graph, 1, 9))
+    print('\n\n\n')
+    print(find_all_paths(graph, start, end))
+    return find_all_paths(graph, int(start), int(end))
