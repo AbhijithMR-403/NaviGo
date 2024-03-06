@@ -93,13 +93,17 @@ class AvailableRoutes(APIView):
             return Response({'origin': 'origin is not available'})
         if 'destination' not in request.query_params:
             return Response({'destination': 'destination is not available'})
-        origin = request.query_params['origin']
-        destination = request.query_params['destination']
-        directions = algorithmAllPaths(origin, destination)
-        print(directions)
+        # Check the origin and destination are numbers
+        try:
+            origin = int(request.query_params['origin'])
+            destination = int(request.query_params['destination'])
+        except Exception:
+            return Response({'error': 'both origin and destination must be numbers'}, status=status.HTTP_400_BAD_REQUEST)
+        wayPoints = algorithmAllPaths(origin, destination)
+        serialized_wayPoints = [[BusStopSerializer(bus_stop).data for bus_stop in sublist if bus_stop.id not in [origin, destination]] for sublist in wayPoints]
 
         if origin and destination:
             print(origin, destination)
-            return Response({'origin': origin, 'destination': destination, "directions": directions})
+            return Response({'origin': origin, 'destination': destination, "wayPoint": serialized_wayPoints})
         else:
             return Response({'error': 'No stops provided'})
