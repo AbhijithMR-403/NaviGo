@@ -6,9 +6,8 @@ function VendorPanel({children}) {
     
     <>
     <VendorNav />
-    <div className='sm:pl-64 pt-8'>
-      <div className='p-8'>
-
+    <div className='md:pl-64 pt-8'>
+      <div className='md:p-8'>
     {children}
 
       </div>

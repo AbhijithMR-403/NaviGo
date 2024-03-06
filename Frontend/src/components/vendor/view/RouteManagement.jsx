@@ -12,6 +12,7 @@ function RouteManagement() {
   const [stop1, setStop1] = useState(null)
   const [stop2, setStop2] = useState(null)
   const [AvailableRoutes, setAvailableRoutes] = useState(null)
+  const [chosen, setChosen] = useState(null)
 
   useEffect(() => {
     AdminBusAxios.get('/bus/list').then(res => {
@@ -40,6 +41,7 @@ function RouteManagement() {
       await VendorAxios.get('/bus/route/available', { params: formData }).then(res => {
         setAvailableRoutes(res.data)
         console.log(res.data);
+
       }).catch(err => console.error(err))
     }
   }
@@ -47,8 +49,9 @@ function RouteManagement() {
 
   return (
     <>
-
-    <StopListModal />
+    {chosen && AvailableRoutes &&
+    <StopListModal origin={AvailableRoutes.origin} setChosen={setChosen} destination={AvailableRoutes.destination} waypoints={chosen}/>
+    }
       <h1 className='text-center font-bold text-2xl m-6'>Connect stop</h1>
       <div className='mb-8 w-full lG:w-3/4 z-50 top-48'>
         <div className='m-8 justify-evenly flex'>
@@ -88,7 +91,7 @@ function RouteManagement() {
         <div className='m-5 mt-8 justify-evenly flex flex-wrap'>
                 {AvailableRoutes && AvailableRoutes.wayPoint.map((res)=>{
                   return(
-                  <RouteCard Waypoint={res} />
+                  <RouteCard setChosen={setChosen} Waypoint={res} />
 )
                 })}
 
