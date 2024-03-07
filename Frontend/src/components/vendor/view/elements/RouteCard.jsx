@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from "react-router-dom";
 
-const RouteCard= ({ Waypoint, setChosen }) => {
+const RouteCard= ({ Waypoint, validateSetChosen }) => {
   // Calculate the number of filled stars and the remaining fractional part
   console.log(Waypoint.length);
   return (
@@ -10,7 +10,7 @@ const RouteCard= ({ Waypoint, setChosen }) => {
       className="flex flex-col items-center p-1 mb-2 bg-gray-300 border rounded-xl shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700"
     >
 
-      <div className="flex flex-col justify-between p-2 leading-normal" onClick={()=>setChosen(Waypoint)}>
+      <div className="flex flex-col justify-between p-2 leading-normal" onClick={()=>{validateSetChosen(Waypoint)}}>
         <h5 className="mb-2 text-lg font-bold tracking-tight text-gray-900">
           {Waypoint.length} waypoint
         </h5>

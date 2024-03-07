@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom';
 import IsAuthUser from '../../utils/IsAuthUser';
-import Loader from '../../components/loader/loader';
+import Loader from '../../components/loader/Loader';
 
 function VendorRoute({ children }) {
     

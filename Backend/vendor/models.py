@@ -63,6 +63,16 @@ class wayPoints(models.Model):
     class Meta:
         unique_together = [['route', 'stop'], ['route', 'order']]
 
+    def save(self, *args, **kwargs):
+        if not self.order:
+            last_order = wayPoints.objects.filter(route=self.route).order_by('-order').first()
+            if last_order:
+                self.order = last_order.order + 1
+            else:
+                self.order = 1
+        self.clean()
+        super().save(*args, **kwargs)
+
     def clean(self):
         waypoints_with_origin = wayPoints.objects.filter(
             route__origin=self.stop)
@@ -74,9 +84,3 @@ class wayPoints(models.Model):
         if waypoints_with_destination.exists():
             raise ValidationError(
                 'Destination cannot be used in any waypoints.')
-
-    def save(self, *args, **kwargs):
-        self.origin = wayPoints.objects.filter(
-            stop=self.stop,  route=self.route).count() + 1
-        self.clean()
-        super().save(*args, **kwargs)

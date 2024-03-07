@@ -70,8 +70,8 @@ class RouteWayPointSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = wayPoints
-        fields = '__all__'
-        # exclude = ["order"]
+        # fields = '__all__'
+        exclude = ["order"]
 
 
 class BusListRouteSerializer(serializers.ModelSerializer):

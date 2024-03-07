@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react'
 import "./Style/loader.scss"
-import Loader from './components/loader/loader';
+import Loader from './components/loader/Loader';
 import { Provider } from "react-redux";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ToastContainer } from 'react-toastify';
