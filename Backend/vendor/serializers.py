@@ -55,8 +55,8 @@ class BusCreateRouteSerializer(serializers.ModelSerializer):
         if destination == origin:
             raise serializers.ValidationError(
                 'Destination and Origin must be different')
-        if Route.objects.filter(destination=destination, origin=origin).exists():
-            raise serializers.ValidationError('This route already exists')
+        # if Route.objects.filter(destination=destination, origin=origin, bus_detail=data['bus_detail']).exists():
+        #     raise serializers.ValidationError('This route already exists')
         # if 'wayPointCount' in data:
         #     waypoints = data['wayPointCount']
         #     if waypoints and len(waypoints) < 1 or len(waypoints) > 8:
@@ -65,9 +65,15 @@ class BusCreateRouteSerializer(serializers.ModelSerializer):
         return data
 
 
-class RouteWayPointSerializer(serializers.ModelSerializer):
+class RouteWayPointListSerializer(serializers.ModelSerializer):
     stop = BusStopSerializer()
 
+    class Meta:
+        model = wayPoints
+        fields = '__all__'
+
+
+class RouteWayPointCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = wayPoints
         # fields = '__all__'
@@ -75,7 +81,7 @@ class RouteWayPointSerializer(serializers.ModelSerializer):
 
 
 class BusListRouteSerializer(serializers.ModelSerializer):
-    waypoints = RouteWayPointSerializer(many=True, read_only=True)
+    waypoints = RouteWayPointListSerializer(many=True, read_only=True)
 
     class Meta:
         model = Route

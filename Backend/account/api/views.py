@@ -100,13 +100,6 @@ class RegisterView(APIView):
                     user.OTP = random_num
                     user.save()
                     send_notification_mail.delay(request.POST['email'], f"{random_num} -OTP")
-                    # send_mail(
-                    #     "OTP AUTHENTICATING NaviGO",
-                    #     f"{random_num} -OTP",
-                    #     "luttapimalayali@gmail.com",
-                    #     [request.POST['email']],
-                    #     fail_silently=False,
-                    # )
                 except:
                     return Response({"Message": "Unknown error"})
         else:
@@ -237,9 +230,6 @@ class UserGoogleAuth(APIView):
             email = id_info['email']
             print(' maankajfakdj\n\nthen next')
 
-
-            val = send_notification_mail.delay('abhijithmr581329@gmail.com', "this what the -OTP")
-
         except KeyError:
             raise ParseError('Check credential')
 
@@ -263,6 +253,7 @@ class UserGoogleAuth(APIView):
 
         content = {
             'refresh': str(refresh),
+            'user_id': user.id,
             'access': str(refresh.access_token),
             'isAdmin': False,
             "isVendor": False,
@@ -276,3 +267,8 @@ class UserGoogleAuth(APIView):
 class AddVendorDetails(generics.CreateAPIView):
     queryset = VendorDetails.objects.all()
     serializer_class = VendorDetailSerializer
+
+
+class changePassword(APIView):
+    def put(self, request, *args, **kwargs):
+        email = kwargs['email']

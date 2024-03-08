@@ -7,5 +7,6 @@ urlpatterns = [
     path("detail/<int:user>", views.vendorDetailsView.as_view(), name="vendorDetailsView"),
     path("route/create", views.BusRouteCreateView.as_view(), name="BusRouteView"),
     path("route/list", views.BusRouteListView.as_view(), name="BusRouteView"),
-    path("waypoint/create", views.RouteWayPointView.as_view(), name="BusRouteView"),
+    path("waypoints/list", views.RouteWayPointListView.as_view(), name="BusRouteListView"),
+    path("waypoint/create", views.RouteWayPointCreateView.as_view(), name="BusRouteCreateView"),
 ]

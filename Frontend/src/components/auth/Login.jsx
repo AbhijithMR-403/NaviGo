@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import InputField from './elements/inputField'
+import InputField from './elements/InputField'
 import { API_BASE_URL } from '../../constant/api';
 import axios from 'axios'
 import { jwtDecode } from "jwt-decode";
@@ -49,12 +49,16 @@ function Login() {
     } 
     await axios.post(API_BASE_URL + '/auth/google', formData).then((res)=>{
       console.log(res)
+      
+      localStorage.setItem('access', res.data.access)
+      localStorage.setItem('refresh', res.data.refresh)
       dispatch(
         Set_Authentication({
           name: jwtDecode(res.data.access).name,
           isAuthenticated: true,
           isAdmin: res.data.isAdmin,
-          is_vendor: res.data.isVendor
+          is_vendor: res.data.isVendor,
+          userid: res.data.user_id
         })
       );
       TSuccess("You have successfully login")

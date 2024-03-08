@@ -1,7 +1,7 @@
 from .models import ConnectedRoute, BusStop
 
 
-def find_all_paths(graph, start, end, path=[]):
+def find_all_paths(graph, start, end, path=[], count=0):
     path = path + [start]
     if start == end:
         return [path]
@@ -27,9 +27,7 @@ def algorithmAllPaths(start, end):
         if src not in graph:
             graph[src] = []
         graph[src].append(dst)
-    print(graph)
 
     start = BusStop.objects.get(pk=start)
     end = BusStop.objects.get(pk=end)
-    print(find_all_paths(graph, start, end))
     return find_all_paths(graph, start, end)

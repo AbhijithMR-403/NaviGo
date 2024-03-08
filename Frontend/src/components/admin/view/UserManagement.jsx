@@ -31,7 +31,6 @@ function UserManagement() {
     axios.get(API_BASE_URL + '/admin/listuser').then((res) => {
       setUsers(res.data)
       console.log(res.data);
-      // console.log(res.data, "dsfasdfa\n\n", listusers);
     }).catch((err) => {
       console.error(err)
     })
@@ -44,7 +43,7 @@ function UserManagement() {
     await axios.put(API_BASE_URL+`/admin/user/detail/${id}/`, formData).then((res)=>{
       TSuccess('completed')
       seteditfield(true)
-      // REmove this line after optiming this is of no use
+      // Remove this line after optiming this is of no use
       axios.get(API_BASE_URL + '/admin/listuser').then((res) => {
         setUsers(res.data)
       }).catch((err) => {
@@ -66,8 +65,6 @@ function UserManagement() {
       setIsActive(res.data.is_active)
       setIsVendor(res.data.is_vendor)
       setid(id)
-
-      console.log(res.data, "dsfasdfa\n\n", listusers);
       console.log(res.data);
 
     }).catch((err) => {

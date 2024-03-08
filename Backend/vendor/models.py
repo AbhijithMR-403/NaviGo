@@ -32,10 +32,12 @@ class Route(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2)
     bus_detail = models.ForeignKey(
         BusDetail, on_delete=models.CASCADE, blank=False)
+    starting_time = models.TimeField()
+    ending_time = models.TimeField()
     wayPointCount = models.PositiveIntegerField(null=True)
 
-    class Meta:
-        unique_together = ['origin', 'destination']
+    # class Meta:
+    #     unique_together = ['origin', 'destination', 'bus_detail', 'starting_time', 'ending_time']
 
     def __str__(self) -> str:
         return f"{self.origin}-{self.destination}"
@@ -44,10 +46,10 @@ class Route(models.Model):
 
         if self.origin == self.destination:
             raise ValidationError('Both stop cannot to the same')
-        check_stop = Route.objects.filter(
-            origin=self.origin, destination=self.destination, bus_detail=self.bus_detail).exists()
-        if check_stop:
-            raise ValidationError("This bus in this route already exists")
+        # check_stop = Route.objects.filter(
+        #     origin=self.origin, destination=self.destination, bus_detail=self.bus_detail).exists()
+        # if check_stop:
+        #     raise ValidationError("This bus in this route already exists")
 
     def save(self, *args, **kwargs):
         self.full_clean()

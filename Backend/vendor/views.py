@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework import status
-from .serializers import BusAddSerializer, BusDetailSerializer, BusCreateRouteSerializer, RouteWayPointSerializer, BusListRouteSerializer
+from .serializers import BusAddSerializer, BusDetailSerializer, BusCreateRouteSerializer, RouteWayPointCreateSerializer, RouteWayPointListSerializer, BusListRouteSerializer
 from rest_framework import generics
 from .models import BusDetail, Route, wayPoints
 from account.models import VendorDetails
@@ -31,17 +31,23 @@ class vendorDetailsView(generics.RetrieveUpdateAPIView):
 
 
 # Create bus Route View
-class BusRouteCreateView(generics.ListCreateAPIView):
+class BusRouteCreateView(generics.CreateAPIView):
     queryset = Route.objects.all()
     serializer_class = BusCreateRouteSerializer
 
 
 # List the route Bus is going to travel
-class BusRouteListView(generics.ListCreateAPIView):
+class BusRouteListView(generics.ListAPIView):
     queryset = Route.objects.all()
     serializer_class = BusListRouteSerializer
 
 
-class RouteWayPointView(generics.ListCreateAPIView):
+# Create waypoints
+class RouteWayPointListView(generics.ListCreateAPIView):
     queryset = wayPoints.objects.all()
-    serializer_class = RouteWayPointSerializer
+    serializer_class = RouteWayPointListSerializer
+
+
+class RouteWayPointCreateView(generics.CreateAPIView):
+    queryset = wayPoints.objects.all()
+    serializer_class = RouteWayPointCreateSerializer

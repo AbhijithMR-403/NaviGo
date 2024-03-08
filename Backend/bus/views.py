@@ -102,6 +102,8 @@ class AvailableRoutes(APIView):
         wayPoints = algorithmAllPaths(origin, destination)
         serialized_wayPoints = [[BusStopSerializer(bus_stop).data for bus_stop in sublist if bus_stop.id not in [
             origin, destination]] for sublist in wayPoints]
+        for i in wayPoints:
+            print()
 
         if origin and destination:
             try:
@@ -109,7 +111,6 @@ class AvailableRoutes(APIView):
                 destination = BusStopSerializer(BusStop.objects.get(pk=destination)).data
             except:
                 return Response({'error': 'Wrong origin or destination'}, status=status.HTTP_400_BAD_REQUEST)
-            print(origin)
             return Response({'origin': origin, 'destination': destination, "wayPoint": serialized_wayPoints})
         else:
             return Response({'error': 'No stops provided'})

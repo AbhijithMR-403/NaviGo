@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 const RouteCard= ({ Waypoint, validateSetChosen }) => {
   // Calculate the number of filled stars and the remaining fractional part
-  console.log(Waypoint.length);
   return (
     <Link
       to=""
@@ -17,9 +16,10 @@ const RouteCard= ({ Waypoint, validateSetChosen }) => {
         <h5 className="mb-2 text-sm font-bold tracking-tight text-gray-900">
           {Waypoint.length == 1 && (Waypoint[0].stop_name)}
           {Waypoint.length == 2 && (`${Waypoint[0].stop_name} -- ${Waypoint[1].stop_name}`)}
+          {Waypoint.length == 3 && (`${Waypoint[0].stop_name} -- ${Waypoint[1].stop_name} -- ${Waypoint[2].stop_name}`)}
           {Waypoint.length == 0 && 'No way points'}
-          {Waypoint.length >2 && Waypoint.length < 5 && `${Waypoint[Math.round(Waypoint.length/2) +1].stop_name} -- ${Waypoint[Math.round(Waypoint.length/2)].stop_name} -- ${Waypoint[Math.round(Waypoint.length/2) - 1].stop_name}`}
-          {Waypoint.length >=5 && `${Waypoint[Math.round(Waypoint.length/2) +2].stop_name} -- ${Waypoint[Math.round(Waypoint.length/2)].stop_name} -- ${Waypoint[Math.round(Waypoint.length/2) - 2].stop_name}`}
+          {Waypoint.length >3 && Waypoint.length < 6 && `${Waypoint[Math.round(Waypoint.length/2) +1].stop_name} -- ${Waypoint[Math.round(Waypoint.length/2)].stop_name} -- ${Waypoint[Math.round(Waypoint.length/2) - 1].stop_name}`}
+          {Waypoint.length >=6 && `${Waypoint[Math.round(Waypoint.length/2) +2].stop_name} -- ${Waypoint[Math.round(Waypoint.length/2)].stop_name} -- ${Waypoint[Math.round(Waypoint.length/2) - 2].stop_name}`}
         </h5>
         
         
