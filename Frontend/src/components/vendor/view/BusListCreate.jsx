@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { VendorAxios, VendorImgAxios } from '../../api/api_instance'
 import { TSuccess } from '../../toastify/Toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import DispatchAuth from '../../../utils/DispatchAuthDetails/DispatchAuth';
+import { jwtDecode } from 'jwt-decode';
 
 function BusListCreate() {
     const [BusList, setBusList] = useState([])
@@ -9,15 +12,22 @@ function BusListCreate() {
     const [busName, setBusName] = useState('')
     const [BusNumber, setBusNumber] = useState('')
     const [busPic, setBusPic] = useState(null);
+    const { userId } = useSelector(state => state.authentication_user)
 
 
     const [file, setFile] = useState([]);
 
+    const dispatch = useDispatch();
     const FetchBusLists = () =>{
-    VendorAxios.get('/vendor/bus/list').then((res) => {
-        setBusList(res.data)
+    VendorAxios.get(`/vendor/bus/list/${userId}`).then((res) => {
         console.log(res);
-    }).catch((err) => {
+        setBusList(res.data)
+    }).catch(async(err) => {
+        
+        if(err.response.status == 401){
+            console.log('yep');
+            await DispatchAuth(dispatch)
+        }
         console.log(err)
     })}
     useEffect(() => {
@@ -59,6 +69,7 @@ function BusListCreate() {
             formData.append('bus_name', busName);
             formData.append('bus_number', BusNumber);
             formData.append('identify_img', busPic);
+            formData.append('user_id', userId);
             console.log(busPic);
             console.log(formData);
             

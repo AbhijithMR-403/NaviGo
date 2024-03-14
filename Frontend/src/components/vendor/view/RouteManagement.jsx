@@ -7,6 +7,7 @@ import RouteCard from './elements/RouteCard'
 import StopListModal from './elements/StopListModal'
 import TimePicker from './elements/TimePicker'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 function RouteManagement() {
   const [stopNames, setStopNamesList] = useState([])
@@ -15,6 +16,8 @@ function RouteManagement() {
   const [stop1, setStop1] = useState(null)
   // destination
   const [stop2, setStop2] = useState(null)
+  const { userId } = useSelector(state => state.authentication_user)
+
 
   const [AvailableRoutes, setAvailableRoutes] = useState(null)
   const [chosen, setChosen] = useState(null)
@@ -31,7 +34,7 @@ function RouteManagement() {
     }).catch((err) => {
       console.log("Error: " + err)
     });
-    AdminBusAxios.get('/vendor/bus/list').then(res => {
+    AdminBusAxios.get(`/vendor/bus/list/${userId}`).then(res => {
       console.log(res.data);
       setBusNames(res.data)
     }).catch((err) => {
@@ -90,18 +93,16 @@ function RouteManagement() {
       'ending_time':endTime
     }
     await VendorAxios.post(`/vendor/route/create`, form_data).then((response)=>{
-      
       console.log(response);
       {chosen.map(async(res, index)=>{
         setTimeout(() => {
-
         const wayPointData = {
           'route':response.data.id,
           'stop':res.id,
         }
         console.log(wayPointData);
         VendorAxios.post('/vendor/waypoint/create',wayPointData).then((pointRes)=>{
-          console.log(pointRes);
+          TSuccess('Route added successfully!')
         }).catch((err)=>{
           console.log(err);
         })

@@ -42,16 +42,14 @@ class BusDetailSerializer(serializers.ModelSerializer):
 class BusCreateRouteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Route
-        # fields = '__all__'
-        exclude = ['wayPointCount',]
-
-    # def validate_destination(self, value):
+        fields = '__all__'
 
     def validate(self, data):
         print(data, '\n\n\n\n\n')
         destination = data['destination']
         origin = data['origin']
-        data['wayPointCount'] = 3
+        start = data['']
+        end = data['']
         if destination == origin:
             raise serializers.ValidationError(
                 'Destination and Origin must be different')
@@ -82,6 +80,20 @@ class RouteWayPointCreateSerializer(serializers.ModelSerializer):
 
 class BusListRouteSerializer(serializers.ModelSerializer):
     waypoints = RouteWayPointListSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Route
+        fields = '__all__'
+
+
+class WayPointViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = wayPoints
+        fields = '__all__'
+
+
+class RouteWayPointDetailSerializer(serializers.ModelSerializer):
+    waypoints = WayPointViewSerializer(many=True)
 
     class Meta:
         model = Route

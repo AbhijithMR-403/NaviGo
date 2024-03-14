@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework import status
-from .serializers import BusAddSerializer, BusDetailSerializer, BusCreateRouteSerializer, RouteWayPointCreateSerializer, RouteWayPointListSerializer, BusListRouteSerializer
+from .serializers import BusAddSerializer, BusDetailSerializer, BusCreateRouteSerializer, RouteWayPointCreateSerializer, RouteWayPointListSerializer, BusListRouteSerializer, RouteWayPointDetailSerializer
 from rest_framework import generics
 from .models import BusDetail, Route, wayPoints
 from account.models import VendorDetails
@@ -22,6 +22,14 @@ class BusListView(generics.ListAPIView):
     queryset = BusDetail.objects.all()
     serializer_class = BusDetailSerializer
     permission_classes = [IsAuthenticated]
+    # lookup_field = 'user_id'
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('user_id')
+        print("User ID:", user_id)
+        queryset = BusDetail.objects.filter(user_id=user_id)
+        print("Filtered queryset:", queryset)
+        return queryset
 
 
 class vendorDetailsView(generics.RetrieveUpdateAPIView):
@@ -43,11 +51,17 @@ class BusRouteListView(generics.ListAPIView):
 
 
 # Create waypoints
-class RouteWayPointListView(generics.ListCreateAPIView):
+class WayPointListView(generics.ListCreateAPIView):
     queryset = wayPoints.objects.all()
     serializer_class = RouteWayPointListSerializer
 
 
-class RouteWayPointCreateView(generics.CreateAPIView):
+class WayPointCreateView(generics.CreateAPIView):
     queryset = wayPoints.objects.all()
     serializer_class = RouteWayPointCreateSerializer
+
+
+class RouteWayPointView(generics.ListAPIView):
+    queryset = Route.objects.all()
+    serializer_class = RouteWayPointDetailSerializer
+    # permission_classes = (IsOwnerOrReadOnly, )

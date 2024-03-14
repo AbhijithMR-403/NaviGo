@@ -1,10 +1,12 @@
 from django.core.exceptions import ValidationError
 from django.db import models
+from account.models import Account
 from bus.models import BusStop
 # Create your models here.
 
 
 class BusDetail(models.Model):
+    user_id = models.ForeignKey(Account, on_delete=models.CASCADE)
     bus_number = models.CharField(max_length=10, unique=True)
     bus_name = models.CharField(max_length=30, blank=True, unique=True)
     # route = models.ForeignKey('Route', on_delete=models.CASCADE)
@@ -14,8 +16,6 @@ class BusDetail(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.available_seats:
-            print(type(self), 'this part is for self\n\n\n\n\n',
-                  type(self.available_seats))
             self.available_seats = self.seating_capacity
         super().save(*args, **kwargs)
 
@@ -34,7 +34,6 @@ class Route(models.Model):
         BusDetail, on_delete=models.CASCADE, blank=False)
     starting_time = models.TimeField()
     ending_time = models.TimeField()
-    wayPointCount = models.PositiveIntegerField(null=True)
 
     # class Meta:
     #     unique_together = ['origin', 'destination', 'bus_detail', 'starting_time', 'ending_time']

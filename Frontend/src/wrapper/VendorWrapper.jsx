@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom';
 import Approval from '../components/vendor/vendor_auth/Approval';
 import VendorAuth from '../pages/vendorPartition/Authentication';
@@ -10,9 +10,23 @@ import VendorAuthRouter from '../routes/Vendor/VendorAuthRouter';
 import VendorProfile from '../components/vendor/view/VendorProfile';
 import BusListCreate from '../components/vendor/view/BusListCreate';
 import RouteManagement from '../components/vendor/view/RouteManagement';
+import BusRouteLists from '../components/vendor/view/BusRouteLists';
+import { useDispatch, useSelector } from 'react-redux';
+import IsAuthUser from '../utils/IsAuthUser';
+import { Set_Authentication } from '../redux/authentication/AuthenticationSlice';
+import DispatchAuth from '../utils/DispatchAuthDetails/DispatchAuth';
 
 function VendorWrapper() {
-  
+
+  const authentication_user = useSelector(state => state.authentication_user)
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!authentication_user.name) {
+
+      DispatchAuth(dispatch);
+
+    }
+  }, [authentication_user])
 
   const routes = useRoutes([
     {
@@ -27,9 +41,10 @@ function VendorWrapper() {
         </>
       ),
       children: [
-        { element: <VendorProfile/>, index: true },
-        { element: <BusListCreate/>, path: '/bus' },
-        { element: <RouteManagement/>, path: '/route' },
+        { element: <VendorProfile />, index: true },
+        { element: <BusListCreate />, path: '/bus' },
+        { element: <RouteManagement />, path: '/route' },
+        { element: <BusRouteLists />, path: '/route/list' },
 
       ],
     },

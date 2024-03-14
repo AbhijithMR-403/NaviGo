@@ -7,8 +7,8 @@ import Loader from '../../components/loader/Loader';
 function VendorRoute({ children }) {
     
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isVendor, setisVendor] = useState(false)
-  const [isVendorActive, setisVendorActive] = useState(false)
+  const [isVendor, setIsVendor] = useState(false)
+  const [isVendorActive, setIsVendorActive] = useState(false)
   const [isAdmin, setAdmin] = useState(false)
   const [isLoading, setLoading] = useState(true);
   
@@ -17,8 +17,8 @@ function VendorRoute({ children }) {
     const fetchData = async () => {
       const authInfo = await IsAuthUser();
       console.log(authInfo);
-      setisVendor(authInfo.is_vendor)
-      setisVendorActive(authInfo.is_vendorActive)
+      setIsVendor(authInfo.is_vendor)
+      setIsVendorActive(authInfo.is_vendorActive)
       console.log(isVendor);
       setIsAuthenticated(authInfo.isAuthenticated);
       setAdmin(authInfo.is_admin);

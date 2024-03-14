@@ -26,7 +26,8 @@ function UserWrapper() {
     dispatch(
       Set_Authentication({
         name: isAuthenticated.name,
-        isAuthenticated: isAuthenticated.isAuthenticated
+        isAuthenticated: isAuthenticated.isAuthenticated,
+        userId: isAuthenticated.user_id,
       })
     );
   };

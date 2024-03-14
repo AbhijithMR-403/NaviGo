@@ -13,7 +13,7 @@ const TimePicker = ({setTime}) => {
       end_time: fromTimeFormatted.format("HH:mm:ss"),
     };
     console.log(newSlot)
-  },[hour])
+  },[hour,minute])
   console.log(minute, hour)
   return (
     <div className="mt-2 p-5 w-24 bg-white rounded-lg shadow-xl">
@@ -24,7 +24,7 @@ const TimePicker = ({setTime}) => {
         </select>
         <span className="text-xl mr-3">:</span>
         <select name="minutes" defaultValue={minute} onChange={(e)=>setMinute(e.target.value)} className="bg-transparent text-xl appearance-none outline-none mr-4">
-        {[...Array(59)].map((res, ind) => <option key={ind} value={ind + 1}> {ind + 1} </option>
+        {[...Array(60)].map((res, ind) => <option key={ind} value={ind}> {ind} </option>
           )}
         </select>
   </div>
