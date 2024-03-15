@@ -21,51 +21,31 @@ function UserMap() {
             style={{backgroundColor:'#7DFFCE'}} */}
             <div className='bg-blue-100 h-full sm:w-96 absolute z-50'>
                 <div className='flex justify-evenly mt-10'>
-                    
+
                     {/* Origin */}
                     <div>
-                        <label for="countries" class="block mb-2 text-sm font-medium text-gray-900">Select an option</label>
-                        <input
-                         style={{ backgroundColor: '#51E08F' }}
-                            type="text"
-                            list="countries1"
-                            // placeholder="Search for a country"
-                            className="bg-black border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-300 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        />
-                        <datalist id="countries1">
-                            <option style={{ backgroundColor: '#C2FCC6' }} value="usa" />
-                            <option style={{ backgroundColor: '#C2FCC6' }} value="canada" />
-                            <option style={{ backgroundColor: '#C2FCC6' }} value="france" />
-                            <option style={{ backgroundColor: '#C2FCC6' }} value="dutch" />
-                            <option style={{ backgroundColor: '#C2FCC6' }} value="US" />
-                            <option style={{ backgroundColor: '#C2FCC6' }} value="CA" />
-                            <option style={{ backgroundColor: '#C2FCC6' }} value="FR" />
-                            <option style={{ backgroundColor: '#C2FCC6' }} value="DE" />
-                        </datalist>
+                        <label for="countries" class="block mb-2 text-sm font-medium text-gray-900">Starting stop</label>
+                        <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            <option style={{ backgroundColor: '#C2FCC6' }} selected>Choose a country</option>
+                            <option style={{ backgroundColor: '#C2FCC6' }} value="US">United States</option>
+                            <option style={{ backgroundColor: '#C2FCC6' }} value="CA">Canada</option>
+                            <option style={{ backgroundColor: '#C2FCC6' }} value="FR">France</option>
+                            <option style={{ backgroundColor: '#C2FCC6' }} value="DE">Germany</option>
+                        </select>
                     </div>
 
                     {/* Destination */}
                     <div>
-                        <label for="countries" class="block mb-2 text-sm font-medium text-gray-900">Select an option</label>
-                        <input
-                         style={{ backgroundColor: '#51E08F' }}
-                            type="text"
-                            list="countries1"
-                            // placeholder="Search for a country"
-                            className="bg-black border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-300 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        />
-                        <datalist id="countries1">
-                            <option style={{ backgroundColor: '#C2FCC6' }} value="usa" />
-                            <option style={{ backgroundColor: '#C2FCC6' }} value="canada" />
-                            <option style={{ backgroundColor: '#C2FCC6' }} value="france" />
-                            <option style={{ backgroundColor: '#C2FCC6' }} value="dutch" />
-                            <option style={{ backgroundColor: '#C2FCC6' }} value="US" />
-                            <option style={{ backgroundColor: '#C2FCC6' }} value="CA" />
-                            <option style={{ backgroundColor: '#C2FCC6' }} value="FR" />
-                            <option style={{ backgroundColor: '#C2FCC6' }} value="DE" />
-                        </datalist>
+                        <label for="countries" class="block mb-2 text-sm font-medium text-gray-900">Ending stop</label>
+                        <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            <option style={{ backgroundColor: '#C2FCC6' }} selected>Choose a country</option>
+                            <option style={{ backgroundColor: '#C2FCC6' }} value="US">United States</option>
+                            <option style={{ backgroundColor: '#C2FCC6' }} value="CA">Canada</option>
+                            <option style={{ backgroundColor: '#C2FCC6' }} value="FR">France</option>
+                            <option style={{ backgroundColor: '#C2FCC6' }} value="DE">Germany</option>
+                        </select>
                     </div>
-                    
+
                 </div>
             </div>
             {/* </nav> */}
