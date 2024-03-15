@@ -65,7 +65,6 @@ class RouteWayPointView(generics.ListAPIView):
     def get_queryset(self):
         user_id = self.kwargs.get('user_id')
         print('this is the thing', user_id)
-        print('this is the thing', user_id)
         queryset = Route.objects.select_related('origin').filter(bus_detail__user_id=user_id)
         print("Filtered queryset:", queryset)
         return queryset
