@@ -11,7 +11,8 @@ function VendorRegister() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [darkMode, setDarkMode] = useState(false);
-    const{userID} = useSelector(state => state.vendor_id)
+    const userId = useSelector(state => state.authentication_user.userId)
+
     console.log(userID);
 
     const [name, setname] = useState('')

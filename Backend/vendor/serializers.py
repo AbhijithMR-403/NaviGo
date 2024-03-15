@@ -45,21 +45,21 @@ class BusCreateRouteSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, data):
-        print(data, '\n\n\n\n\n')
         destination = data['destination']
         origin = data['origin']
-        start = data['']
-        end = data['']
+        start = data['starting_time']
+        end = data['ending_time']
         if destination == origin:
             raise serializers.ValidationError(
                 'Destination and Origin must be different')
-        # if Route.objects.filter(destination=destination, origin=origin, bus_detail=data['bus_detail']).exists():
-        #     raise serializers.ValidationError('This route already exists')
-        # if 'wayPointCount' in data:
-        #     waypoints = data['wayPointCount']
-        #     if waypoints and len(waypoints) < 1 or len(waypoints) > 8:
-        #         raise serializers.ValidationError(
-        #             'Way points should contain between 1 to 8 items beyong that cost me money')
+        if Route.objects.filter(bus_detail=data['bus_detail'], starting_time__lt=end, ending_time__gt=start).exists():
+            raise serializers.ValidationError('A route with the same time frame already exists for this bus')
+
+        if 'wayPointCount' in data:
+            waypoints = data['wayPointCount']
+            if waypoints and len(waypoints) < 1 or len(waypoints) > 8:
+                raise serializers.ValidationError(
+                    'Way points should contain between 1 to 8 items beyong that cost me money')
         return data
 
 
@@ -86,14 +86,20 @@ class BusListRouteSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+# ? Currently used only in RouteWayPointDetailSerializer
+# serializer to get the raw Waypoint object
 class WayPointViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = wayPoints
         fields = '__all__'
 
 
+# return Route details along with of bus, waypoints, origin, destination, etc.
 class RouteWayPointDetailSerializer(serializers.ModelSerializer):
     waypoints = WayPointViewSerializer(many=True)
+    bus_detail = BusDetailSerializer()
+    origin = BusStopSerializer()
+    destination = BusStopSerializer()
 
     class Meta:
         model = Route

@@ -13,56 +13,7 @@ const myStyle = {
     const avatarName = data.map((data) => data.charAt(0));
     return avatarName;
   };
-  //JSON to generate a dummy database
-  const apiData = [
-    {
-      category: "Lorem, ipsum dolor.",
-      title:
-        " Lorem ipsum dolor sit, amet consectetur adipisicing elit.Accusamus, mollitia dolorem cupiditat necessitatibus ad quaerepudiandae cumque quos numquam a, natus quod expedita, dictaveniam porro minus delectus eos nemo?",
-      date: new Date().toDateString(),
-      location: "Iscon, Ahmedabad",
-      subCategory: "Ocean",
-      price: "Free",
-      image:
-        "https://www.tailwindtap.com/assets/components/scale-effect-card/flower.jpg",
-      name: "infynno solution",
-    },
-    {
-      category: "Lorem, ipsum dolor.",
-      title:
-        " Lorem ipsum dolor sit, amet consectetur adipisicing elit.Accusamus, mollitia dolorem cupiditat necessitatibus ad quaerepudiandae cumque quos numquam a, natus quod expedita, dictaveniam porro minus delectus eos nemo?",
-      date: new Date().toDateString(),
-      location: "Gota, Ahmedabad",
-      subCategory: "Ocean",
-      price: "Free",
-      image:
-        "https://www.tailwindtap.com/assets/components/scale-effect-card/mountain.jpg",
-      name: "React js",
-    },
-    {
-      category: "Lorem, ipsum dolor.",
-      title:
-        " Lorem ipsum dolor sit, amet consectetur adipisicing elit.Accusamus, mollitia dolorem cupiditat necessitatibus ad quaerepudiandae cumque quos numquam a, natus quod expedita, dictaveniam porro minus delectus eos nemo?",
-      date: new Date().toDateString(),
-      location: "Sola, Ahmedabad",
-      subCategory: "Ocean",
-      price: "$52",
-      image:
-        "https://www.tailwindtap.com/assets/components/scale-effect-card/sunset.jpg",
-      name: "Laravel development",
-    },
-    {
-      category: "Lorem, ipsum dolor.",
-      title: " Lorem ipsum dol",
-      date: new Date().toDateString(),
-      location: "Sarkhej, Ahmedabad",
-      subCategory: "Ocean",
-      price: "Free",
-      image:
-        "https://www.tailwindtap.com/assets/components/scale-effect-card/greenleaves.jpg",
-      name: "Infynno",
-    },
-  ];
+
 function UserBus()  {
     const [BusList, setBusList] = useState([])
     useEffect(() => {
@@ -150,8 +101,8 @@ function UserBus()  {
         fill="none"
         stroke-width="2"
         viewBox="0 0 24 24"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
         height="1em"
         width="1em"
         xmlns="http://www.w3.org/2000/svg"

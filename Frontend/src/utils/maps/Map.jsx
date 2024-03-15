@@ -100,7 +100,9 @@ function Map({ PointA, PointB, dimension = {
                                         {infoWindowOpen && selectedMarker &&
                                             (<InfoWindowF
                                                 position={{lat: selectedMarker.lat, lng: selectedMarker.lng}}
-                                                onCloseClick={() => {setInfoWindowOpen(false), setSelectedMarker(null)}}
+                                                onCloseClick={() => {
+                                                    console.log();
+                                                    setInfoWindowOpen(false), setSelectedMarker(null)}}
                                             >
                                                 <div>
                                                     <h1>{selectedMarker.stop_name}</h1>

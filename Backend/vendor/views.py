@@ -43,25 +43,29 @@ class BusRouteCreateView(generics.CreateAPIView):
     queryset = Route.objects.all()
     serializer_class = BusCreateRouteSerializer
 
-
-# List the route Bus is going to travel
-class BusRouteListView(generics.ListAPIView):
-    queryset = Route.objects.all()
-    serializer_class = BusListRouteSerializer
+# List WayPoints
 
 
-# Create waypoints
 class WayPointListView(generics.ListCreateAPIView):
     queryset = wayPoints.objects.all()
     serializer_class = RouteWayPointListSerializer
 
 
+# Create waypoints
 class WayPointCreateView(generics.CreateAPIView):
     queryset = wayPoints.objects.all()
     serializer_class = RouteWayPointCreateSerializer
 
 
+# To List all Route and It's waypoint, bus details
 class RouteWayPointView(generics.ListAPIView):
     queryset = Route.objects.all()
     serializer_class = RouteWayPointDetailSerializer
-    # permission_classes = (IsOwnerOrReadOnly, )
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('user_id')
+        print('this is the thing', user_id)
+        print('this is the thing', user_id)
+        queryset = Route.objects.select_related('origin').filter(bus_detail__user_id=user_id)
+        print("Filtered queryset:", queryset)
+        return queryset

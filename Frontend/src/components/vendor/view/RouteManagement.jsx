@@ -126,7 +126,7 @@ function RouteManagement() {
       <div className='mb-8 w-full lG:w-3/4 z-50 top-48'>
         <div className='m-8 justify-evenly flex'>
           <div>
-            <select className=' text-center sm:w-56 w-32 h-11 focus:outline-none appearance-none rounded-xl shadow-xl' onChange={(e) => { setFormData({ ...formData, bus_name: e.target.value }) }} name="place1">
+            <select className=' text-center sm:w-56 w-32 h-11 focus:outline-none appearance-none rounded-xl shadow-xl' value={formData.bus_name} onChange={(e) => { setFormData({ ...formData, bus_name: e.target.value }) }} name="place1">
               <option className='text-center outline-none' value="">Choice the Bus</option>
               {BusNames.map((val, index) => (
                 <option className='text-center outline-none' selected={stop1 == val} value={val.id} key={val.id}>{val.bus_name}</option>
@@ -134,7 +134,7 @@ function RouteManagement() {
             </select>
           </div>
           <div>
-            <input placeholder='Price' onChange={(e) => setFormData({ ...formData, price: e.target.value })} className=' text-center sm:w-56 w-32 h-11 focus:outline-none appearance-none rounded-xl shadow-xl' />
+            <input placeholder='Price' value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} className=' text-center sm:w-56 w-32 h-11 focus:outline-none appearance-none rounded-xl shadow-xl' />
           </div>
         </div>
 
