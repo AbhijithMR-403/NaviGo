@@ -10,7 +10,7 @@ function ConnectStop() {
     const [stop2, setStop2] = useState('')
 
     useEffect(() => {
-        AdminBusAxios.get('/bus/list').then(res => {
+        AdminBusAxios.get('/bus/stop/list').then(res => {
             console.log(res.data);
             setStopNames(res.data)
         }).catch((err) => {

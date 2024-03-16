@@ -35,7 +35,7 @@ function BusStop() {
   }, [])
 
   const MarkPoint = () => {
-    AdminBusAxios.get('/bus/list').then(res => {
+    AdminBusAxios.get('/bus/stop/list').then(res => {
       const bus_stop_length = res.data.length
       setStopNames(res.data)
       let lat = 0
@@ -69,7 +69,7 @@ function BusStop() {
       'lng': Point.lng
     }
 
-    await AdminBusAxios.post(API_BASE_URL + '/bus/add', formData).then((res) => {
+    await AdminBusAxios.post(API_BASE_URL + '/bus/stop/add', formData).then((res) => {
       TSuccess("Successfully added")
       setstopName('')
       MarkPoint()

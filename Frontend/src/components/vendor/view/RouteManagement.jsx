@@ -29,7 +29,7 @@ function RouteManagement() {
   const [fromTime, setFromTime] = useState('')
   const [endTime, setEndTime] = useState('')
   useEffect(() => {
-    AdminBusAxios.get('/bus/list').then(res => {
+    AdminBusAxios.get('/bus/stop/list').then(res => {
       setStopNamesList(res.data)
     }).catch((err) => {
       console.log("Error: " + err)

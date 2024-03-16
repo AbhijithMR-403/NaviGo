@@ -7,10 +7,11 @@ import DirectionsMap from './DirectionsMap'
 
 const libraries = ['places',]
 
-function Map({ PointA, PointB, dimension = {
+function MapUsers({ PointA, PointB, dimension = {
     width: 'Auto',
     height: '400px'
 } }) {
+    
     const [stopNames, setStopNames] = useState([])
     const [PointACoordinate, setPointACoordinate] = useState('')
     const [PointBCoordinate, setPointBCoordinate] = useState('')
@@ -130,4 +131,4 @@ function areEqual(prevProps, nextProps) {
         return true
     }
 }
-export default memo(Map, areEqual)
+export default memo(MapUsers, areEqual)

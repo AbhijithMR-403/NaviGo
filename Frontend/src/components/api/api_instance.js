@@ -33,11 +33,10 @@ export const AdminBusAxios = axios.create({
 export const UserAxios = axios.create({
     baseURL: `${API_BASE_URL}`,
     // timeout: 3000,
-    // headers: {
-    //   Authorization: `Bearer ${localStorage.getItem('access')}`,
-    //   Accept: 'application/json',
-    //   'Content-Type': 'application/json',
-    // },
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
   });
 
 
