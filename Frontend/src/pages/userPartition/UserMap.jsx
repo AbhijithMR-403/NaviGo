@@ -26,7 +26,7 @@ function UserMap() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    
+
     return (
         <div className='relative bg-gray-100'>
             {/* <nav> */}
@@ -61,7 +61,29 @@ function UserMap() {
                     </div>
                 </div>
                 {/* To show the available buses */}
-                <div className='flex justify-evenly mt-7 bus-list-card'>
+                <div className='flex justify-evenly mt-4 bus-list-card'>
+                    <section id="card1" class="card">
+                        hello
+                        <div class="card__content">
+                            <p class="card__title">Lorem Ipsum</p>
+                            <p class="card__description">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae
+                            </p>
+                        </div>
+                    </section>
+                </div>
+                <div className='flex justify-evenly mt-4 bus-list-card'>
+                    <section id="card1" class="card">
+                        hello
+                        <div class="card__content">
+                            <p class="card__title">Lorem Ipsum</p>
+                            <p class="card__description">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae
+                            </p>
+                        </div>
+                    </section>
+                </div>
+                <div className='flex justify-evenly mt-4 bus-list-card'>
                     <section id="card1" class="card">
                         hello
                         <div class="card__content">
