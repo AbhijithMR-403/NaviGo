@@ -51,7 +51,7 @@ function VendorLogin() {
                         name: jwtDecode(res.data.access).name,
                         isAuthenticated: true,
                         isAdmin: res.data.isAdmin,
-                        isvendor: res.data.is_vendor
+                        isVendor: res.data.is_vendor
                     })
                 );
                 if (!res.data.is_vendor_active){

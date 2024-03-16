@@ -6,7 +6,6 @@ import { API_BASE_URL } from "../../constant/api";
 export const AuthAxios = axios.create({
     baseURL: `${API_BASE_URL}/auth`,
     // timeout: 3000,
-    
   });
 
 
@@ -31,6 +30,17 @@ export const AdminBusAxios = axios.create({
   });
 
 
+export const UserAxios = axios.create({
+    baseURL: `${API_BASE_URL}`,
+    // timeout: 3000,
+    // headers: {
+    //   Authorization: `Bearer ${localStorage.getItem('access')}`,
+    //   Accept: 'application/json',
+    //   'Content-Type': 'application/json',
+    // },
+  });
+
+
   export const VendorAxios = axios.create({
     baseURL: `${API_BASE_URL}`,
     // timeout: 3000,
@@ -38,6 +48,17 @@ export const AdminBusAxios = axios.create({
       Authorization: `Bearer ${localStorage.getItem('access')}`,
       Accept: 'application/json',
       'Content-Type': 'application/json',
+    },
+  });
+
+
+  export const VendorImgAxios = axios.create({
+    baseURL: `${API_BASE_URL}`,
+    // timeout: 3000,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('access')}`,
+      Accept: 'application/json',
+      'Content-Type': 'multipart/form-data',
     },
   });
 

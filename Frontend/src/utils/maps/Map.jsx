@@ -1,4 +1,4 @@
-import { GoogleMap, MarkerF, useJsApiLoader } from '@react-google-maps/api'
+import { GoogleMap, InfoWindowF, MarkerF, useJsApiLoader } from '@react-google-maps/api'
 import React, { memo, useEffect, useState } from 'react'
 import { AdminBusAxios } from '../../components/api/api_instance'
 import DirectionsMap from './DirectionsMap'
@@ -11,7 +11,7 @@ function Map({ PointA, PointB, dimension = {
     width: 'Auto',
     height: '400px'
 } }) {
-    const [stopNames, setstopNames] = useState([])
+    const [stopNames, setStopNames] = useState([])
     const [PointACoordinate, setPointACoordinate] = useState('')
     const [PointBCoordinate, setPointBCoordinate] = useState('')
 
@@ -32,7 +32,7 @@ function Map({ PointA, PointB, dimension = {
         AdminBusAxios.get('/bus/list').then(res => {
             console.log(res.data, 'yep you again');
             const bus_stop_length = res.data.length
-            setstopNames(res.data)
+            setStopNames(res.data)
             let lat = 0
             let lng = 0;
             res.data.forEach((val) => {
@@ -62,7 +62,14 @@ function Map({ PointA, PointB, dimension = {
     })
     console.log('AdminMap is rendered')
 
+    const [selectedMarker, setSelectedMarker] = useState(null);
+    const [infoWindowOpen, setInfoWindowOpen] = useState(false);
 
+    const handleMarkerClick = (marker) => {
+        setSelectedMarker(marker);
+        setInfoWindowOpen(true);
+      };
+      
 
     return (
         <div>
@@ -82,10 +89,27 @@ function Map({ PointA, PointB, dimension = {
                             <DirectionsMap origin={PointACoordinate} destination={PointBCoordinate} />}
                         {stopNames.map((data, index) => {
                             let pointer = { lat: data.lat, lng: data.lng }
-
-                            return (<MarkerF key={index} position={pointer}
-                                icon={customMarker}
-                            />)
+                            return (
+                                <>
+                                    <MarkerF
+                                        key={data.lat + data.lng} position={pointer}
+                                        icon={customMarker}
+                                        value={'Location Marker info here!'}
+                                        onClick={() => handleMarkerClick(data)}
+                                    />
+                                        {infoWindowOpen && selectedMarker &&
+                                            (<InfoWindowF
+                                                position={{lat: selectedMarker.lat, lng: selectedMarker.lng}}
+                                                onCloseClick={() => {
+                                                    console.log();
+                                                    setInfoWindowOpen(false), setSelectedMarker(null)}}
+                                            >
+                                                <div>
+                                                    <h1>{selectedMarker.stop_name}</h1>
+                                                </div>
+                                            </InfoWindowF>)}
+                                </>
+                            )
                         })}
 
                         {/* {Point && <MarkerF position={Point} />} */}

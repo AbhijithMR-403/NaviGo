@@ -7,12 +7,9 @@ from account.tasks import send_notification_mail
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.exceptions import AuthenticationFailed, ParseError
 from django.contrib.auth import authenticate
-from .serializers import UserRegisterSerializer, UserSerializer, RegVendorSerializer, VendorDetailSerializer
+from .serializers import UserRegisterSerializer, UserSerializer, VendorDetailSerializer
 import random
 from rest_framework import generics
-from django.core.mail import send_mail
-from django.core.files.base import ContentFile
-from urllib.request import urlopen
 from rest_framework.parsers import MultiPartParser, FormParser
 from decouple import config
 from google.oauth2 import id_token
@@ -22,12 +19,9 @@ from google.auth.transport import requests
 class UserLogin(APIView):
 
     def post(self, request):
-
         try:
             email = request.data['email']
             password = request.data['password']
-            print(email, password)
-
         except KeyError:
             raise ParseError('All Fields Are Required')
         if not Account.objects.filter(email=email).exists():
@@ -63,29 +57,16 @@ class UserLogin(APIView):
         return Response(content, status=status.HTTP_200_OK)
 
 
-class HomeView(APIView):
-    permission_classes = (IsAuthenticated, )
-
-    def get(self, request):
-
-        content = {
-            'message': 'Welcome to the JWT Authentication page using React Js and Django!'}
-        return Response(content)
-
-
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
         try:
-            print('log out')
             refresh_token = request.data["refresh_token"]
             token = RefreshToken(refresh_token)
             token.blacklist()
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
-            print("401 error mannnn")
-            # return Response(status=status.HTTP_400_BAD_REQUEST)
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
@@ -101,18 +82,11 @@ class RegisterView(APIView):
                     random_num = random.randint(1000, 9999)
                     user.OTP = random_num
                     user.save()
-                    send_notification_mail.delay(request.POST['email'], f"{random_num} -OTP")
-                    # send_mail(
-                    #     "OTP AUTHENTICATING NaviGO",
-                    #     f"{random_num} -OTP",
-                    #     "luttapimalayali@gmail.com",
-                    #     [request.POST['email']],
-                    #     fail_silently=False,
-                    # )
+                    send_notification_mail.delay(
+                        request.POST['email'], f"{random_num} -OTP")
                 except:
                     return Response({"Message": "Unknown error"})
         else:
-            print('am here man', serializer['is_active'].value)
             is_active = False
             content = {
                 'message': 'Registration failed',
@@ -123,8 +97,7 @@ class RegisterView(APIView):
 
         content = {"Message": "OTP send",
                    'user_id': serializer.data['id'],
-                   "username": serializer.data['email']
-                   }
+                   "username": serializer.data['email']}
         return Response(content, status=status.HTTP_201_CREATED)
 
 
@@ -137,23 +110,13 @@ class Send_OTP(APIView):
                 user = Account.objects.get(id=request.data['userID'])
         except:
             return Response({'error': 'Such an email does not exist'}, status=status.HTTP_404_NOT_FOUND)
-        print('this use is active or not \n\n', user.is_active)
         if user.is_active:
             return Response({'error': 'This user is already active'}, status=status.HTTP_208_ALREADY_REPORTED)
         user.OTP = random_num
         user.save()
-        
-        print('OTP :-\n\n\n\n', random_num)
         try:
-            send_notification_mail.delay(request.POST['email'], f"{random_num} -OTP")
-
-            # send_mail(
-            #     "OTP AUTHENTICATING NaviGO",
-            #     f"{random_num} -OTP",
-            #     "luttapimalayali@gmail.com",
-            #     [user.email],
-            #     fail_silently=False,
-            # )
+            send_notification_mail.delay(
+                request.POST['email'], f"{random_num} -OTP")
             context = {
                 "Message": "OTP send",
                 "OTP": str(random_num)
@@ -161,12 +124,6 @@ class Send_OTP(APIView):
             return Response(context, status=status.HTTP_200_OK)
         except:
             return Response({"error": "Unknown error"}, status=status.HTTP_406_NOT_ACCEPTABLE)
-
-    def get(self, request):
-        try:
-            user = Account.objects.get(email=request.data['email'])
-        except:
-            return Response({'error': 'Email not found.'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class OtpVerify(APIView):
@@ -203,30 +160,6 @@ class UserDetails(APIView):
         return Response(content)
 
 
-class VendorRegister(APIView):
-    parser_classes = (MultiPartParser, FormParser)
-
-    def post(self, request):
-        print(request.data['email'])
-        serializer = UserRegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-        else:
-            print('am here man', serializer['is_active'].value)
-            is_active = False
-            content = {
-                'message': 'Registration failed',
-                'error': serializer.errors,
-                'is_active': is_active
-            }
-            return Response(content, status=status.HTTP_409_CONFLICT)
-
-        content = {"Message": "OTP send",
-                   "username": serializer.data['email']
-                   }
-        return Response(content, status=status.HTTP_201_CREATED)
-
-
 class UserGoogleAuth(APIView):
 
     def post(self, request):
@@ -237,10 +170,6 @@ class UserGoogleAuth(APIView):
             id_info = id_token.verify_oauth2_token(
                 request.data['client_id'], google_request,  config('GOOGLE_AUTH_API'))
             email = id_info['email']
-            print(' maankajfakdj\n\nthen next')
-
-
-            val = send_notification_mail.delay('abhijithmr581329@gmail.com', "this what the -OTP")
 
         except KeyError:
             raise ParseError('Check credential')
@@ -265,6 +194,7 @@ class UserGoogleAuth(APIView):
 
         content = {
             'refresh': str(refresh),
+            'user_id': user.id,
             'access': str(refresh.access_token),
             'isAdmin': False,
             "isVendor": False,

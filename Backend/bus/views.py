@@ -1,8 +1,10 @@
+import json
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import generics
 from .models import BusStop, ConnectedRoute
 from .serializers import BusStopSerializer, BusConnectionSerializer, BusConnectionListSerializer
+from .algorithm import algorithmAllPaths
 from rest_framework.response import Response
 from rest_framework import status
 import googlemaps
@@ -82,3 +84,33 @@ class UpdateConnectBus(generics.RetrieveUpdateDestroyAPIView):
     queryset = ConnectedRoute.objects.all()
     serializer_class = BusConnectionSerializer
     lookup_field = 'id'
+
+
+class AvailableRoutes(APIView):
+    def get(self, request):
+        print(request.query_params)
+        if 'origin' not in request.query_params:
+            return Response({'origin': 'origin is not available'})
+        if 'destination' not in request.query_params:
+            return Response({'destination': 'destination is not available'})
+        # Check the origin and destination are numbers
+        try:
+            origin = int(request.query_params['origin'])
+            destination = int(request.query_params['destination'])
+        except Exception:
+            return Response({'error': 'both origin and destination must be numbers'}, status=status.HTTP_400_BAD_REQUEST)
+        wayPoints = algorithmAllPaths(origin, destination)
+        serialized_wayPoints = [[BusStopSerializer(bus_stop).data for bus_stop in sublist if bus_stop.id not in [
+            origin, destination]] for sublist in wayPoints]
+        for i in wayPoints:
+            print()
+
+        if origin and destination:
+            try:
+                origin = BusStopSerializer(BusStop.objects.get(pk=origin)).data
+                destination = BusStopSerializer(BusStop.objects.get(pk=destination)).data
+            except:
+                return Response({'error': 'Wrong origin or destination'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'origin': origin, 'destination': destination, "wayPoint": serialized_wayPoints})
+        else:
+            return Response({'error': 'No stops provided'})

@@ -11,15 +11,13 @@ function VendorRegister() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [darkMode, setDarkMode] = useState(false);
-    const{userID} = useSelector(state => state.vendor_id)
-    console.log(userID);
 
-    const [name, setname] = useState('')
-    const [username, setusername] = useState('')
-    const [email, setemail] = useState('')
-    const [password, setpassword] = useState('')
-    const [confirmPassword, setconfirmPassword] = useState('')
-    const [phone, setphone] = useState('')
+    const [name, setName] = useState('')
+    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [phone, setPhone] = useState('')
     const [file, setFile] = useState(null);
     const [FileImg, setFileImg] = useState([])
 
@@ -91,7 +89,7 @@ function VendorRegister() {
 
     // Store the validation Documentation image
     function handleChange(e) {
-        console.log(e.target.files);
+        console.log(e.target.files[0]);
         setFile(e.target.files[0]);
         setFileImg(URL.createObjectURL(e.target.files[0]))
     }
@@ -140,7 +138,7 @@ function VendorRegister() {
                                     type="text"
                                     placeholder="Username"
                                     value={username}
-                                    onChange={(e) => setusername(e.target.value)}
+                                    onChange={(e) => setUsername(e.target.value)}
                                     name='username'
                                 />
                             </div>
@@ -151,7 +149,7 @@ function VendorRegister() {
                                     }`}
                                 type="text"
                                 value={name}
-                                onChange={(e) => setname(e.target.value)}
+                                onChange={(e) => setName(e.target.value)}
                                 placeholder="Enter your Full name"
                                 name='name'
                             />
@@ -162,7 +160,7 @@ function VendorRegister() {
                                     }`}
                                 type="email"
                                 value={email}
-                                onChange={(e) => setemail(e.target.value)}
+                                onChange={(e) => setEmail(e.target.value)}
                                 placeholder="Enter your email"
                                 name='email'
                             />
@@ -174,7 +172,7 @@ function VendorRegister() {
                                 type="tel"
 
                                 value={phone}
-                                onChange={(e) => setphone(e.target.value)}
+                                onChange={(e) => setPhone(e.target.value)}
                                 placeholder="Enter your phone"
                                 name='phone'
                             />
@@ -187,7 +185,7 @@ function VendorRegister() {
                                         }`}
                                     type="password"
                                     value={password}
-                                    onChange={(e) => setpassword(e.target.value)}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     placeholder="Password"
                                     name='password'
                                 />
@@ -199,7 +197,7 @@ function VendorRegister() {
                                         }`}
                                     type="password"
                                     value={confirmPassword}
-                                    onChange={(e) => setconfirmPassword(e.target.value)}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
                                     placeholder="Confirm Password"
                                     name='cpassword'
                                 />

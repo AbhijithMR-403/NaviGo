@@ -10,7 +10,7 @@ const navigation = [
   { name: 'Map', href: '/map' },
   { name: 'Features', href: '#' },
   { name: 'Buses', href: '/bus' },
-  { name: 'upcoming', href: '#' },
+  { name: 'profile', href: '/profile' },
 ]
 
 

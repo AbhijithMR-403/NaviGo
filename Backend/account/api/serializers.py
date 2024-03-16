@@ -23,6 +23,11 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             'password': {'write_only': True}
         }
 
+    def validate(self, attrs):
+        if 'password' not in attrs or not attrs['password'].strip():
+            raise serializers.ValidationError({"error": "Password is required"})
+        return super().validate(attrs)
+
     def create(self, validated_data):
         validated_data['password'] = make_password(
             validated_data.get('password'))
@@ -53,4 +58,3 @@ class RegVendorSerializer(serializers.ModelSerializer):
         print('inside create fun \n\n', validated_data.get('user'))
         vendor_details = VendorDetails.objects.create(**validated_data)
         return vendor_details
-

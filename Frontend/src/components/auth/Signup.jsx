@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import InputField from './elements/inputField'
+import InputField from './elements/InputField'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { API_BASE_URL } from '../../constant/api'
@@ -15,8 +15,7 @@ import { TError, TInfo, TSuccess } from '../toastify/Toastify'
 
 function Signup() {
 
-    const [sign_up, setsignup] = useState(true)
-    const [uname, setuname] = useState("")
+    const [sign_up, setSignUp] = useState(true)
     const [UserID, setUserID] = useState(null)
     const [otp, setOtp] = useState("")
     const EyeIcon = () => {
@@ -92,11 +91,9 @@ function Signup() {
         }
         
             await axios.post(API_BASE_URL + '/auth/register', formData).then((res)=>{
-                console.log(res);
             if (res.status === 201) {
-                setuname(res.data.username)
                 setUserID(res.data.user_id)
-                setsignup(false)
+                setSignUp(false)
                 TSuccess("OTP sent")
                 return res
             }}).catch ((err)=>{
@@ -107,7 +104,7 @@ function Signup() {
                     }
                     else{
                         sendotp()
-                        setsignup(false)
+                        setSignUp(false)
                     console.log('409 reached' );
                     }
                 }
@@ -154,7 +151,6 @@ function Signup() {
 
     const verify_otp = async(e) => {
         e.preventDefault()
-        console.log('asdfasd');
             await axios.patch(API_BASE_URL + `/auth/otp/verify`,{"OTP":otp, 'UserID':UserID}).then(
                 (res) => {
 
@@ -220,7 +216,7 @@ function Signup() {
                         <div className="flex-row">
                             
                             <span className="span" onClick={() => sendotp()}>Resent otp?</span>
-                            <span className="span" onClick={() => setsignup(true)}>re-enter email</span>
+                            <span className="span" onClick={() => setSignUp(true)}>re-enter email</span>
                         </div>
                         <button className="button-submit" onClick={verify_otp}>Sign Up</button>
 
