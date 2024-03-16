@@ -110,13 +110,10 @@ class Send_OTP(APIView):
                 user = Account.objects.get(id=request.data['userID'])
         except:
             return Response({'error': 'Such an email does not exist'}, status=status.HTTP_404_NOT_FOUND)
-        print('this use is active or not \n\n', user.is_active)
         if user.is_active:
             return Response({'error': 'This user is already active'}, status=status.HTTP_208_ALREADY_REPORTED)
         user.OTP = random_num
         user.save()
-
-        print('OTP :-\n\n\n\n', random_num)
         try:
             send_notification_mail.delay(
                 request.POST['email'], f"{random_num} -OTP")
