@@ -23,7 +23,6 @@ class BusStopDelete(generics.RetrieveUpdateDestroyAPIView):
 
 # To List Bus Stop
 class BusStopLocation(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
     queryset = BusStop.objects.all()
     serializer_class = BusStopSerializer
 
