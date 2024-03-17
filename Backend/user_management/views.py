@@ -2,7 +2,8 @@ from django.shortcuts import render
 from account.models import Account
 from vendor.models import Route, BusDetail
 from rest_framework import generics
-from .serializers import UserDetailSerializer, UserBusListSerializer
+from .models import TicketOrder
+from .serializers import UserDetailSerializer, UserBusListSerializer, TicketOrderSerializer
 from vendor.serializers import RouteWayPointDetailSerializer
 
 # Create your views here.
@@ -26,13 +27,13 @@ class BusRouteListView(generics.ListAPIView):
     serializer_class = RouteWayPointDetailSerializer
 
 
+# ? this is not used yet
+# For filtering bus
 class FilterBusView(generics.ListAPIView):
     queryset = Route.objects.all()
     serializer_class = RouteWayPointDetailSerializer
 
-    def get_queryset(self):
-        user_id = self.kwargs.get('user_id')
-        print('this is the thing', user_id)
-        queryset = Route.objects.select_related('origin').filter(bus_detail__user_id=user_id)
-        print("Filtered queryset:", queryset)
-        return queryset
+
+class TicketOrderCreateView(generics.CreateAPIView):
+    serializer_class = TicketOrderSerializer
+    queryset = TicketOrder.objects.all()

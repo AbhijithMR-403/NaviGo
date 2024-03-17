@@ -13,6 +13,7 @@ class BusDetail(models.Model):
     seating_capacity = models.PositiveIntegerField()
     available_seats = models.PositiveIntegerField()
     identify_img = models.ImageField(upload_to='bus/', null=True)
+    is_active = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
         if not self.available_seats:
@@ -34,6 +35,8 @@ class Route(models.Model):
         BusDetail, on_delete=models.CASCADE, blank=False)
     starting_time = models.TimeField()
     ending_time = models.TimeField()
+    is_active = models.BooleanField(default=True)
+
 
     # class Meta:
     #     unique_together = ['origin', 'destination', 'bus_detail', 'starting_time', 'ending_time']
