@@ -113,7 +113,11 @@ function RouteManagement() {
       setFormData({price: '', bus_name: ''})
       setChosen(null)
     })
-    .catch((errors)=>console.log(errors));
+    .catch((errors)=>{
+      if (errors.response.status = 400)
+      TError(errors.response.data.error)
+      console.log(errors)
+    });
   }
 
 

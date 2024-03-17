@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { API_BASE_URL } from '../../constant/api';
-import axios from 'axios';
-import Map from '../../utils/maps/Map';
 import { UserAxios } from '../../components/api/api_instance';
 import MapUsers from '../../utils/maps/MapUsers';
 
@@ -13,9 +10,8 @@ function UserMap() {
     console.log(StartStop);
     useEffect(() => {
 
-        UserAxios.get(API_BASE_URL + "/bus/stop/list").then((res) => {
+        UserAxios.get("/bus/stop/list").then((res) => {
             setBusStopList(res.data)
-            console.log(res.data);
 
         }).catch((err) => console.log(err))
 
