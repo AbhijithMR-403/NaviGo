@@ -53,13 +53,14 @@ class BusCreateRouteSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 'Destination and Origin must be different')
         if Route.objects.filter(bus_detail=data['bus_detail'], starting_time__lt=end, ending_time__gt=start).exists():
-            raise serializers.ValidationError('A route with the same time frame already exists for this bus')
+            raise serializers.ValidationError(
+                {'error': 'A route with the same time frame already exists for this bus'})
 
         if 'wayPointCount' in data:
             waypoints = data['wayPointCount']
             if waypoints and len(waypoints) < 1 or len(waypoints) > 8:
                 raise serializers.ValidationError(
-                    'Way points should contain between 1 to 8 items beyong that cost me money')
+                    {'error': 'Way points should contain between 1 to 8 items beyong that cost me money'})
         return data
 
 

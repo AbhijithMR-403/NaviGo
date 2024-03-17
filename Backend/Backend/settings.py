@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'bus',
     'vendor',
+    'user_management',
     'admin_management',
     'account',
     'rest_framework_simplejwt.token_blacklist',
