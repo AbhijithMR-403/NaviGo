@@ -17,17 +17,15 @@ class TicketOrder(models.Model):
     quantity = models.IntegerField(default=1)
     user_id = models.ForeignKey(
         Account, on_delete=models.CASCADE, related_name='user_tickets')
-    Route_id = models.ForeignKey(Route, on_delete=models.CASCADE, related_name="order_route")
+    route_id = models.ForeignKey(Route, on_delete=models.CASCADE, related_name="order_route")
     bus_detail = models.ForeignKey(
         BusDetail, on_delete=models.CASCADE, related_name='bus_tickets')
     status = models.CharField(
         max_length=25, choices=STATUS_CHOICES, default='PENDING')
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-    start_stop = models.ForeignKey(
-        BusStop, on_delete=models.CASCADE, related_name="order_start_stops")
-    end_stop = models.ForeignKey(
-        BusStop, on_delete=models.CASCADE, related_name="order_end_stops")
+    # start_stop = models.ForeignKey(
+    #     BusStop, on_delete=models.CASCADE, related_name="order_start_stops")
+    # end_stop = models.ForeignKey(
+    #     BusStop, on_delete=models.CASCADE, related_name="order_end_stops")
     sub_total = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     tax = models.DecimalField(max_digits=5, decimal_places=2, null=True)
     total = models.DecimalField(max_digits=10, decimal_places=2, null=True)
