@@ -10,8 +10,9 @@ import Signup from '../components/auth/Signup';
 import Authenticator from '../pages/userPartition/Authenticator';
 import Header from '../components/user/Header';
 import UserMap from '../pages/userPartition/UserMap';
-import UserBus from '../components/user/views/UserBus';
+import UserBus from '../pages/userPartition/UserBus';
 import UserProfile from '../components/user/views/UserProfile';
+import BookingConfirm from '../pages/userPartition/BookingConfirm';
 
 
 function UserWrapper() {
@@ -61,6 +62,7 @@ function UserWrapper() {
         { element: <UserMap />, path: '/map' },
         { element: <UserBus />, path: '/bus' },
         { element: <UserProfile />, path: '/profile' },
+        { element: <BookingConfirm />, path: '/confirm/:uuid' },
       ],
     },
     {

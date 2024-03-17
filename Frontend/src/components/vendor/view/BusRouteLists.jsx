@@ -7,7 +7,6 @@ function BusRouteLists() {
     const { userId } = useSelector(state => state.authentication_user)
 
     useEffect(() => {
-        console.log(userId, 'dfghjkhgf\n\n');
         VendorAxios.get(`/vendor/view/bus/route/${userId}`).then(res => {
             console.log(res)
             setBusRoutes(res.data)

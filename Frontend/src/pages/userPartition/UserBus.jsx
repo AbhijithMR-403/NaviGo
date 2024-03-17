@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-import { API_BASE_URL } from '../../../constant/api';
+import { API_BASE_URL } from '../../constant/api';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { TInfo, TSuccess } from '../../components/toastify/Toastify';
+import { AuthUserAxios } from '../../components/api/api_instance';
 
 const myStyle = {
     display: "-webkit-box",
@@ -15,23 +19,47 @@ const myStyle = {
   };
 
 function UserBus()  {
-    const [BusList, setBusList] = useState([])
+    const [BusRouteList, setBusRouteList] = useState([])
+    const user = useSelector(state => state.authentication_user)
+    const navigate = useNavigate()
     useEffect(() => {
-        axios.get(API_BASE_URL+'/vendor/bus/list').then((res) => {
-            setBusList(res.data)
+        axios.get(API_BASE_URL+'/user/bus/route/list').then((res) => {
+            setBusRouteList(res.data)
             console.log(res);
         }).catch((err) => {
             console.log(err)
         })
     }, [])
 
+  const handleSubmit = (data) =>{
+    // console.log(data);
+    if (!user.isAuthenticated){
+      TInfo('Login Required','Please Login First')
+      navigate('/login')
+    }
+    const formData = {
+      bus_detail: data.bus_detail.id,
+      user_id: user.userId,
+      start_stop:data.origin.id,
+      end_stop:data.destination.id,
+      end_time:data.ending_time,
+      start_time:data.starting_time,
+    }
+    AuthUserAxios.post('/user/create/order', formData).then((res)=>{
+      // TSuccess('');
+      console.log(res);
+      navigate(`/confirm/${res.data.ticket_order_id}`)
+    }).catch((err)=>console.log(err))
+    // console.log(formData);
+  }
+
         return (
-          <div className="bg-black bg-opacity-20 min-h-[100vh] flex items-center">
+          <div className="bg-black pt-11 bg-opacity-20 min-h-[100vh] flex items-center">
             <div className="container mx-auto">
               {/* card grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 py-10 text-left mx-5 xl:mx-10">
-                {Array(2).fill(
-                  BusList.map((data, index) => (
+                {
+                  BusRouteList.map((data, index) => (
                     <div
                       className="border rounded-lg hover:drop-shadow-md overflow-hidden relative bg-white"
                       key={index}
@@ -39,20 +67,20 @@ function UserBus()  {
                       {/* image and avatar block */}
                       <div className="cursor-pointer h-48 overflow-hidden">
                         <img
-                          src={data.identify_img}
+                          src={data.bus_detail.identify_img}
                           alt="Profile image for perticular category"
                           sizes="300px"
                           className="w-full h-full hover:scale-125 delay-200 duration-300 ease-in-out"
                         />
                         <span className="absolute top-4 right-4 w-8 h-8 items-center bg-gray-100 flex justify-center rounded-full">
-                          {data.bus_name && myFun(data.bus_name)}
+                          {data.bus_detail.bus_name && myFun(data.bus_detail.bus_name)}
                         </span>
                       </div>
                       {/* card fields section  */}
                       <div className="p-4 space-y-2 relative h-60 text-gray-400">
                         <div>
                           <p className="text-sm font-bold truncate">
-                            {data.bus_number}
+                            {data.bus_detail.bus_number}
                           </p>
                         </div>
                         <div>
@@ -60,34 +88,36 @@ function UserBus()  {
                             style={myStyle}
                             className="text-xl font-bold text-gray-600 overflow-hidden h-12"
                           >
-                            {data.bus_name}
+                            {data.bus_detail.bus_name}
                           </span>
                         </div>
                         <div className="flex gap-2 items-center">
                           <CategoryIcon />
                           <span className="text-sm font-normal">
-                            {data.subCategory}
+                          {data.origin.stop_name.slice(0, 10)} - {data.destination.stop_name.slice(0, 10)}
                           </span>
                         </div>
                         <div className="flex gap-2 items-center">
                           <DateIcon />
-                          <span className="text-sm font-normal">9:00 - 5:00</span>
+                          <span className="text-sm font-normal">{data.starting_time.slice(0, 5)} - {data.ending_time.slice(0, 5)}</span>
                         </div>
                         <div className="flex gap-2 justify-start items-center">
                           <LocationIcon />
-                          <span className="text-sm font-normal">{data.location}</span>
+                          <span className="text-sm font-normal">{data.origin.stop_name.slice(0, 10)} - {data.destination.stop_name.slice(0, 10)}</span>
                         </div>
                         {/* fix bottom section */}
-                        <div className="bottom-2 absolute inset-x-0">
                           <div className="border-t mt-2 mb-2"></div>
-                          <span className="text-xl text-gray-600 pl-4">
-                            $43
+                        <div className="bottom-2 absolute inset-x-0 flex justify-around items-center buy-bus-ticket-button">
+                          <span className="text-xl text-gray-600">
+                          ₹ {data.price}
                           </span>
+                          <button className="btn" onClick={()=>handleSubmit(data)}>Buy</button>
+                          
                         </div>
                       </div>
                     </div>
                   ))
-                )}
+                }
               </div>
             </div>
           </div>
@@ -99,7 +129,7 @@ function UserBus()  {
       <svg
         stroke="gray"
         fill="none"
-        stroke-width="2"
+        strokeWidth="2"
         viewBox="0 0 24 24"
         strokeLinecap="round"
         strokeLinejoin="round"

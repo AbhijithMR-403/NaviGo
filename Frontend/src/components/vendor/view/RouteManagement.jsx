@@ -29,7 +29,7 @@ function RouteManagement() {
   const [fromTime, setFromTime] = useState('')
   const [endTime, setEndTime] = useState('')
   useEffect(() => {
-    AdminBusAxios.get('/bus/list').then(res => {
+    AdminBusAxios.get('/bus/stop/list').then(res => {
       setStopNamesList(res.data)
     }).catch((err) => {
       console.log("Error: " + err)
@@ -113,7 +113,11 @@ function RouteManagement() {
       setFormData({price: '', bus_name: ''})
       setChosen(null)
     })
-    .catch((errors)=>console.log(errors));
+    .catch((errors)=>{
+      if (errors.response.status = 400)
+      TError(errors.response.data.error)
+      console.log(errors)
+    });
   }
 
 
