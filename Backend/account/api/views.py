@@ -80,6 +80,7 @@ class RegisterView(APIView):
             if not user.is_vendor:
                 try:
                     random_num = random.randint(1000, 9999)
+                    print(random_num)
                     user.OTP = random_num
                     user.save()
                     send_notification_mail.delay(

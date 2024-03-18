@@ -33,13 +33,6 @@ class BusRouteListView(generics.ListAPIView):
     serializer_class = RouteWayPointDetailSerializer
 
 
-# ? this is not used yet
-# For filtering bus
-class FilterBusView(generics.ListAPIView):
-    queryset = Route.objects.all()
-    serializer_class = RouteWayPointDetailSerializer
-
-
 class TicketOrderCreateView(generics.CreateAPIView):
     serializer_class = TicketOrderSerializer
     queryset = TicketOrder.objects.all()
@@ -89,7 +82,8 @@ class RazorpayPaymentView(APIView):
             Response({'error': 'Wrong order id'})
         print(ticketOrder)
         # Save the order in DB
-        order = Payment.objects.create(amount=amount, provider_order_id=razorpay_order["id"], ticket=ticketOrder)
+        order = Payment.objects.create(
+            amount=amount, provider_order_id=razorpay_order["id"], ticket=ticketOrder)
         print(order)
 
         data = {
@@ -118,7 +112,8 @@ class RazorpayCallback(APIView):
             # if we get here True signature
             if data:
                 # razorpay_payment = RazorpayPayment.objects.get(order_id=response['razorpay_order_id'])
-                payment_object = Payment.objects.get(provider_order_id=response['razorpay_order_id'])
+                payment_object = Payment.objects.get(
+                    provider_order_id=response['razorpay_order_id'])
                 print(payment_object)
                 payment_object.status = 'Success'
                 payment_object.payment_id = response['razorpay_payment_id']
@@ -166,5 +161,33 @@ class TicketOrderListView(generics.ListAPIView):
     def get_queryset(self):
         user_id = self.kwargs.get('id')
         print(user_id)
-        queryset = TicketOrder.objects.filter(user_id=user_id, status='Delivered')
+        queryset = TicketOrder.objects.filter(
+            user_id=user_id, status='Delivered')
         return queryset
+
+
+class UserAvailableRouteView(APIView):
+    serializer_class = RouteWayPointDetailSerializer
+
+    def get(self, request, start_id, end_id):
+        # print(request.data)
+        # start_id = request.data.get('start')
+        # end_id = request.data.get('end')
+        print(start_id, end_id)
+
+        start_routes = Route.objects.filter(origin__id=start_id, destination__id=end_id)
+        # end_routes = Route.objects.filter(destination__id=end_id)
+
+        waypoint_routes = Route.objects.filter(waypoints__stop__id=start_id)
+        print(start_routes)
+        print(waypoint_routes)
+
+        start_routes_data = self.serializer_class(start_routes, many=True).data
+        # end_routes_data = self.serializer_class(end_routes, many=True).data
+        waypoint_routes_data = self.serializer_class(waypoint_routes, many=True).data
+
+        return Response({
+            'start_routes': start_routes_data,
+            # 'end_routes': end_routes_data,
+            'waypoint_routes': waypoint_routes_data
+        }, status=status.HTTP_200_OK)
