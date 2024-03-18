@@ -8,8 +8,9 @@ import {AuthAxios} from '../api/api_instance'
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Map', href: '/map' },
-  { name: 'Features', href: '#' },
+  // { name: 'Features', href: '#' },
   { name: 'Buses', href: '/bus' },
+  { name: 'Order', href: '/order' },
   { name: 'profile', href: '/profile' },
 ]
 

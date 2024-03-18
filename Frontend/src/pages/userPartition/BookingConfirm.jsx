@@ -1,142 +1,219 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { AuthUserAxios } from '../../components/api/api_instance';
+import { TError } from '../../components/toastify/Toastify';
 
 
 const BookingConfirm = () => {
-    const {uuid} = useParams()
-    console.log('this is from kooking confirm page', uuid);
+    const { uuid } = useParams()
+    const [bookingData, setBookingData] = useState(null)
+    const [subTotal, setSubTotal] = useState(0.0)
+    const navigate = useNavigate()
+    const [quantity, setQuantity] = useState(1)
+    const [Tax, setTax] = useState(0.0)
+    useEffect(() => {
+        AuthUserAxios.get(`/user/order/detail/${uuid}/`).then((res) => {
+            setBookingData(res.data)
 
-    
+            CalculatePrice(1, res.data.route_id.price)
+        }).catch((err) => console.log(err))
+    }, [])
+
+    const CalculatePrice = (qty, subT) => {
+        console.log('inside handle change');
+        //     try{
+        //     let subTotal = qty * parseFloat(bookingData.route_id.price)
+        // console.log(bookingData.route_id.price);
+        // }
+        // catch{
+        let subTotal = qty * parseFloat(subT)
+        // }
+        console.log(subTotal, qty)
+        let tax = subTotal * 18 / 100
+        console.log(tax);
+        setSubTotal(subTotal)
+        setTax(tax)
+    }
+
+
+    //Function to load razorpay script for the display of razorpay payment SDK.
+    function loadRazorpayScript(src) {
+        return new Promise((resolve) => {
+            const script = document.createElement("script");
+            script.src = src;
+            script.onload = () => {
+                resolve(true);
+            };
+            script.onerror = () => {
+                resolve(false);
+            };
+            document.body.appendChild(script);
+        });
+    }
+
+    //function will get called when clicked on the pay button.
+    async function displayRazorpayPaymentSdk() {
+        const res = await loadRazorpayScript(
+            "https://checkout.razorpay.com/v1/checkout.js"
+        );
+
+        if (!res) {
+            alert("Razorpay SDK failed to load. please check are you online?");
+            return;
+        }
+
+        // creating a new order and sending order ID to backend
+        const result = await AuthUserAxios.post("/user/razorpay_order", {
+            "order_id": uuid,
+            "total": subTotal + Tax,
+            "subtotal": subTotal,
+            "quantity": quantity,
+        });
+
+        if (!result) {
+            alert("Server error. please check are you onlin?");
+            return;
+        }
+
+        // Getting the order details back
+        const { merchantId = null, amount = null, currency = null, orderId = null } = result.data;
+
+        const options = {
+            key: merchantId,
+            amount: amount.toString(),
+            currency: currency,
+            name: "Razorpay Testing",
+            description: "Test Transaction",
+            order_id: orderId,
+            // callback_url: "http://127.0.0.1:8000/user/razorpay_callback/",
+            // callback_url: "http://localhost:5173/success",
+            // redirect: false,
+            handler: function(response) {
+                console.log(response);
+                
+                AuthUserAxios.post('/user/razorpay_callback',{data:response}).then((res)=>{
+                    console.log(res)
+                    navigate('/success')
+                }).catch((err)=>console.log(err))
+                // window.location.href = "http://localhost:5173/success";
+                // Handle successful payment and redirect to your React success page
+            },
+            prefill: {
+                name: "Swapnil Pawar",
+                email: "swapnil@example.com",
+                contact: "9999999999",
+            },
+            notes: {
+                address: "None",
+            },
+            theme: {
+                color: "#61dafb",
+            },
+        };
+
+        const paymentObject = new window.Razorpay(options);
+        paymentObject.on('payment.success', function(response) {
+            // Handle successful payment and redirect to your React success page
+            window.location.href = "http://localhost:5173/success";
+        });
+        paymentObject.open();
+    }
+
+
     return (
-        <div className="pt-20 relative mx-auto w-full bg-white">
-            <div className="grid min-h-screen grid-cols-10">
-                <div className="col-span-full py-6 px-4 sm:py-12 lg:col-span-6 lg:py-24">
-                    <div className="mx-auto w-full max-w-lg">
-                        <h1 className="relative text-2xl font-medium text-gray-700 sm:text-3xl">
-                            Secure Checkout
-                            <span className="mt-2 block h-1 w-10 bg-teal-600 sm:w-20" />
-                        </h1>
+        <div className="pt-16 relative mx-auto w-full bg-white">
+            {/* <div className="grid min-h-screen grid-cols-10"> */}
+            <div className="col-span-full py-6 px-4 sm:py-12 lg:col-span-6 lg:py-24">
+                <div className="mx-auto w-full max-w-lg">
+                    <h1 className="relative text-2xl font-medium text-gray-700 sm:text-3xl">
+                        Secure Checkout
+                        <span className="mt-2 block h-1 w-10 bg-teal-600 sm:w-20" />
+                    </h1>
+                    {bookingData &&
                         <form action="" className="mt-10 flex flex-col space-y-4">
-                            <div>
-                                <label
-                                    htmlFor="email"
-                                    className="text-xs font-semibold text-gray-500"
-                                >
-                                    Email
-                                </label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    placeholder="john.capler@fang.com"
-                                    className="mt-1 block w-full rounded border-gray-300 bg-gray-50 py-3 px-4 text-sm placeholder-gray-300 shadow-sm outline-none transition focus:ring-2 focus:ring-teal-500"
-                                />
-                            </div>
                             <div className="relative">
-                                <label
-                                    htmlFor="card-number"
-                                    className="text-xs font-semibold text-gray-500"
-                                >
-                                    Enter your address
-                                </label>
-                                <textarea className="block w-full rounded border-gray-300 bg-gray-50 py-3 px-4 pr-10 text-sm placeholder-gray-300 shadow-sm outline-none transition focus:ring-2 focus:ring-teal-500"/>
-                                
-                                <img
-                                    src="/images/uQUFIfCYVYcLK0qVJF5Yw.png"
-                                    alt=""
-                                    className="absolute bottom-3 right-3 max-h-4"
-                                />
+                                <ul className="space-y-5">
+                                    <li className="flex justify-between">
+                                        <div className="inline-flex">
+                                            <img
+                                                src="https://images.unsplash.com/photo-1621607512214-68297480165e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fGhhaXIlMjBkcnllcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
+                                                alt=""
+                                                className="max-h-16"
+                                            />
+                                            <div className="ml-3">
+                                                <p className="text-base font-semibold text-black">{bookingData.route_id.origin.stop_name} - {bookingData.route_id.destination.stop_name}</p>
+                                            </div>
+                                        </div>
+                                        <p className="text-sm font-semibold text-black">{quantity} x {bookingData.route_id.price} =  ₹{subTotal}</p>
+                                    </li>
+                                    <p className="flex items-center">
+                                        <label htmlFor="quantity" className="pr-3 font-medium">Qty:</label>
+                                        <input
+                                            className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            value={quantity}
+                                            onChange={(e) => {
+                                                const val = e.target.value
+                                                if (Number(val) >= 1 && Number(val) <= 8) {
+                                                    setQuantity(Number(val))
+
+                                                    CalculatePrice(val, bookingData.route_id.price)
+
+                                                } else {
+                                                    TError("Please enter a number between than 0 and 8");
+                                                }
+                                            }}
+                                            type="number"
+                                            name="quantity"
+                                        />
+                                    </p>
+                                    <p className="text-sm font-medium text-black text-opacity-80 flex flex-wrap">
+                                        <label htmlFor="quantity" className="pr-3 font-bold">Waypoints:</label>
+
+                                        {
+                                            bookingData.route_id.waypoints.map((res, index) => {
+                                                return (
+                                                    <>
+                                                        {index !== 0 &&
+                                                            <p className='pl-2 pr-2'> - </p>
+                                                        }
+                                                        <p>{res.stop.stop_name}</p>
+                                                    </>
+                                                )
+                                            }
+                                            )
+                                        }
+                                    </p>
+                                </ul>
+                                <div className="my-5 h-0.5 w-full bg-black bg-opacity-30" />
+                                <div className="space-y-2">
+                                    <p className="flex justify-between text-lg font-bold text-black">
+                                        <span>Total price:</span>
+                                        <span>₹{subTotal + Tax}</span>
+                                    </p>
+                                    <p className="flex justify-between text-sm font-medium text-black">
+                                        <span>GST: 18%</span>
+                                        <span>₹{Tax}</span>
+                                    </p>
+                                </div>
                             </div>
                         </form>
-                        <p className="mt-10 text-center text-sm font-semibold text-gray-500">
-                            By placing this order you agree to the{" "}
-                            <a
-                                href="#"
-                                className="whitespace-nowrap text-teal-400 underline hover:text-teal-600"
-                            >
-                                Terms and Conditions
-                            </a>
-                        </p>
-                        <button
-                            type="submit"
-                            className="mt-4 inline-flex w-full items-center justify-center rounded bg-teal-600 py-2.5 px-4 text-base font-semibold tracking-wide text-white text-opacity-80 outline-none ring-offset-2 transition hover:text-opacity-100 focus:ring-2 focus:ring-teal-500 sm:text-lg"
+                    }
+                    <p className="mt-10 text-center text-sm font-semibold text-gray-500">
+                        By placing this order you agree to the{" "}
+                        <a
+                            href="#"
+                            className="whitespace-nowrap text-teal-400 underline hover:text-teal-600"
                         >
-                            Place Order
-                        </button>
-                    </div>
-                </div>
-                <div className="relative col-span-full flex flex-col py-6 pl-8 pr-4 sm:py-12 lg:col-span-4 lg:py-24">
-                    <h2 className="sr-only">Order summary</h2>
-                    <div>
-                        <img
-                            src="https://images.unsplash.com/photo-1581318694548-0fb6e47fe59b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                            alt=""
-                            className="absolute inset-0 h-full w-full object-cover"
-                        />
-                        <div className="absolute inset-0 h-full w-full bg-gradient-to-t from-teal-800 to-teal-400 opacity-95" />
-                    </div>
-                    <div className="relative">
-                        <ul className="space-y-5">
-                            {/* <li className="flex justify-between">
-                                <div className="inline-flex">
-                                    <img
-                                        src="https://images.unsplash.com/photo-1620331311520-246422fd82f9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTN8fGhhaXIlMjBkcnllcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                                        alt=""
-                                        className="max-h-16"
-                                    />
-                                    <div className="ml-3">
-                                        <p className="text-base font-semibold text-white">
-                                            Nano Titanium Hair Dryer
-                                        </p>
-                                        <p className="text-sm font-medium text-white text-opacity-80">
-                                            Pdf, doc Kindle
-                                        </p>
-                                    </div>
-                                </div>
-                                <p className="text-sm font-semibold text-white">$260.00</p>
-                            </li> */}
-                            <li className="flex justify-between">
-                                <div className="inline-flex">
-                                    <img
-                                        src="https://images.unsplash.com/photo-1621607512214-68297480165e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fGhhaXIlMjBkcnllcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                                        alt=""
-                                        className="max-h-16"
-                                    />
-                                    <div className="ml-3">
-                                        <p className="text-base font-semibold text-white">Luisia H35</p>
-                                        <p className="text-sm font-medium text-white text-opacity-80">
-                                            Hair Dryer
-                                        </p>
-                                    </div>
-                                </div>
-                                <p className="text-sm font-semibold text-white">$350.00</p>
-                            </li>
-                        </ul>
-                        <div className="my-5 h-0.5 w-full bg-white bg-opacity-30" />
-                        <div className="space-y-2">
-                            <p className="flex justify-between text-lg font-bold text-white">
-                                <span>Total price:</span>
-                                <span>$510.00</span>
-                            </p>
-                            <p className="flex justify-between text-sm font-medium text-white">
-                                <span>Vat: 10%</span>
-                                <span>$55.00</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div className="relative mt-10 text-white">
-                        <h3 className="mb-5 text-lg font-bold">Support</h3>
-                        <p className="text-sm font-semibold">
-                            +44433 <span className="font-light">(International)</span>
-                        </p>
-                        <p className="mt-1 text-sm font-semibold">
-                            support@gmail.com <span className="font-light">(Email)</span>
-                        </p>
-                        <p className="mt-2 text-xs font-medium">
-                            Call us now for payment related issues
-                        </p>
-                    </div>
-                    
+                            Terms and Conditions
+                        </a>
+                    </p>
+                    <button
+                        onClick={displayRazorpayPaymentSdk}
+                        type="button"
+                        className="mt-4 inline-flex w-full items-center justify-center rounded bg-teal-600 py-2.5 px-4 text-base font-semibold tracking-wide text-white text-opacity-80 outline-none ring-offset-2 transition hover:text-opacity-100 focus:ring-2 focus:ring-teal-500 sm:text-lg"
+                    >
+                        Place Order
+                    </button>
                 </div>
             </div>
         </div>

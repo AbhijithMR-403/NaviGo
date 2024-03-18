@@ -48,6 +48,9 @@ INSTALLED_APPS = [
     'google',
     "django_celery_results",
 
+    'chat',
+    'channels',
+
     'corsheaders',
     'rest_framework',
 
@@ -68,6 +71,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'Backend.urls'
 
 AUTH_USER_MODEL = "account.Account"
+
+ASGI_APPLICATION = 'chatapp.asgi.application'
 
 
 TEMPLATES = [
