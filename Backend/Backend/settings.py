@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'google',
     "django_celery_results",
+
 
     'corsheaders',
     'rest_framework',
@@ -68,6 +70,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'Backend.urls'
 
 AUTH_USER_MODEL = "account.Account"
+
+ASGI_APPLICATION = 'chatapp.asgi.application'
 
 
 TEMPLATES = [

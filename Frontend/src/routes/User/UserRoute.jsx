@@ -13,7 +13,7 @@ function UserRoute({ children }) {
     const fetchData = async () => {
       const authInfo = await IsAuthUser();
       setIsAuthenticated(authInfo.isAuthenticated);
-      setTimeout(() => { setLoading(false); }, 1000);
+      setTimeout(() => { setLoading(false); }, 500);
       
     };
     fetchData();

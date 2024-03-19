@@ -13,6 +13,8 @@ import UserMap from '../pages/userPartition/UserMap';
 import UserBus from '../pages/userPartition/UserBus';
 import UserProfile from '../components/user/views/UserProfile';
 import BookingConfirm from '../pages/userPartition/BookingConfirm';
+import PaymentSuccess from '../pages/userPartition/PaymentSucess';
+import Order from '../pages/userPartition/Order';
 
 
 function UserWrapper() {
@@ -63,6 +65,8 @@ function UserWrapper() {
         { element: <UserBus />, path: '/bus' },
         { element: <UserProfile />, path: '/profile' },
         { element: <BookingConfirm />, path: '/confirm/:uuid' },
+        { element: <PaymentSuccess />, path: '/success' },
+        { element: <Order />, path: '/order' },
       ],
     },
     {

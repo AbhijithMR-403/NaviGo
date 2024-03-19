@@ -89,15 +89,16 @@ class BusListRouteSerializer(serializers.ModelSerializer):
 
 # ? Currently used only in RouteWayPointDetailSerializer
 # serializer to get the raw Waypoint object
-class WayPointViewSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = wayPoints
-        fields = '__all__'
+# class WayPointViewSerializer(serializers.ModelSerializer):
+#     stop = BusStopSerializer()
+#     class Meta:
+#         model = wayPoints
+#         fields = '__all__'
 
 
 # return Route details along with of bus, waypoints, origin, destination, etc.
 class RouteWayPointDetailSerializer(serializers.ModelSerializer):
-    waypoints = WayPointViewSerializer(many=True)
+    waypoints = RouteWayPointListSerializer(many=True)
     bus_detail = BusDetailSerializer()
     origin = BusStopSerializer()
     destination = BusStopSerializer()

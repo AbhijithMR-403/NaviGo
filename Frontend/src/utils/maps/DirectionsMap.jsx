@@ -5,8 +5,6 @@ import { TInfo, TWarning } from '../../components/toastify/Toastify';
 
 
 function DirectionsMap({origin, destination, waypoints}) {
-  console.log(origin, destination);
-  console.log('\n\n\n way point :\n\n', waypoints);
   const [response, setResponse] = useState(null);
 
   const options = {

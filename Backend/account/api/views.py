@@ -80,6 +80,7 @@ class RegisterView(APIView):
             if not user.is_vendor:
                 try:
                     random_num = random.randint(1000, 9999)
+                    print(random_num)
                     user.OTP = random_num
                     user.save()
                     send_notification_mail.delay(
@@ -114,6 +115,7 @@ class Send_OTP(APIView):
             return Response({'error': 'This user is already active'}, status=status.HTTP_208_ALREADY_REPORTED)
         user.OTP = random_num
         user.save()
+        print(random_num)
         try:
             send_notification_mail.delay(
                 request.POST['email'], f"{random_num} -OTP")
@@ -168,7 +170,7 @@ class UserGoogleAuth(APIView):
         try:
             google_request = requests.Request()
             id_info = id_token.verify_oauth2_token(
-                request.data['client_id'], google_request,  config('GOOGLE_AUTH_API'))
+                request.data['client_id'], google_request,  config('GOOGLE_AUTH_API'), clock_skew_in_seconds=10)
             email = id_info['email']
 
         except KeyError:
