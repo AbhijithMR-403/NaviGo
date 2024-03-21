@@ -61,14 +61,12 @@ function VendorRegister() {
             formData.append('is_active', false);
             formData.append('profile_img', file);
             await axios.post(API_BASE_URL + '/auth/register', formData).then((res) => {
-                console.log(res);
-                localStorage.setItem('userID', res.data.user_id);
                 dispatch(
                     set_vendor({
                         userID: res.data.user_id,
                     })
                 )
-                navigate('/vendor/details')
+                navigate('/vendor/details/' + res.data.user_id+'/')
                 
             }).catch((err) => {
                 console.log(err);

@@ -49,6 +49,7 @@ class Account(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     is_vendor = models.BooleanField(default=False)
     OTP = models.IntegerField(null=True)
+    OTP_expire = models.DateTimeField(null=True)
 
     objects = CustomUserManager()
 

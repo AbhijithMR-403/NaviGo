@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'channels',
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -71,7 +71,15 @@ ROOT_URLCONF = 'Backend.urls'
 
 AUTH_USER_MODEL = "account.Account"
 
-ASGI_APPLICATION = 'chatapp.asgi.application'
+
+ASGI_APPLICATION = 'Backend.asgi.application'
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 
 TEMPLATES = [
@@ -185,9 +193,9 @@ SIMPLE_JWT = {
 
 # Email
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = "587"
+EMAIL_PORT = '587'
 EMAIL_HOST_USER = "abhijithmr581@gmail.com"
-EMAIL_HOST_PASSWORD = "rwvh rjwl juzv calj"
+EMAIL_HOST_PASSWORD = "otfz tvai nfda yzsr"
 EMAIL_USE_TLS = True
 
 

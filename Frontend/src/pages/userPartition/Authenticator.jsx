@@ -41,12 +41,6 @@ function Authenticator({ children }) {
 
         {children}
 
-        {/* <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<ThemeProvider><Signup /></ThemeProvider>} />
-          <Route path="/*" element={<h1>Page not there</h1>} />
-        </Routes> */}
-
       </div>
     </div>
   );
