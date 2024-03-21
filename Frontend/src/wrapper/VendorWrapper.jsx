@@ -18,15 +18,17 @@ import DispatchAuth from '../utils/DispatchAuthDetails/DispatchAuth';
 
 function VendorWrapper() {
 
+  if(localStorage.getItem('access') == null && localStorage.getItem('access')) {
+    window.location.reload();
+  }
   const authentication_user = useSelector(state => state.authentication_user)
   const dispatch = useDispatch();
   useEffect(() => {
+    console.log('is this been logged');
     if (!authentication_user.name) {
-
       DispatchAuth(dispatch);
-
     }
-  }, [authentication_user])
+  }, [])
 
   const routes = useRoutes([
     {

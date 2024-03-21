@@ -12,6 +12,9 @@ function VendorProfile() {
             setVendorDetail(res.data)
             console.log("vendor detail : ", res.data);
         }).catch((err)=>{
+            if(err.response.status){
+                window.location.reload();
+            }
             console.error("Error: ", err)
         })
     }, [])

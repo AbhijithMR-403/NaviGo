@@ -3,6 +3,15 @@ import { API_BASE_URL } from "../../constant/api";
 
 
 
+export const getToken = () => localStorage.getItem("access")
+  ? JSON.parse(localStorage.getItem("access"))
+  : null;
+
+export const getAuthorizationHeader = () => `Bearer ${getToken()}`;
+
+const Access_token = () => {
+  return localStorage.getItem('access')
+}
 export const AuthAxios = axios.create({
     baseURL: `${API_BASE_URL}/auth`,
     // timeout: 3000,
@@ -55,7 +64,7 @@ export const UserAxios = axios.create({
     baseURL: `${API_BASE_URL}`,
     // timeout: 3000,
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('access')}`,
+      Authorization: `Bearer ${localStorage.getItem('access') }`,
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
