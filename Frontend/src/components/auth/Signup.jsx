@@ -3,12 +3,9 @@ import InputField from './elements/InputField'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { API_BASE_URL } from '../../constant/api'
-import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode'
 import { MuiOtpInput } from 'mui-one-time-password-input'
-import { colors } from '@mui/material'
-import OtpInput from "react-otp-input";
 import { TError, TInfo, TSuccess } from '../toastify/Toastify'
 
 
@@ -23,7 +20,6 @@ function Signup() {
     }
 
     const fields = [
-
         {
             name: "Username",
             type: "text",
@@ -153,7 +149,7 @@ function Signup() {
         e.preventDefault()
             await axios.patch(API_BASE_URL + `/auth/otp/verify`,{"OTP":otp, 'UserID':UserID}).then(
                 (res) => {
-
+ 
                     TSuccess('Verified Successfully')
                     navigate('/login',
                         {
@@ -174,10 +170,10 @@ function Signup() {
             {sign_up ?
                 (<form className="form" method='POST' onSubmit={handleLoginSubmit}>
 
-                    {fields.map((field) => <InputField {...field} />)}
+                    {fields.map((field, ind) => <InputField {...field} />)}
 
 
-                    <ul className='text-red-500'>
+                    <ul className='text-red-500' >
                         {formError && <li>
                             {formError}
                         </li>}

@@ -8,3 +8,11 @@
 2.  ### UserBooking checkout page
 
     - quantity count is not accurate
+
+3.  ### While adding bus
+    - it should reduce bus seat number
+    - If there are no seats left then show message "No Seats Left"
+
+4. ### Payment gateway integration
+
+   - failure response handling

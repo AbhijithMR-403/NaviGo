@@ -65,7 +65,12 @@ function VendorLogin() {
             return res
         }
         catch (error) {
-            console.log('error\n\n', error);
+            console.log(error);
+            if(error.response.status == 401)
+            {
+            TWarning('Activate your account')
+            navigate('/vendor/details/' + error.response.data.user+'/')
+            }
             TError(error.response.data.error)
         }
     }

@@ -6,6 +6,7 @@ from django.core.mail import send_mail
 def send_notification_mail(target_mail, message,
                            mail_subject="OTP AUTHENTICATING NaviGO"):
     print(message)
+    print('dey evide yetthiaa')
     send_mail(
         subject=mail_subject,
         message=message,

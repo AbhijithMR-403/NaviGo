@@ -1,20 +1,22 @@
-import React, { useEffect } from 'react'
+import React, { lazy, useEffect } from 'react'
 import Home from '../pages/userPartition/Home';
-import { Navigate, Outlet, Route, Routes, useRoutes } from 'react-router-dom';
+import { Outlet, useRoutes } from 'react-router-dom';
 import UserRoute from '../routes/User/UserRoute';
 import { useDispatch, useSelector } from 'react-redux';
 import IsAuthUser from '../utils/IsAuthUser';
 import { Set_Authentication } from '../redux/authentication/AuthenticationSlice';
-import Login from '../components/auth/Login';
-import Signup from '../components/auth/Signup';
-import Authenticator from '../pages/userPartition/Authenticator';
-import Header from '../components/user/Header';
-import UserMap from '../pages/userPartition/UserMap';
-import UserBus from '../pages/userPartition/UserBus';
-import UserProfile from '../components/user/views/UserProfile';
-import BookingConfirm from '../pages/userPartition/BookingConfirm';
-import PaymentSuccess from '../pages/userPartition/PaymentSucess';
-import Order from '../pages/userPartition/Order';
+
+const Login = lazy(() => import('../components/auth/Login'));
+const Signup = lazy(() => import('../components/auth/Signup'));
+const Authenticator = lazy(() => import('../pages/userPartition/Authenticator'));
+const Header = lazy(() => import('../components/user/Header'));
+
+const UserMap = lazy(() => import('../pages/userPartition/UserMap'));
+const UserBus = lazy(() => import('../pages/userPartition/UserBus'));
+const UserProfile = lazy(() => import('../pages/userPartition/UserBus'));
+const BookingConfirm = lazy(() => import('../pages/userPartition/BookingConfirm'));
+const PaymentSuccess = lazy(() => import('../pages/userPartition/PaymentSucess'));
+const Order = lazy(() => import('../pages/userPartition/Order'));
 
 
 function UserWrapper() {

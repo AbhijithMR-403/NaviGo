@@ -9,13 +9,7 @@ function Approval() {
     const refresh_token = localStorage.getItem('refresh');
 
     const getData = async() => {
-        await AdminAxios.get('/vendor/list', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-        }).then((res) => {
+        await AdminAxios.get('/vendor/list').then((res) => {
             console.log(res.data)
             setApprovedList(res.data)
         }).catch((err) => {

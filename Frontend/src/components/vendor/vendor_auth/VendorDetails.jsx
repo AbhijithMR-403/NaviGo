@@ -1,48 +1,55 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import InputField from './element/InputField';
-import {
-    CitySelect,
-    StateSelect,
-} from "react-country-state-city";
-import "react-country-state-city/dist/react-country-state-city.css";
 import axios from 'axios';
 import { API_BASE_URL } from '../../../constant/api';
-import { TError, TInfo, TSuccess } from '../../toastify/Toastify';
+import { TError, TInfo, TLoading, TPromise, TSuccess, TUpdate } from '../../toastify/Toastify';
+import { AuthAxios } from '../../api/api_instance';
+import { toast } from 'react-toastify';
 
 function VendorDetails() {
     const [darkMode, setDarkMode] = useState(false);
     const [Company, setCompany] = useState('')
-    const [otp, setotp] = useState('')
+    const [otp, setOTP] = useState('')
     const [GSTIN, setGSTIN] = useState('')
-    const [address, setaddress] = useState('')
+    const [address, setAddress] = useState('')
     const [PinCode, setPinCode] = useState('')
     const [file, setFile] = useState([]);
     const [IdProof, setIdProof] = useState([]);
     const imgRef = useRef()
-    const [stateid, setstateid] = useState({});
-    const [cityid, setCityid] = useState({});
+    const [stateID, setStateID] = useState('');
+    const [cityID, setCityID] = useState('');
     const [ShowOTPInput, setShowOTPInput] = useState(true)
-    const userID = localStorage.getItem('userID')
+    const {userID} = useParams()
     const navigate = useNavigate()
 
 
-    useEffect(() => {
-        console.log('this is userID', userID);
 
-        axios.patch(API_BASE_URL + '/auth/otp', { 'userID': userID }).then((res) => {
+    const SentOTP = async() =>{
+        console.log(userID);
+        const toaster = TLoading('Please wait...')
+        await AuthAxios.patch('/otp', { 'userID': userID }).then((res) => {
+            TUpdate(toaster, 'OTP send', 'success')
             if (res.status == 208) {
                 setShowOTPInput(false)
             }
             console.log((res));
-
         }
-        ).catch((err) => console.log(err))
-    }, [])
+        ).catch((err) => {
+            console.log(err)
+            if(err.response.status == 429){
+                TUpdate(toaster, err.response.data.error, 'error')
+            }
+            else{
+                TUpdate(toaster, err.response.data.error, 'error')
 
+            }
+        })
+    
+    }
 
     // Store the validation Documentation image
-    function handleimgChange(e) {
+    function handleImgChange(e) {
         console.log(e.target.files);
         setIdProof(e.target.files[0])
         setFile(URL.createObjectURL(e.target.files[0]));
@@ -73,13 +80,7 @@ function VendorDetails() {
         if (!GSTIN || GSTIN.trim() === '') {
             TError('GSTIN is required');
             return false
-        } 
-        // else if (!/^[0-9A-Za-z]{15}$/.test(GSTIN)) {
-        //     TError('Invalid GSTIN format');
-        //     return false
-        // }
-
-        // Validate IdProof (assuming it's a file)
+        }
         if (!IdProof) {
             TError('Identification proof is required');
             return false
@@ -92,13 +93,13 @@ function VendorDetails() {
         }
 
         // Validate city
-        if (!cityid.name || cityid.name.trim() === '') {
+        if (!cityID || cityID.trim() === '') {
             TError('City is required');
             return false
         }
 
         // Validate state
-        if (!stateid.name || stateid.name.trim() === '') {
+        if (!stateID || stateID.trim() === '') {
             TError('State is required');
             return false
         }
@@ -119,50 +120,41 @@ function VendorDetails() {
         const ValidateOTP = await CheckOTP()
         console.log(ValidateOTP);
         if (ValidateOTP && validateFormData()) {
-            
+
             const formData = new FormData();
             formData.append('user', userID);
             formData.append('company_name', Company);
             formData.append('GSTIN', GSTIN);
             formData.append('identify_img', IdProof);
             formData.append('address', address);
-            formData.append('city', cityid.name);
-            formData.append('state', stateid.name);
+            formData.append('city', cityID.name);
+            formData.append('state', stateID.name);
             formData.append('pincode', PinCode);
-            // const data = {
-            //     'user': userID,
-            //     'company_name': Company,
-            //     'GSTIN': GSTIN,
-            //     'identify_img':IdProof,
-            //     'address': address,
-            //     'city': cityid.name,
-            //     'state': stateid.name,
-            //     'pincode': PinCode,
-            // }
+
             await axios.post(API_BASE_URL + '/auth/vendor/details', formData).then((res) => {
-                TSuccess('Registeration completed(Your request under process now)')
+                TSuccess('Registration completed(Your request under process now)')
                 console.log('Added')
                 navigate('/vendor/login')
             }).catch((err) => {
                 console.log(err);
-                if(err.response.status == 400){
-                    if(err.response.data.company_name){
+                if (err.response.status == 400) {
+                    if (err.response.data.company_name) {
                         TError(err.response.data.company_name)
                     }
-                    else if(err.response.data.GSTIN){
+                    else if (err.response.data.GSTIN) {
                         TError('GSTIN: ' + err.response.data.GSTIN)
                     }
                 }
             })
         }
-        console.log(Company, otp, GSTIN, address, PinCode, file, stateid);
+        console.log(Company, otp, GSTIN, address, PinCode, file, stateID);
     }
 
     const CheckOTP = async () => {
         let otp_Active = false
         await axios.patch(API_BASE_URL + '/auth/otp/verify', { 'OTP': otp, 'UserID': userID }).then((res) => {
             console.log(res);
-            if(res.status == 201){
+            if (res.status == 201) {
                 TInfo('OTP verified')
                 otp_Active = true
             }
@@ -218,27 +210,30 @@ function VendorDetails() {
                             <div className="flex flex-row gap-4">
                                 <InputField type="text" placeholder="Company Name" name="Company" value={Company} setValue={setCompany} />
                                 {ShowOTPInput ?
-                                    <InputField type="number" placeholder="Enter OTP" name="otp" value={otp} setValue={setotp} />
-                                    : null}
+                                    <InputField type="number" placeholder="Enter OTP" name="otp" value={otp} setValue={setOTP} />
+                                    : null} 
+                                <p className=' text-sm text-blue-600 self-end cursor-pointer' onClick={()=>SentOTP()}>resent_otp?</p>
                             </div>
                             <InputField type="text" placeholder="GSTIN" name="GSTIN" value={GSTIN} setValue={setGSTIN} />
-                            <InputField type="text" placeholder="Enter Your address" name="address" value={address} setValue={setaddress} />
+                            <InputField type="text" placeholder="Enter Your address" name="address" value={address} setValue={setAddress} />
                             <div className="flex flex-col sm:flex-row gap-4">
-                                <StateSelect
-                                    countryid={101}
+                            <InputField type="text" placeholder="State" name="state" value={stateID} setValue={setStateID} />
+                            <InputField type="text" placeholder="City" name="city" value={cityID} setValue={setCityID} />
+                                {/* <StateSelect
+                                    countryID={101}
                                     onChange={(e) => {
-                                        setstateid(e);
+                                        setStateID(e);
                                     }}
                                     placeHolder="Select State"
                                 />
                                 <CitySelect
-                                    countryid={101}
-                                    stateid={stateid.id}
+                                    countryID={101}
+                                    stateID={stateID.id}
                                     onChange={(e) => {
-                                        setCityid(e);
+                                        setCityID(e);
                                     }}
                                     placeHolder="Select City"
-                                />
+                                /> */}
                             </div>
                             <div className="flex flex-col sm:flex-row gap-4">
 
@@ -266,13 +261,13 @@ function VendorDetails() {
                                         name="documents[]"
                                         accept="image/*"
                                         ref={imgRef}
-                                        onChange={handleimgChange}
+                                        onChange={handleImgChange}
                                     />
                                 </div>
 
 
                                 {/* <label className='font-mono text-sm mt-2 -mb-3'>Upload profile pic</label> */}
-                                {/* <input type="file" onChange={handleimgChange} placeholder='adslk'/> */}
+                                {/* <input type="file" onChange={handleImgChange} placeholder='adslk'/> */}
 
                                 {/* <InputField type="text" placeholder="City" name="Company Name" value={City} setValue={setCity} /> */}
                                 <InputField type="number" placeholder="Pin code" name="Company Name" value={PinCode} setValue={setPinCode} />

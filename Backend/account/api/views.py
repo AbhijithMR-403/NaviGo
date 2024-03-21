@@ -12,6 +12,7 @@ import random
 from rest_framework import generics
 from rest_framework.parsers import MultiPartParser, FormParser
 from decouple import config
+from datetime import datetime, timedelta, timezone
 from google.oauth2 import id_token
 from google.auth.transport import requests
 
@@ -26,10 +27,11 @@ class UserLogin(APIView):
             raise ParseError('All Fields Are Required')
         if not Account.objects.filter(email=email).exists():
             return Response({'error': 'Email Does Not Exist'},
-                            status=status.HTTP_401_UNAUTHORIZED)
+                            status=status.HTTP_404_NOT_FOUND)
 
         if not Account.objects.filter(email=email, is_active=True).exists():
-            return Response({'error': 'Incorrect Email'}, status=status.HTTP_403_FORBIDDEN)
+            user = Account.objects.get(email=email)
+            return Response({'error': 'Your mail is not validated', 'user': user.id}, status=status.HTTP_401_UNAUTHORIZED)
 
         user = authenticate(username=email, password=password)
         if user is None:
@@ -75,18 +77,6 @@ class RegisterView(APIView):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            user = Account.objects.get(email=request.data['email'])
-            random_num = None
-            if not user.is_vendor:
-                try:
-                    random_num = random.randint(1000, 9999)
-                    print(random_num)
-                    user.OTP = random_num
-                    user.save()
-                    send_notification_mail.delay(
-                        request.POST['email'], f"{random_num} -OTP")
-                except:
-                    return Response({"Message": "Unknown error"})
         else:
             is_active = False
             content = {
@@ -105,32 +95,49 @@ class RegisterView(APIView):
 class Send_OTP(APIView):
     def patch(self, request):
         random_num = random.randint(1000, 9999)
+        userID = int(request.data['userID'])
         try:
             user = None
-            if request.data['userID']:
-                user = Account.objects.get(id=request.data['userID'])
+            if userID:
+                user = Account.objects.get(id=userID)
         except:
             return Response({'error': 'Such an email does not exist'}, status=status.HTTP_404_NOT_FOUND)
         if user.is_active:
             return Response({'error': 'This user is already active'}, status=status.HTTP_208_ALREADY_REPORTED)
-        user.OTP = random_num
-        user.save()
-        print(random_num)
+        current_time = datetime.now(timezone.utc)
+        print(type(current_time))
+        otp_expiry_time = user.OTP_expire
         try:
-            send_notification_mail.delay(
-                request.POST['email'], f"{random_num} -OTP")
-            context = {
-                "Message": "OTP send",
-                "OTP": str(random_num)
-            }
-            return Response(context, status=status.HTTP_200_OK)
+
+            if user.OTP_expire is not None:
+                if current_time < otp_expiry_time + timedelta(seconds=20):
+                    print(user.OTP_expire, current_time)
+                    time_remaining = (otp_expiry_time +
+                                      timedelta(seconds=20)) - current_time
+                    error_message = f'OTP was sent just before (wait for {time_remaining.seconds} seconds)'
+                    return Response({'error': error_message}, status=status.HTTP_429_TOO_MANY_REQUESTS)
+                else:
+                    user.OTP = random_num
+                    user.OTP_expire = current_time
+                    user.save()
         except:
             return Response({"error": "Unknown error"}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        try:
+            send_notification_mail(user.email, f"{random_num} -OTP")
+        except:
+            return Response({'error': 'This OTP is not sent'}, status=status.HTTP_408_REQUEST_TIMEOUT)
+
+        context = {
+            "Message": "OTP send",
+            "OTP": str(random_num)
+        }
+        return Response(context, status=status.HTTP_200_OK)
 
 
 class OtpVerify(APIView):
     def patch(self, request):
-        UserID = request.data['UserID']
+        UserID = int(request.data['UserID'])
         try:
             user = Account.objects.get(id=UserID)
         except Account.DoesNotExist:

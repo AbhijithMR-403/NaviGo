@@ -10,7 +10,7 @@ const VendorAuth = () => {
         <Routes>
             <Route path="/register" element={<VendorRegister/>} />
             <Route path="/login" element={<VendorLogin/>} />
-            <Route path="/details" element={<VendorDetails/>} />
+            <Route path="/details/:userID/" element={<VendorDetails/>} />
         </Routes>
 
     </div>
