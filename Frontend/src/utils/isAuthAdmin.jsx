@@ -36,7 +36,7 @@ const fetchIsAdmin = async () => {
             }
         });
 
-        return res.data.is_superuser; // Return directly from the function
+        return res.data.is_superuser;
 
     } catch (error) {
         return false;
@@ -45,7 +45,6 @@ const fetchIsAdmin = async () => {
 
 const isAuthAdmin = async () => {
     const accessToken = localStorage.getItem("access");
-    console.log(accessToken, 'kanakona kanakona/n/n/n\n\n\n\n');
     if (!accessToken) {
         return { 'name': null, isAuthenticated: false, isAdmin: false };
     }

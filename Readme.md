@@ -16,3 +16,6 @@
 4. ### Payment gateway integration
 
    - failure response handling
+
+5. ### USER Sign up page
+    - Bring the google auth to the center
