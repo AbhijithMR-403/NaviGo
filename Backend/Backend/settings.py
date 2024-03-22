@@ -173,8 +173,8 @@ SIMPLE_JWT = {
 # Email
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = '587'
-EMAIL_HOST_USER = "abhijithmr581@gmail.com"
-EMAIL_HOST_PASSWORD = "otfz tvai nfda yzsr"
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 
 
