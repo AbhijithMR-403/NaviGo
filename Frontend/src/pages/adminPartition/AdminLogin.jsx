@@ -4,8 +4,6 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
@@ -13,20 +11,16 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
 
-// import { useRouter } from 'src/routes/hooks';
-
 import { bgGradient } from '../../components/admin/elements/theme/css';
 
-// import Logo from 'src/components/logo';
 import Iconify from '../../components/admin/elements/iconify';
 import { useRouter } from '../../components/admin/navbar/hooks';
-import { API_BASE_URL } from '../../constant/api';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import axios from 'axios';
 import { jwtDecode } from 'jwt-decode'
 import { Set_Authentication } from '../../redux/authentication/AuthenticationSlice';
 import { TError } from '../../components/toastify/Toastify';
+import { AuthAxios } from '../../components/api/api_instance';
 
 
 
@@ -46,7 +40,7 @@ export default function LoginView() {
     formData.append("email", event.target.email.value);
     formData.append("password", event.target.password.value);
     try {
-      const res = await axios.post(API_BASE_URL+'/auth/login', formData)
+      const res = await AuthAxios.post('/login', formData)
       if( ! res.data.isAdmin){
         TError("User is not an admin")
         return navigate('/login')
@@ -67,7 +61,6 @@ export default function LoginView() {
       
     }
     catch (error) {
-      console.log(error);
       if (error.response.status===401)
       {
         TError("Account doesn't exist")
@@ -87,9 +80,6 @@ export default function LoginView() {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  // const handleClick = () => {
-  //   router.push('/dashboard');
-  // };
 
   const renderForm = (
     <>

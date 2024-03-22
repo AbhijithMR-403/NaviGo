@@ -10,7 +10,6 @@ function VendorProfile() {
         
         VendorAxios.get(`/vendor/detail/${userID}`).then((res) => {
             setVendorDetail(res.data)
-            console.log("vendor detail : ", res.data);
         }).catch((err)=>{
             if(err.response.status){
                 window.location.reload();

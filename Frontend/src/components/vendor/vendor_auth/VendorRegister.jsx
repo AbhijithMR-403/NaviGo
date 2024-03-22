@@ -1,11 +1,9 @@
-import axios from 'axios';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import { API_BASE_URL } from '../../../constant/api';
-import { TError, TSuccess, TWarning } from '../../toastify/Toastify';
-import OTPModal from './element/OTPModal';
-import { useDispatch, useSelector } from 'react-redux';
+import { TError, TWarning } from '../../toastify/Toastify';
+import { useDispatch } from 'react-redux';
 import { set_vendor } from '../../../redux/authentication/VendorSlice';
+import { AuthAxios, UserAxios } from '../../api/api_instance';
 
 function VendorRegister() {
     const navigate = useNavigate()
@@ -47,7 +45,6 @@ function VendorRegister() {
             TError(['Invalid email address'])
         }
         else if(!file){
-            console.log(file);
             TError('Upload your image')
         }
         else {
@@ -60,7 +57,7 @@ function VendorRegister() {
             formData.append('is_vendor', true);
             formData.append('is_active', false);
             formData.append('profile_img', file);
-            await axios.post(API_BASE_URL + '/auth/register', formData).then((res) => {
+            await AuthAxios.post('/register', formData).then((res) => {
                 dispatch(
                     set_vendor({
                         userID: res.data.user_id,

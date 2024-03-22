@@ -16,11 +16,10 @@ function createData(id, bus_stop_1, distance, time, bus_stop_2) {
 
 function ListBusConnection() {
 
-    const [rows, setrows] = useState([])
+    const [rows, setRows] = useState([])
 
     const DeleteRow = async (id) =>{
         AdminBusAxios.delete(`/bus/connect/delete/${id}`).then((res)=>{
-            console.log(res);
             ListConnection()
             TSuccess('Removed successfully')
         }).catch((err)=>{
@@ -33,10 +32,8 @@ function ListBusConnection() {
 
     const ListConnection = async() =>{
         await AdminBusAxios.get('/bus/connect/list').then((res) => {
-            console.log("Connections: ", res);
             const newArray = res.data.map(item => createData(item.id, item.bus_stop_1.stop_name, item.distance, item.time, item.bus_stop_2.stop_name));
-            console.log(newArray);
-            setrows(newArray)
+            setRows(newArray)
         }).catch((err) => {
             console.log(err);
         })
@@ -58,7 +55,6 @@ function ListBusConnection() {
                 </TableHead>
                 <TableBody>
                     {rows.map((row) => {
-                        console.log(row);
                         return (
                             <TableRow
                                 key={row.name}

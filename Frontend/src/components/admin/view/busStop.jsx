@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { API_BASE_URL } from '../../../constant/api';
 import {
   getGeocode,
   getLatLng,
@@ -24,12 +23,11 @@ function BusStop() {
     lng: 76.6337262,
   });
   const [Point, setPoint] = useState(null)
-  const [stopName, setstopName] = useState('')
+  const [stopName, setStopName] = useState('')
 
   // Fetching  all bus stops data
   useEffect(() => {
     const token = localStorage.getItem('access');
-    console.log(localStorage.getItem('access'), 'this is availble or not ');
 
     MarkPoint()
   }, [])
@@ -69,12 +67,11 @@ function BusStop() {
       'lng': Point.lng
     }
 
-    await AdminBusAxios.post(API_BASE_URL + '/bus/stop/add', formData).then((res) => {
+    await AdminBusAxios.post('/bus/stop/add', formData).then((res) => {
       TSuccess("Successfully added")
-      setstopName('')
+      setStopName('')
       MarkPoint()
     }).catch((err) => {
-      console.log(err);
       TError("Something went wrong! Please try again.")
     })
   }
@@ -129,12 +126,11 @@ function BusStop() {
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
               Stop name
             </label>
-            <input value={stopName} onChange={(e) => setstopName(e.target.value)} className="shadow appearance-none border rounded sm:w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" />
+            <input value={stopName} onChange={(e) => setStopName(e.target.value)} className="shadow appearance-none border rounded sm:w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" />
           </div>
           {isLoaded ? (
             <div className='relative'>
               <div className='absolute w-4 h-4 top-3 left-2 sm:left-1/3 mx-auto my-auto z-50' id="searchColumn ">
-                {/* <h2>Search for place</h2> */}
                 <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
                   <div className='relative inline'>
 
@@ -144,11 +140,7 @@ function BusStop() {
                       placeholder="Search "
                       style={{
                         boxSizing: `border-box`,
-                        // border: `1px solid transparent`,
-                        // width: `240px`,
-                        // height: `32px`,
                         padding: `0 12px`,
-                        // borderRadius: `3px`,
                         boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
                         fontSize: `14px`,
                         outline: `none`,

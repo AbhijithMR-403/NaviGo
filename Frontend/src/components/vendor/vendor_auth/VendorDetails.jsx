@@ -1,11 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import InputField from './element/InputField';
-import axios from 'axios';
-import { API_BASE_URL } from '../../../constant/api';
-import { TError, TInfo, TLoading, TPromise, TSuccess, TUpdate } from '../../toastify/Toastify';
-import { AuthAxios } from '../../api/api_instance';
-import { toast } from 'react-toastify';
+import { TError, TInfo, TLoading, TSuccess, TUpdate } from '../../toastify/Toastify';
+import { AuthAxios, UserAxios } from '../../api/api_instance';
 
 function VendorDetails() {
     const [darkMode, setDarkMode] = useState(false);
@@ -26,14 +23,12 @@ function VendorDetails() {
 
 
     const SentOTP = async() =>{
-        console.log(userID);
         const toaster = TLoading('Please wait...')
         await AuthAxios.patch('/otp', { 'userID': userID }).then((res) => {
             TUpdate(toaster, 'OTP send', 'success')
             if (res.status == 208) {
                 setShowOTPInput(false)
             }
-            console.log((res));
         }
         ).catch((err) => {
             console.log(err)
@@ -50,7 +45,6 @@ function VendorDetails() {
 
     // Store the validation Documentation image
     function handleImgChange(e) {
-        console.log(e.target.files);
         setIdProof(e.target.files[0])
         setFile(URL.createObjectURL(e.target.files[0]));
     }
@@ -118,7 +112,6 @@ function VendorDetails() {
 
     const HandleSubmit = async (event) => {
         const ValidateOTP = await CheckOTP()
-        console.log(ValidateOTP);
         if (ValidateOTP && validateFormData()) {
 
             const formData = new FormData();
@@ -131,9 +124,8 @@ function VendorDetails() {
             formData.append('state', stateID.name);
             formData.append('pincode', PinCode);
 
-            await axios.post(API_BASE_URL + '/auth/vendor/details', formData).then((res) => {
+            await UserAxios.post('/auth/vendor/details', formData).then((res) => {
                 TSuccess('Registration completed(Your request under process now)')
-                console.log('Added')
                 navigate('/vendor/login')
             }).catch((err) => {
                 console.log(err);
@@ -147,25 +139,20 @@ function VendorDetails() {
                 }
             })
         }
-        console.log(Company, otp, GSTIN, address, PinCode, file, stateID);
     }
 
     const CheckOTP = async () => {
         let otp_Active = false
-        await axios.patch(API_BASE_URL + '/auth/otp/verify', { 'OTP': otp, 'UserID': userID }).then((res) => {
-            console.log(res);
+        await UserAxios.patch('/auth/otp/verify', { 'OTP': otp, 'UserID': userID }).then((res) => {
             if (res.status == 201) {
                 TInfo('OTP verified')
                 otp_Active = true
             }
             if (res.status == 200) {
-                console.log('You are active already');
                 otp_Active = true
             }
             otp_Active = true
         }).catch((err) => {
-
-            console.log('this reach here man\n\n\n', err);
             otp_Active = false
         })
         return otp_Active
@@ -219,21 +206,7 @@ function VendorDetails() {
                             <div className="flex flex-col sm:flex-row gap-4">
                             <InputField type="text" placeholder="State" name="state" value={stateID} setValue={setStateID} />
                             <InputField type="text" placeholder="City" name="city" value={cityID} setValue={setCityID} />
-                                {/* <StateSelect
-                                    countryID={101}
-                                    onChange={(e) => {
-                                        setStateID(e);
-                                    }}
-                                    placeHolder="Select State"
-                                />
-                                <CitySelect
-                                    countryID={101}
-                                    stateID={stateID.id}
-                                    onChange={(e) => {
-                                        setCityID(e);
-                                    }}
-                                    placeHolder="Select City"
-                                /> */}
+                            
                             </div>
                             <div className="flex flex-col sm:flex-row gap-4">
 
@@ -266,19 +239,11 @@ function VendorDetails() {
                                 </div>
 
 
-                                {/* <label className='font-mono text-sm mt-2 -mb-3'>Upload profile pic</label> */}
-                                {/* <input type="file" onChange={handleImgChange} placeholder='adslk'/> */}
-
-                                {/* <InputField type="text" placeholder="City" name="Company Name" value={City} setValue={setCity} /> */}
                                 <InputField type="number" placeholder="Pin code" name="Company Name" value={PinCode} setValue={setPinCode} />
                             </div>
 
                             <img className='max-w-56 max-h-44' src={file} />
 
-
-                            {/* <ul className='text-red-700'>
-                                <li>{error}</li>
-                            </ul> */}
                             <button onClick={() => { HandleSubmit(); }} type='button' className="mt-5 tracking-wide font-semibold bg-[#E9522C] text-gray-100 w-full py-4 rounded-lg hover:bg-[#E9522C]/90 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
                                 <svg
                                     className="w-6 h-6 -ml-2"

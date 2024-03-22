@@ -5,7 +5,6 @@ import IsAuthUser from '../IsAuthUser';
 const DispatchAuth = async(dispatch) => {
 
     const isAuthenticated = await IsAuthUser();
-    console.log(isAuthenticated);
     dispatch(
       Set_Authentication({
         name: isAuthenticated.name,

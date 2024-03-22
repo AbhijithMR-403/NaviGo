@@ -7,9 +7,9 @@ import './Style/User.scss'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  // <React.StrictMode>
+  <React.StrictMode>
     <Router>
-    <App />
+      <App />
     </Router>,
-  {/* </React.StrictMode>, */}
+  </React.StrictMode>,
 )

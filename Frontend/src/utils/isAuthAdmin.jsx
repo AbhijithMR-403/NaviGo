@@ -1,6 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import axios from 'axios'
-import { API_BASE_URL } from "../constant/api";
+import { AuthAxios } from "../components/api/api_instance";
 
 
 
@@ -9,10 +8,9 @@ const updateAdminToken = async () => {
     const refreshToken = localStorage.getItem("refresh");
 
     try {
-        const res = await axios.post(API_BASE_URL + '/auth/token/refresh/', {
+        const res = await AuthAxios.post('/token/refresh/', {
             refresh: localStorage.getItem("refresh")
         }, { headers: {'Content-Type': 'application/json'}},{withCredentials: true});
-        console.log('from updateAdminToken\n\n\n', res);
         if (res.status === 200) {
             localStorage.setItem('access', res.data.access);
             localStorage.setItem('refresh', res.data.refresh);
@@ -26,11 +24,11 @@ const updateAdminToken = async () => {
     }
 };
 
-const fetchisAdmin = async () => {
+const fetchIsAdmin = async () => {
     const token = localStorage.getItem('access');
     
     try {
-        const res = await axios.get(API_BASE_URL + '/auth/details', {
+        const res = await AuthAxios.get('/details', {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem("access")}`,
                 'Accept': 'application/json',
@@ -56,14 +54,14 @@ const isAuthAdmin = async () => {
     let decoded = jwtDecode(accessToken);
 
     if (decoded.exp > currentTime) {
-        let checkAdmin = await fetchisAdmin(); // Await the result
+        let checkAdmin = await fetchIsAdmin(); // Await the result
         return { 'name': decoded.first_name, isAuthenticated: true, isAdmin: checkAdmin };
     } else {
         const updateSuccess = await updateAdminToken();
 
         if (updateSuccess) {
             let decoded = jwtDecode(accessToken);
-            let checkAdmin = await fetchisAdmin(); // Await the result
+            let checkAdmin = await fetchIsAdmin(); // Await the result
             return { 'name': decoded.first_name, isAuthenticated: true, isAdmin: checkAdmin };
         } else {
             return { 'name': null, isAuthenticated: false, isAdmin: false };

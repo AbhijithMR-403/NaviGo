@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import InputField from './elements/InputField'
-import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
-import { API_BASE_URL } from '../../constant/api'
-import { GoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from 'jwt-decode'
 import { MuiOtpInput } from 'mui-one-time-password-input'
 import { TError, TInfo, TSuccess } from '../toastify/Toastify'
+import { UserAxios } from '../api/api_instance'
 
 
 
-function Signup() {
+function SignUp() {
 
     const [sign_up, setSignUp] = useState(true)
     const [UserID, setUserID] = useState(null)
@@ -85,83 +82,55 @@ function Signup() {
             formData.append("password", password);
             formData.append("username", name)
         }
-        
-            await axios.post(API_BASE_URL + '/auth/register', formData).then((res)=>{
+
+        await UserAxios.post('/auth/register', formData).then((res) => {
             if (res.status === 201) {
                 setUserID(res.data.user_id)
                 setSignUp(false)
                 TSuccess("OTP sent")
                 return res
-            }}).catch ((err)=>{
-                console.log(err)
-                if (err.response.status===409){
-                    if  (err.response.data.is_active){
+            }
+        }).catch((err) => {
+            if (err.response.status === 409) {
+                if (err.response.data.is_active) {
                     navigate('/login')
-                    }
-                    else{
-                        sendotp()
-                        setSignUp(false)
-                    console.log('409 reached' );
-                    }
                 }
-                for (let key in err.response.data.errors) {
-                    TInfo(err.response.data.errors[key])
-                  } 
-            } )
+                else {
+                    sendOTP()
+                    setSignUp(false)
+                }
+            }
+            for (let key in err.response.data.errors) {
+                TInfo(err.response.data.errors[key])
+            }
+        })
     }
 
-    const sendotp = async () =>{
-        var data={"userID": UserID}
-        await axios.patch(API_BASE_URL+'/auth/otp', data).then((res)=>{
+    const sendOTP = async () => {
+        var data = { "userID": UserID }
+        await UserAxios.patch(+'/auth/otp', data).then((res) => {
             TSuccess('OTP is sent')
         }
-        ).catch((err)=>console.log(err))
+        ).catch((err) => console.log(err))
     }
 
-    const Google_login = async (user_detail) => {
-        const formData = new FormData();
-        formData.append("email", user_detail.email)
-        formData.append("username", user_detail.name)
-        formData.append("is_active", true)
-        formData.append("password", "1704974569")
-        try {
-            const res = await axios.post(API_BASE_URL + '/auth/google/register', formData)
-            if (res.status === 201) {
-                TSuccess('Signed up successfully')
+
+
+    const verify_otp = async (e) => {
+        e.preventDefault()
+        await UserAxios.patch(`/auth/otp/verify`, { "OTP": otp, 'UserID': UserID }).then(
+            (res) => {
+
+                TSuccess('Verified Successfully')
                 navigate('/login',
                     {
                         state: res.data.Message
                     })
-                return res
             }
-        }
-        catch (error) {
-            if (error.response.status === 409){
-                TInfo("Already Signed up")
-                navigate('/login')
-                return error
-            }
-        }
-    }
-
-
-    const verify_otp = async(e) => {
-        e.preventDefault()
-            await axios.patch(API_BASE_URL + `/auth/otp/verify`,{"OTP":otp, 'UserID':UserID}).then(
-                (res) => {
- 
-                    TSuccess('Verified Successfully')
-                    navigate('/login',
-                        {
-                            state: res.data.Message
-                        })
-                }
-            ).catch((err) => {
-                if(err.response.status == 422)
+        ).catch((err) => {
+            if (err.response.status == 422)
                 TError('Invalid OTP')
-                console.log(err);
-                // TError(res)
-            })
+        })
     }
 
 
@@ -169,10 +138,9 @@ function Signup() {
         <div>
             {sign_up ?
                 (<form className="form" method='POST' onSubmit={handleLoginSubmit}>
-
-                    {fields.map((field, ind) => <InputField {...field} />)}
-
-
+                    
+                    {/* List those Input fields */}
+                    {fields.map((field, ind) => <div key={ind}><InputField {...field} /></div>)}
                     <ul className='text-red-500' >
                         {formError && <li>
                             {formError}
@@ -187,31 +155,15 @@ function Signup() {
                     </div>
                     <button className="button-submit" type='submit'>Sign Up</button>
                     <p className="p">Don't have an account? <Link to={'/login'}><span className="span">Log in</span></Link>
-
-                    </p><p className="p line">Or With</p>
-
-                    <div className="flex-row">
-
-                        <GoogleLogin
-                            onSuccess={credentialResponse => {
-                                const user_detail = jwtDecode(credentialResponse.credential)
-                                Google_login(user_detail)
-                            }}
-                            onError={() => {
-                                console.log('error ')
-                            }}
-                        />
-
-                    </div>
+                    </p>
                 </form>)
                 : (
                     <div className='m-40 p-10 bg-slate-50' >
                         <div className="flex-column mb-5">
                             <label >OTP </label></div>
-                        <MuiOtpInput className='mb-5' value={otp} onChange={(val)=>setOtp(val)} />
+                        <MuiOtpInput className='mb-5' value={otp} onChange={(val) => setOtp(val)} />
                         <div className="flex-row">
-                            
-                            <span className="span" onClick={() => sendotp()}>Resent otp?</span>
+                            <span className="span" onClick={() => sendOTP()}>Resent otp?</span>
                             <span className="span" onClick={() => setSignUp(true)}>re-enter email</span>
                         </div>
                         <button className="button-submit" onClick={verify_otp}>Sign Up</button>
@@ -223,4 +175,4 @@ function Signup() {
     )
 }
 
-export default Signup
+export default SignUp

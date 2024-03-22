@@ -35,7 +35,6 @@ function RouteManagement() {
       console.log("Error: " + err)
     });
     AdminBusAxios.get(`/vendor/bus/list/${userId}`).then(res => {
-      console.log(res.data);
       setBusNames(res.data)
     }).catch((err) => {
       console.log("Error: " + err)
@@ -45,17 +44,13 @@ function RouteManagement() {
 
   const AvailableRoutesFn = async () => {
 
-    console.log(stop1 && stop2);
     if (stop1 && stop2) {
       const formData = {
         'origin': stop1.id,
         'destination': stop2.id,
       }
-      console.log(formData);
       await VendorAxios.get('/bus/route/available', { params: formData }).then(res => {
         setAvailableRoutes(res.data)
-        console.log(res.data);
-        console.log(res.data.wayPoint);
         if (res.data.wayPoint.length == 0) {
           TError('There is no route through those bus stops')
         }
@@ -78,8 +73,6 @@ function RouteManagement() {
       TError('Departure time should be earlier than arrival time');
     }
     else {
-      console.log(fromTime);
-      console.log(endTime);
       setChosen(waypoint)
     }
   }
@@ -93,20 +86,17 @@ function RouteManagement() {
       'ending_time':endTime
     }
     await VendorAxios.post(`/vendor/route/create`, form_data).then((response)=>{
-      console.log(response);
       {chosen.map(async(res, index)=>{
         setTimeout(() => {
         const wayPointData = {
           'route':response.data.id,
           'stop':res.id,
         }
-        console.log(wayPointData);
         VendorAxios.post('/vendor/waypoint/create',wayPointData).then((pointRes)=>{
           TSuccess('Route added successfully!')
         }).catch((err)=>{
           console.log(err);
         })
-        console.log('hello');
       }, 700*index);
       
       })}

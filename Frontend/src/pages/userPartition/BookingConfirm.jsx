@@ -20,17 +20,9 @@ const BookingConfirm = () => {
     }, [])
 
     const CalculatePrice = (qty, subT) => {
-        console.log('inside handle change');
-        //     try{
-        //     let subTotal = qty * parseFloat(bookingData.route_id.price)
-        // console.log(bookingData.route_id.price);
-        // }
-        // catch{
+        
         let subTotal = qty * parseFloat(subT)
-        // }
-        console.log(subTotal, qty)
         let tax = subTotal * 18 / 100
-        console.log(tax);
         setSubTotal(subTotal)
         setTax(tax)
     }
@@ -85,18 +77,11 @@ const BookingConfirm = () => {
             name: "Razorpay Testing",
             description: "Test Transaction",
             order_id: orderId,
-            // callback_url: "http://127.0.0.1:8000/user/razorpay_callback/",
-            // callback_url: "http://localhost:5173/success",
-            // redirect: false,
             handler: function(response) {
-                console.log(response);
                 
                 AuthUserAxios.post('/user/razorpay_callback',{data:response}).then((res)=>{
-                    console.log(res)
                     navigate('/success')
                 }).catch((err)=>console.log(err))
-                // window.location.href = "http://localhost:5173/success";
-                // Handle successful payment and redirect to your React success page
             },
             prefill: {
                 name: "Swapnil Pawar",
@@ -122,7 +107,6 @@ const BookingConfirm = () => {
 
     return (
         <div className="pt-16 relative mx-auto w-full bg-white">
-            {/* <div className="grid min-h-screen grid-cols-10"> */}
             <div className="col-span-full py-6 px-4 sm:py-12 lg:col-span-6 lg:py-24">
                 <div className="mx-auto w-full max-w-lg">
                     <h1 className="relative text-2xl font-medium text-gray-700 sm:text-3xl">

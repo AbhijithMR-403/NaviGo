@@ -14,11 +14,7 @@ const navigation = [
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const authentication_user = useSelector(state => state.authentication_user)
-  // useEffect(() => {
-  //   console.log('Authentication user changed:', authentication_user);
-
-  // }, [authentication_user]);
-
+  
   return (
     <div className="user-home-div bg-white">
 

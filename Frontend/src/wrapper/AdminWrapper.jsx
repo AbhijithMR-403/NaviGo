@@ -70,12 +70,6 @@ function AdminWrapper() {
         { element: <Approval />, path: "/approval" },
         { element: <ConnectStop />, path: "/bus/connection" },
         { element: <ListBusConnection />, path: "/bus/connection/list" },
-        // {
-        //   element: <DirectionsMap
-        //   origin={origin} 
-        //   destination={destination}
-        // />, path: "/map"
-        // },
 
       ],
     },

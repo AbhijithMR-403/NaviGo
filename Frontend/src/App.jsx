@@ -14,7 +14,6 @@ const VendorWrapper = lazy(() => import('./wrapper/VendorWrapper'));
 
 
 function App() {
-  console.log(import.meta.env.VITE_GOOGLE_AUTH_API);
   return (
     <Provider store={reduxStore}>
       <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_AUTH_API}>

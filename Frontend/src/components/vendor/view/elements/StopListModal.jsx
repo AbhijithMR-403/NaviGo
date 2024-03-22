@@ -1,7 +1,6 @@
 import React from 'react'
 
 function StopListModal({handleSubmit, origin, waypoints, destination, setChosen}) {
-    console.log(origin,'\n\n\n', waypoints, destination);
     return (
 
         <div className="absolute w-full md:w-3/4 h-full backdrop-blur-sm z-50">

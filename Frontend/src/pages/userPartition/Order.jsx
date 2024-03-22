@@ -2,17 +2,23 @@ import React, { useEffect, useState } from 'react'
 import { AuthUserAxios } from '../../components/api/api_instance'
 import { useSelector } from 'react-redux'
 import { jwtDecode } from 'jwt-decode'
+import { useNavigate } from 'react-router-dom'
+import { TWarning } from '../../components/toastify/Toastify'
 
 function Order() {
-    const userID = jwtDecode(localStorage.getItem('access')).user_id
+    const userID = localStorage.getItem('access')? jwtDecode(localStorage.getItem('access')).user_id:null;
     const [orderList, setOrderList] = useState([]);
+    const navigate = useNavigate()
     useEffect(()=>{
-        
+        if(!localStorage.getItem('access')){
+            TWarning('Login to get to Order page')
+            navigate('/login')
+        }
         AuthUserAxios.get(`user/list/order/${userID}`).then(res=>{
-            console.log(res)
             setOrderList(res.data)
         }).catch(err=>console.error(err))
     },[])
+    
     return (
         <div className='pt-24 sm:p-24'>
             <h1 className="text-center font-bold text-2xl">Order</h1>

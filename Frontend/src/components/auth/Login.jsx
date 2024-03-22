@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react'
 import InputField from './elements/InputField'
-import { API_BASE_URL } from '../../constant/api';
-import axios from 'axios'
 import { jwtDecode } from "jwt-decode";
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -9,6 +7,7 @@ import { Set_Authentication } from '../../redux/authentication/AuthenticationSli
 import { GoogleLogin } from '@react-oauth/google';
 import { ToastContainer, toast } from 'react-toastify';
 import { TError, TSuccess } from '../toastify/Toastify';
+import { AuthAxios, UserAxios } from '../api/api_instance';
 
 
 function Login() {
@@ -22,7 +21,7 @@ function Login() {
     formData.append("email", event.target.email.value);
     formData.append("password", event.target.password.value);
     try {
-      const res = await axios.post(API_BASE_URL + '/auth/login', formData)
+      const res = await AuthAxios.post('/login', formData)
       if (res.status === 200) {
         localStorage.setItem('access', res.data.access)
         localStorage.setItem('refresh', res.data.refresh)
@@ -43,12 +42,11 @@ function Login() {
     }
   }
 
-  const GoogleTestlogin = async(user_detail) =>{
+  const GoogleTestLogin = async(user_detail) =>{
     const formData = {
       client_id: user_detail,
     } 
-    await axios.post(API_BASE_URL + '/auth/google', formData).then((res)=>{
-      console.log(res)
+    await AuthAxios.post('/google', formData).then((res)=>{
       
       localStorage.setItem('access', res.data.access)
       localStorage.setItem('refresh', res.data.refresh)
@@ -105,7 +103,7 @@ function Login() {
       <ToastContainer />
       <form className="form" method='POST' onSubmit={handleLoginSubmit}>
 
-        {fields.map((field) => <InputField {...field} />)}
+        {fields.map((field, index) => <div key={index}><InputField {...field} /></div>)}
 
         <div className="flex-row">
           <div>
@@ -125,12 +123,11 @@ function Login() {
 
           <GoogleLogin
             onSuccess={credentialResponse => {
-              console.log(credentialResponse);
-              GoogleTestlogin(credentialResponse.credential)
+              GoogleTestLogin(credentialResponse.credential)
               // Google_login(user_detail)
             }}
             onError={() => {
-              console.log('Login Failed');
+              TError("Login Failed")
             }}
           />
 

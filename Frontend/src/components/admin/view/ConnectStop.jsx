@@ -11,7 +11,6 @@ function ConnectStop() {
 
     useEffect(() => {
         AdminBusAxios.get('/bus/stop/list').then(res => {
-            console.log(res.data);
             setStopNames(res.data)
         }).catch((err) => {
             console.log("Error: " + err)
@@ -21,8 +20,6 @@ function ConnectStop() {
     const submitBusConnection = (event) =>{
         event.preventDefault();
         const formData = new FormData();
-
-        console.log(formData);
         if (stop1 === '' || stop2 ==='') return alert("Please enter both stops") 
         {
         formData.append("bus_stop_1", stop1.id);
@@ -30,10 +27,8 @@ function ConnectStop() {
         }
 
         AdminBusAxios.post("/bus/connect", formData).then(response=>{
-            console.log(response);
             TSuccess('Successful Connection')
         }).catch((err)=>{
-            console.log(err);
             if(err.response.status == 401){
                 TError('There is an issue with Refesh token');
             }
