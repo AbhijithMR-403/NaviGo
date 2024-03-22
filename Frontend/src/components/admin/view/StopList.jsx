@@ -1,13 +1,11 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { API_BASE_URL } from '../../../constant/api'
 import { Button } from '@mui/material'
 import { AdminBusAxios } from '../../api/api_instance'
 
 function StopList() {
     const [busStops, setBusStops] = useState([])
     const deleteStop = async (id) => {
-        await AdminBusAxios.delete(API_BASE_URL + `/bus/delete/${id}/`).then((res) => {
+        await AdminBusAxios.delete(`/bus/delete/${id}/`).then((res) => {
             setBusStops((prevStops) => prevStops.filter(stop => stop.id !== id));
         }).catch((error) => {
             console.error("Error deleting bus stop:", error);
@@ -16,7 +14,7 @@ function StopList() {
     }
 
     useEffect(() => {
-        AdminBusAxios.get(API_BASE_URL + "/bus/stop/list").then((res) => {
+        AdminBusAxios.get("/bus/stop/list").then((res) => {
             setBusStops(res.data)
         }).catch((err) => console.log(err))
     }, [])
