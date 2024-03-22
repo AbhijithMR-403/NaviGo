@@ -15,7 +15,7 @@ const UserMap = lazy(() => import('../pages/userPartition/UserMap'));
 const UserBus = lazy(() => import('../pages/userPartition/UserBus'));
 const UserProfile = lazy(() => import('../pages/userPartition/UserBus'));
 const BookingConfirm = lazy(() => import('../pages/userPartition/BookingConfirm'));
-const PaymentSuccess = lazy(() => import('../pages/userPartition/PaymentSucess'));
+const PaymentSuccess = lazy(() => import('../pages/userPartition/PaymentSuccess'));
 const Order = lazy(() => import('../pages/userPartition/Order'));
 
 
