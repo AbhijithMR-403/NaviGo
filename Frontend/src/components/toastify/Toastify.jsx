@@ -8,7 +8,6 @@ function Toastify() {
 }
 
 export const TError = (message) => {
-  console.log(message);
   toast.error(`${message}`, {
     position: "top-center",
     autoClose: 4000,
@@ -21,6 +20,23 @@ export const TError = (message) => {
     transition: Slide,
   });
 }
+
+
+export const TOwnerError = (message) => {
+  toast.error(`${message}`, {
+    position: "top-center",
+    autoClose: 4000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    transition: Slide,
+  });
+}
+
+
 export const TSuccess = (message) => {
   toast.success(`${message}`, {
     position: "top-center",

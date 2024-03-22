@@ -13,13 +13,10 @@ function VendorRoute({ children }) {
   const [isLoading, setLoading] = useState(true);
   
   useEffect(() => {
-    console.log('Vendor Router start here:\n\n\n');
     const fetchData = async () => {
       const authInfo = await IsAuthUser();
-      console.log(authInfo);
       setIsVendor(authInfo.is_vendor)
       setIsVendorActive(authInfo.is_vendorActive)
-      console.log(isVendor);
       setIsAuthenticated(authInfo.isAuthenticated);
       setAdmin(authInfo.is_admin);
       setTimeout(() => { setLoading(false); }, 60);

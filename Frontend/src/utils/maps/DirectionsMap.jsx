@@ -63,11 +63,9 @@ function DirectionsMap({origin, destination, waypoints}) {
 function areEqual(prevProps, nextProps){
   if (prevProps.origin != nextProps.origin || prevProps.destination != nextProps.destination || prevProps.waypoints != nextProps.waypoints)
   {
-    console.log('inside false statement');
       return false
   }
   else{
-    console.log('inside true statement if it needs not rendered');
       return true
   }
 }

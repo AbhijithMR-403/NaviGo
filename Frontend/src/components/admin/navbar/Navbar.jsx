@@ -11,15 +11,6 @@ import Typography from '@mui/material/Typography';
 import ListItemButton from '@mui/material/ListItemButton';
 
 import { usePathname } from './hooks';
-// import { RouterLink } from 'src/routes/components';
-
-// import { useResponsive } from 'src/hooks/use-responsive';
-
-// import { account } from 'src/_mock/account';
-
-// import Logo from 'src/components/logo';
-// import Scrollbar from 'src/components/scrollbar';
-
 import { NAV } from '../../../constant/admin-layout';
 import navConfig from './config-navigation';
 import { useResponsive } from './hooks/use-responsive';

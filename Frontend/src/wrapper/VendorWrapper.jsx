@@ -12,8 +12,6 @@ import BusListCreate from '../components/vendor/view/BusListCreate';
 import RouteManagement from '../components/vendor/view/RouteManagement';
 import BusRouteLists from '../components/vendor/view/BusRouteLists';
 import { useDispatch, useSelector } from 'react-redux';
-import IsAuthUser from '../utils/IsAuthUser';
-import { Set_Authentication } from '../redux/authentication/AuthenticationSlice';
 import DispatchAuth from '../utils/DispatchAuthDetails/DispatchAuth';
 
 function VendorWrapper() {
@@ -24,7 +22,6 @@ function VendorWrapper() {
   const authentication_user = useSelector(state => state.authentication_user)
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log('is this been logged');
     if (!authentication_user.name) {
       DispatchAuth(dispatch);
     }

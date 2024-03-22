@@ -15,26 +15,15 @@ function UserMap() {
     const navigate = useNavigate()
 
 
-    // useEffect(() => {
-
-    //     UserAxios.get(`/user/filter/bus/${StartStop ? StartStop.id : 0}/${EndStop ? EndStop.id : 0}`).then((res) => {
-    //         console.log(res);
-    //         setBestAvailableStop(res.data.start_routes)
-    //         setMidAvailableStop(res.data.waypoint_routes)
-    //     })
-    // }, [StartStop, EndStop])
-
     const showBusRoute = async() =>{
 
         await UserAxios.get(`/user/filter/bus/${StartStop ? StartStop.id : 0}/${EndStop ? EndStop.id : 0}`).then((res) => {
-            console.log(res);
             setBestAvailableStop(res.data.start_routes)
             setMidAvailableStop(res.data.waypoint_routes)
         })
     }
 
 
-    console.log(StartStop);
     useEffect(() => {
 
         UserAxios.get("/bus/stop/list").then((res) => {
@@ -64,8 +53,6 @@ function UserMap() {
             route_id: data.id,
         }
         AuthUserAxios.post('/user/create/order', formData).then((res) => {
-            // TSuccess('');
-            console.log(res);
             navigate(`/confirm/${res.data.ticket_order_id}`)
         }).catch((err) => console.log(err))
     }

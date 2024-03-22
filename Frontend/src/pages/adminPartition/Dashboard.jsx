@@ -6,10 +6,6 @@ import Main from '../../components/admin/elements/main';
 import Nav from '../../components/admin/navbar/Navbar';
 import Header from '../../components/admin/header/Header';
 
-// import Nav from './nav';
-// import Main from './main';
-// import Header from './header';
-
 // ----------------------------------------------------------------------
 
 export default function DashboardLayout({ children }) {

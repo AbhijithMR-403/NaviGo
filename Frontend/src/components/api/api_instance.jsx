@@ -1,26 +1,16 @@
 import axios from "axios"; 
-import { API_BASE_URL } from "../../constant/api";
 
 
 
-export const getToken = () => localStorage.getItem("access")
-  ? JSON.parse(localStorage.getItem("access"))
-  : null;
+const API_BASE_URL= import.meta.env.VITE_API_BASE_URL
 
-export const getAuthorizationHeader = () => `Bearer ${getToken()}`;
-
-const Access_token = () => {
-  return localStorage.getItem('access')
-}
 export const AuthAxios = axios.create({
     baseURL: `${API_BASE_URL}/auth`,
-    // timeout: 3000,
   });
 
 
 export const AdminAxios = axios.create({
     baseURL: `${API_BASE_URL}/admin`,
-    // timeout: 3000,
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('access')}`,
       Accept: 'application/json',
@@ -30,7 +20,6 @@ export const AdminAxios = axios.create({
 
 export const AdminBusAxios = axios.create({
     baseURL: `${API_BASE_URL}`,
-    // timeout: 3000,
     headers: {
       Authorization: `Bearer ${localStorage.getItem('access')}`,
       Accept: 'application/json',
@@ -81,15 +70,4 @@ export const UserAxios = axios.create({
     },
   });
 
-// export const AdminUserListAxios = axios.create({
-//     baseURL: `${API_BASE_URL}/admin`,
-//     timeout: 3000,
-//     headers: {
-//       Authorization: `Bearer ${token}`,
-//       Accept: 'application/json',
-//       'Content-Type': 'application/json',
-//   },
-//   });
-
-  
 

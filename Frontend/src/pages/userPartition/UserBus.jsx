@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios';
-import { API_BASE_URL } from '../../constant/api';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { TInfo, TSuccess } from '../../components/toastify/Toastify';
-import { AuthUserAxios } from '../../components/api/api_instance';
+import { TInfo } from '../../components/toastify/Toastify';
+import { AuthUserAxios, UserAxios } from '../../components/api/api_instance';
 
 const myStyle = {
     display: "-webkit-box",
@@ -23,16 +21,14 @@ function UserBus()  {
     const user = useSelector(state => state.authentication_user)
     const navigate = useNavigate()
     useEffect(() => {
-        axios.get(API_BASE_URL+'/user/bus/route/list').then((res) => {
+      UserAxios.get('/user/bus/route/list').then((res) => {
             setBusRouteList(res.data)
-            console.log(res);
         }).catch((err) => {
             console.log(err)
         })
     }, [])
 
   const handleSubmit = (data) =>{
-    // console.log(data);
     if (!user.isAuthenticated){
       TInfo('Login Required','Please Login First')
       navigate('/login')
@@ -47,11 +43,8 @@ function UserBus()  {
       route_id: data.id,
     }
     AuthUserAxios.post('/user/create/order', formData).then((res)=>{
-      // TSuccess('');
-      console.log(res);
       navigate(`/confirm/${res.data.ticket_order_id}`)
     }).catch((err)=>console.log(err))
-    // console.log(formData);
   }
 
         return (

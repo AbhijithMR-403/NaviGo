@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import { w3cwebsocket as W3CWebSocket } from "websocket";
+
 function Chat() {
     const [socket, setSocket] = useState(null);
     const [username, setUsername] = useState("");

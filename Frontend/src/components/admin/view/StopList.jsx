@@ -18,8 +18,6 @@ function StopList() {
     useEffect(() => {
         AdminBusAxios.get(API_BASE_URL + "/bus/stop/list").then((res) => {
             setBusStops(res.data)
-            console.log(res.data);
-
         }).catch((err) => console.log(err))
     }, [])
 

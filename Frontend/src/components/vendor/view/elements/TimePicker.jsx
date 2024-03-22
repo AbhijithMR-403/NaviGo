@@ -12,9 +12,7 @@ const TimePicker = ({setTime}) => {
       from_time: fromTimeFormatted.format("HH:mm:ss"),
       end_time: fromTimeFormatted.format("HH:mm:ss"),
     };
-    console.log(newSlot)
   },[hour,minute])
-  console.log(minute, hour)
   return (
     <div className="mt-2 p-5 w-24 bg-white rounded-lg shadow-xl">
       <div className="flex">

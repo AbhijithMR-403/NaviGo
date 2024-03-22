@@ -12,8 +12,7 @@ function VendorAuthRouter({children}) {
   
   useEffect(() => {
     const fetchData = async () => {
-      const authInfo = await IsAuthUser();
-      console.log(authInfo);
+      const authInfo = await IsAuthUser();\
       setIsVendor(authInfo.is_vendor)
       setIsVendorActive(authInfo.is_vendorActive)
       setIsAuthenticated(authInfo.isAuthenticated);

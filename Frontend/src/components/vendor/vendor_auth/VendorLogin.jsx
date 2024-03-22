@@ -1,11 +1,10 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import { API_BASE_URL } from '../../../constant/api';
 import { Set_Authentication } from '../../../redux/authentication/AuthenticationSlice';
 import { jwtDecode } from 'jwt-decode';
 import { TError, TInfo, TSuccess, TWarning } from '../../toastify/Toastify';
 import { useDispatch } from 'react-redux';
+import { AuthAxios } from '../../api/api_instance';
 
 function VendorLogin() {
     const dispatch = useDispatch()
@@ -20,8 +19,7 @@ function VendorLogin() {
             'password': password
         }
         try {
-            const res = await axios.post(API_BASE_URL + '/auth/login', formData)
-            console.log(res);
+            const res = await AuthAxios.post( '/login', formData)
             if(!res.data.is_vendor){
                 TInfo('Only for Vendors')
                 navigate('/')
@@ -37,7 +35,6 @@ function VendorLogin() {
                 navigate('/vendor/details')
             }
             else if (res.status === 200) {
-                console.log(res);
                 if (!res.data.is_vendor){
                     TWarning('You are not an vendor')
                     navigate('/vendor/login')

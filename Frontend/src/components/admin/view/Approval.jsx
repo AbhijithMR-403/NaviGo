@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { AdminAxios } from '../../api/api_instance'
-import { TError } from '../../toastify/Toastify';
+import { TError, TOwnerError } from '../../toastify/Toastify';
 
 function Approval() {
 
@@ -10,11 +10,8 @@ function Approval() {
 
     const getData = async() => {
         await AdminAxios.get('/vendor/list').then((res) => {
-            console.log(res.data)
             setApprovedList(res.data)
         }).catch((err) => {
-            console.log(err);
-
             TError(err)
         })
     }
@@ -27,10 +24,9 @@ function Approval() {
     const approveVendor = async (id, approval) => {
         const formData = { 'approve': approval }
         await AdminAxios.patch(`/vendor/update/${id}`, formData).then((res) => {
-            console.log(res);
             getData()
         }).catch((err) => {
-            console.log(err);
+            TOwnerError('Something went wrong(admin/view/Approval)')
         })
     }
     return (

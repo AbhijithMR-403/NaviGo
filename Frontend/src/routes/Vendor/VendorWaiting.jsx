@@ -12,16 +12,15 @@ import Loader from '../../components/loader/Loader';
 function VendorWaiting({ children }) {
     
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isVendor, setisVendor] = useState(false)
-  const [isVendorActive, setisVendorActive] = useState(false)
+  const [isVendor, setIsVendor] = useState(false)
+  const [isVendorActive, setIsVendorActive] = useState(false)
   const [isLoading, setLoading] = useState(true);
   
   useEffect(() => {
     const fetchData = async () => {
       const authInfo = await IsAuthUser();
-      console.log(authInfo);
-      setisVendorActive(authInfo.is_vendorActive)
-      setisVendor(authInfo.is_vendor)
+      setIsVendorActive(authInfo.is_vendorActive)
+      setIsVendor(authInfo.is_vendor)
       setIsAuthenticated(authInfo.isAuthenticated);
       setLoading(false);
     };

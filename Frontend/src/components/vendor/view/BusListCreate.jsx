@@ -20,12 +20,10 @@ function BusListCreate() {
     const dispatch = useDispatch();
     const FetchBusLists = () =>{
     VendorAxios.get(`/vendor/bus/list/${userId}`).then((res) => {
-        console.log(res);
         setBusList(res.data)
     }).catch(async(err) => {
         
         if(err.response.status == 401){
-            console.log('yep');
             await DispatchAuth(dispatch)
         }
         console.log(err)
@@ -36,7 +34,6 @@ function BusListCreate() {
 
     function handleImgChange(e) {
         setBusPic(e.target.files[0])
-        console.log(e.target.files)
         setFile(URL.createObjectURL(e.target.files[0]));
     }
 
@@ -61,20 +58,14 @@ function BusListCreate() {
             isValid = false;
         }
         if (isValid) {
-            console.log(busPic);
-
-            console.log('Form data is valid');
             const formData = new FormData();
             formData.append('seating_capacity', Capacity);
             formData.append('bus_name', busName);
             formData.append('bus_number', BusNumber);
             formData.append('identify_img', busPic);
             formData.append('user_id', userId);
-            console.log(busPic);
-            console.log(formData);
             
             await VendorImgAxios.post('/vendor/bus/create', formData).then((res) => {
-                console.log(res, '--- this is the create form bere for bus create');
                 TSuccess('Created successfully')
                 setShowModal(false);
                 setBusName('')

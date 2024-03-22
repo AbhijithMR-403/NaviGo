@@ -7,7 +7,7 @@ import IsAuthUser from '../utils/IsAuthUser';
 import { Set_Authentication } from '../redux/authentication/AuthenticationSlice';
 
 const Login = lazy(() => import('../components/auth/Login'));
-const Signup = lazy(() => import('../components/auth/Signup'));
+const SignUp = lazy(() => import('../components/auth/SignUp'));
 const Authenticator = lazy(() => import('../pages/userPartition/Authenticator'));
 const Header = lazy(() => import('../components/user/Header'));
 
@@ -27,7 +27,6 @@ function UserWrapper() {
 
   const checkAuth = async () => {
     const isAuthenticated = await IsAuthUser();
-    console.log(isAuthenticated);
     dispatch(
       Set_Authentication({
         name: isAuthenticated.name,
@@ -55,10 +54,8 @@ function UserWrapper() {
         <div className='h-full w-full'>
         
           <Header />
-          {/* <div className=''> */}
             
           <Outlet />
-          {/* </div> */}
         </div>
       ),
       children: [
@@ -81,7 +78,7 @@ function UserWrapper() {
       ),
       children: [
         { element: <Login />, path: "/login" },
-        { element: <Signup />, path: "/signup" },
+        { element: <SignUp />, path: "/signup" },
       ],
     },
   ]);

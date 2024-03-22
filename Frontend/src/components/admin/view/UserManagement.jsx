@@ -1,12 +1,10 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { API_BASE_URL } from '../../../constant/api'
 import { TError, TSuccess } from '../../toastify/Toastify'
+import { AdminAxios } from '../../api/api_instance'
 
 function UserManagement() {
-  const [listusers, setUsers] = React.useState([])
-  const [editfield, seteditfield] = useState(true)
-  // const [userDetail, setUserDetail] = useState(null)
+  const [listUsers, setUsers] = React.useState([])
+  const [editField, setEditField] = useState(true)
 
 
   const [name, setName] = useState('');
@@ -15,7 +13,7 @@ function UserManagement() {
   const [email, setEmail] = useState('');
   const [is_active, setIsActive] = useState(false);
   const [is_vendor, setIsVendor] = useState(false);
-  const [id, setid] = useState(null)
+  const [id, setID] = useState(null)
 
   const formData = {
     name,
@@ -28,9 +26,8 @@ function UserManagement() {
   useEffect(() => {
 
 
-    axios.get(API_BASE_URL + '/admin/listuser').then((res) => {
+    AdminAxios.get('/listuser').then((res) => {
       setUsers(res.data)
-      console.log(res.data);
     }).catch((err) => {
       console.error(err)
     })
@@ -39,12 +36,11 @@ function UserManagement() {
   const handleFormSubmit = async(event) => {
 
     event.preventDefault()
-    console.log(formData);
-    await axios.put(API_BASE_URL+`/admin/user/detail/${id}/`, formData).then((res)=>{
+    await AdminAxios.put(`/user/detail/${id}/`, formData).then((res)=>{
       TSuccess('completed')
-      seteditfield(true)
+      setEditField(true)
       // Remove this line after optiming this is of no use
-      axios.get(API_BASE_URL + '/admin/listuser').then((res) => {
+      AdminAxios.get('/admin/listuser').then((res) => {
         setUsers(res.data)
       }).catch((err) => {
         console.error(err)
@@ -56,16 +52,15 @@ function UserManagement() {
     
   }
   const updateUserDetails = (id) => {
-    seteditfield(false)
+    setEditField(false)
 
-    axios.get(API_BASE_URL + `/admin/user/detail/${id}/`).then((res) => {
+    AdminAxios.get(`/user/detail/${id}/`).then((res) => {
       setName(res.data.name)
       setUsername(res.data.username)
       setEmail(res.data.email)
       setIsActive(res.data.is_active)
       setIsVendor(res.data.is_vendor)
-      setid(id)
-      console.log(res.data);
+      setID(id)
 
     }).catch((err) => {
       TError("Error in fetching user details")
@@ -75,7 +70,7 @@ function UserManagement() {
   return (
     <div>
       {/* component */}
-      {(editfield) ? (
+      {(editField) ? (
         <>
           <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Loopple/loopple-public-assets@main/riva-dashboard-tailwind/riva-dashboard.css" />
           <div className="flex flex-wrap -mx-3 mb-5">
@@ -109,7 +104,7 @@ function UserManagement() {
                           </tr>
                         </thead>
                         <tbody>
-                          {listusers.map((item, index) => (
+                          {listUsers.map((item, index) => (
                             // <UserItem key={index} item={item}/>
                             <>
                               {/* <UserRow item={item} index={index}/> */}
@@ -310,7 +305,7 @@ function UserManagement() {
               >
                 Submit
               </button>
-              <button onClick={() => seteditfield(true)}
+              <button onClick={() => setEditField(true)}
                 className="ml-8 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 Go back
