@@ -58,7 +58,7 @@ function Order() {
                                 {res.route_id.bus_detail.bus_name}
                             </td>
                             <td class="px-6 py-4">
-                                ${res.total}
+                            ₹ {res.total}
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
