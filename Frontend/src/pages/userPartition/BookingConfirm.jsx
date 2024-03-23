@@ -13,6 +13,7 @@ const BookingConfirm = () => {
     const [Tax, setTax] = useState(0.0)
     useEffect(() => {
         AuthUserAxios.get(`/user/order/detail/${uuid}/`).then((res) => {
+            console.log(res);
             setBookingData(res.data)
 
             CalculatePrice(1, res.data.route_id.price)
@@ -120,7 +121,7 @@ const BookingConfirm = () => {
                                     <li className="flex justify-between">
                                         <div className="inline-flex">
                                             <img
-                                                src="https://images.unsplash.com/photo-1621607512214-68297480165e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fGhhaXIlMjBkcnllcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
+                                                src={bookingData.route_id.bus_detail.identify_img}
                                                 alt=""
                                                 className="max-h-16"
                                             />

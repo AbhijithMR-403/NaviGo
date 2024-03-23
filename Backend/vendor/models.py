@@ -63,6 +63,7 @@ class wayPoints(models.Model):
     order = models.PositiveSmallIntegerField()
     route = models.ForeignKey(
         Route, related_name="waypoints", on_delete=models.CASCADE)
+    reaching_time = models.TimeField(null=True)
 
     class Meta:
         unique_together = [['route', 'stop'], ['route', 'order']]

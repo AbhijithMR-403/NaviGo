@@ -15,7 +15,7 @@ function UserMap() {
     const navigate = useNavigate()
 
 
-    const showBusRoute = async() =>{
+    const showBusRoute = async () => {
 
         await UserAxios.get(`/user/filter/bus/${StartStop ? StartStop.id : 0}/${EndStop ? EndStop.id : 0}`).then((res) => {
             setBestAvailableStop(res.data.start_routes)
@@ -92,6 +92,40 @@ function UserMap() {
                     </div>
                 </div>
                 {/* To show the available buses */}
+
+                <div class="flex justify-evenly mt-4 bus-list-card cursor-pointer rounded-lg bg-blue-400 text-surface shadow-secondary-1 m-4">
+                    <div class="p-2">
+                        <div className='justify-between flex'>
+                            <div>
+                            <h5 class="mb-1 text-md font-medium leading-tight ">
+                                Aluva - Eloor
+                            </h5>
+                            <h6
+                                class="mb-2 text-sm font-medium leading-tight text-surface/75 dark:text-neutral-300">
+                                Card subtitle
+                            </h6>
+                            </div>
+                            <div>₹ 100</div>
+                        </div>
+                        <p class="mb-4 text-sm leading-normal">
+                            {/* Some quick example text to build on the card title and make up the
+                            bulk of the card's content. */}
+                        </p>
+                        <a
+                            type="button"
+                            href="#"
+                            class="pointer-events-auto me-5 inline-block cursor-pointer rounded text-base font-normal leading-normal text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:text-primary-700 dark:text-primary-400">
+                            Show on map
+                        </a>
+                        <a
+                            type="button"
+                            href="#"
+                            class="pointer-events-auto inline-block cursor-pointer rounded text-base font-normal leading-normal text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:text-primary-700 dark:text-primary-400">
+                            Buy
+                        </a>
+                    </div>
+                </div>
+
                 {BestAvailableStop.map((res, ind) => {
 
                     return (
@@ -100,7 +134,7 @@ function UserMap() {
                                 {res.origin.stop_name} - {res.destination.stop_name}
                                 <div class="card__content bg-yellow-400">
                                     <p class="card__title">{res.bus_detail.bus_name}</p>
-                                <p class="">{res.starting_time} - {res.ending_time}</p>
+                                    <p class="">{res.starting_time} - {res.ending_time}</p>
                                     <p class="card__description">
                                         ₹{res.price}  | Available Seats : {res.bus_detail.available_seats}
                                     </p>

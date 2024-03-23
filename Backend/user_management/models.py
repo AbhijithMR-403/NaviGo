@@ -17,6 +17,8 @@ class TicketOrder(models.Model):
     quantity = models.IntegerField(default=1)
     user_id = models.ForeignKey(
         Account, on_delete=models.CASCADE, related_name='user_tickets')
+    # starting_stop = models.ForeignKey(BusStop, on_delete=models.CASCADE, related_name='starting_bus_stop')
+    # ending_stop = models.ForeignKey(BusStop, on_delete=models.CASCADE, related_name='ending_bus_stop')
     route_id = models.ForeignKey(
         Route, on_delete=models.CASCADE, related_name="order_route")
     status = models.CharField(

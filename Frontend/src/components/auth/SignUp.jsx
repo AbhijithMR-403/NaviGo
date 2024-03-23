@@ -3,7 +3,7 @@ import InputField from './elements/InputField'
 import { Link, useNavigate } from 'react-router-dom'
 import { MuiOtpInput } from 'mui-one-time-password-input'
 import { TError, TInfo, TSuccess } from '../toastify/Toastify'
-import { UserAxios } from '../api/api_instance'
+import { AuthAxios, UserAxios } from '../api/api_instance'
 
 
 
@@ -108,7 +108,7 @@ function SignUp() {
 
     const sendOTP = async () => {
         var data = { "userID": UserID }
-        await UserAxios.patch(+'/auth/otp', data).then((res) => {
+        await AuthAxios.patch('/otp', data).then((res) => {
             TSuccess('OTP is sent')
         }
         ).catch((err) => console.log(err))
@@ -128,6 +128,7 @@ function SignUp() {
                     })
             }
         ).catch((err) => {
+            console.log(err);
             if (err.response.status == 422)
                 TError('Invalid OTP')
         })

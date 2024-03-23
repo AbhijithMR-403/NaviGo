@@ -3,6 +3,7 @@ import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Header from '../../components/user/Header'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const navigation = [
   { name: 'Product', href: '#' },
@@ -30,15 +31,15 @@ export default function Home() {
               To Your Best Place
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              This is platform from which you can book or find the timming of your bus.
+              This is platform from which you can book or find the timing of your bus.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <a
-                href="#"
+              <Link
+                to={'/bus'}
                 className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Get started
-              </a>
+              </Link>
             </div>
           </div>
         </div>

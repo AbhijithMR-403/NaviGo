@@ -22,6 +22,7 @@ function UserBus()  {
     const navigate = useNavigate()
     useEffect(() => {
       UserAxios.get('/user/bus/route/list').then((res) => {
+        console.log(res);
             setBusRouteList(res.data)
         }).catch((err) => {
             console.log(err)
