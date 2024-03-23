@@ -64,7 +64,8 @@ class RazorpayPaymentView(APIView):
 
         # Take Order Id from frontend and get all order info from Database.
         order_id = request.data.get('order_id', None)
-
+        quantity = request.data.get('quantity', 1)
+        print('==============', quantity)
         # Here We are Using Static Order Details for Demo.
         name = "Swapnil Pawar"
         amount = request.data.get('total', None)
@@ -77,6 +78,13 @@ class RazorpayPaymentView(APIView):
 
         try:
             ticketOrder = TicketOrder.objects.get(ticket_order_id=order_id)
+            bus = ticketOrder.route_id.bus_detail
+            print(bus)
+            print('==================')
+            ticketOrder.quantity = quantity
+            ticketOrder.save()
+            bus.available_seats = bus.available_seats - quantity
+            bus.save()
 
         except:
             Response({'error': 'Wrong order id'})

@@ -120,6 +120,10 @@ class Send_OTP(APIView):
                     user.OTP = random_num
                     user.OTP_expire = current_time
                     user.save()
+            else:
+                user.OTP = random_num
+                user.OTP_expire = current_time
+                user.save()
         except:
             return Response({"error": "Unknown error"}, status=status.HTTP_406_NOT_ACCEPTABLE)
 

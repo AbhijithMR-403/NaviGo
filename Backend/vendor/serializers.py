@@ -73,6 +73,8 @@ class RouteWayPointListSerializer(serializers.ModelSerializer):
 
 
 class RouteWayPointCreateSerializer(serializers.ModelSerializer):
+    starting_time = serializers.TimeField()
+    ending_time = serializers.TimeField()
     class Meta:
         model = wayPoints
         # fields = '__all__'
