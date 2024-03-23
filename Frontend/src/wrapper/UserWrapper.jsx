@@ -13,7 +13,7 @@ const Header = lazy(() => import('../components/user/Header'));
 
 const UserMap = lazy(() => import('../pages/userPartition/UserMap'));
 const UserBus = lazy(() => import('../pages/userPartition/UserBus'));
-const UserProfile = lazy(() => import('../pages/userPartition/UserBus'));
+const UserProfile = lazy(() => import('../components/user/views/UserProfile.jsx'));
 const BookingConfirm = lazy(() => import('../pages/userPartition/BookingConfirm'));
 const PaymentSuccess = lazy(() => import('../pages/userPartition/PaymentSuccess'));
 const Order = lazy(() => import('../pages/userPartition/Order'));
