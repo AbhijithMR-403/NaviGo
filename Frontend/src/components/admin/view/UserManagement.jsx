@@ -29,6 +29,9 @@ function UserManagement() {
     AdminAxios.get('/listuser').then((res) => {
       setUsers(res.data)
     }).catch((err) => {
+      if(err.response.status  == 401){
+        window.location.reload();
+    }
       console.error(err)
     })
   }, [])

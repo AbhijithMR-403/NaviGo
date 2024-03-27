@@ -78,14 +78,14 @@ class wayPoints(models.Model):
         self.clean()
         super().save(*args, **kwargs)
 
-    def clean(self):
-        waypoints_with_origin = wayPoints.objects.filter(
-            route__origin=self.stop)
-        if waypoints_with_origin.exists():
-            raise ValidationError('Origin cannot be used in any waypoints.')
+    # def clean(self):
+        # waypoints_with_origin = wayPoints.objects.filter(
+        #     route__origin=self.stop)
+        # if waypoints_with_origin.exists():
+        #     raise ValidationError('Origin cannot be used in any waypoints.')
 
-        waypoints_with_destination = wayPoints.objects.filter(
-            route__destination=self.stop)
-        if waypoints_with_destination.exists():
-            raise ValidationError(
-                'Destination cannot be used in any waypoints.')
+        # waypoints_with_destination = wayPoints.objects.filter(
+        #     route__destination=self.stop)
+        # if waypoints_with_destination.exists():
+        #     raise ValidationError(
+        #         'Destination cannot be used in any waypoints.')

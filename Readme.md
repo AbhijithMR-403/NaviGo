@@ -19,3 +19,7 @@
 
 5. ### USER Sign up page
     - Bring the google auth to the center
+
+
+6. ### Remove All non active user's or else do something else
+    - do nessary changes in user login page or signup page

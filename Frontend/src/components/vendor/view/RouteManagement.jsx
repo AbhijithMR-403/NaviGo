@@ -31,7 +31,10 @@ function RouteManagement() {
   useEffect(() => {
     AdminBusAxios.get('/bus/stop/list').then(res => {
       setStopNamesList(res.data)
+      console.log(res.data);
     }).catch((err) => {
+      if(err.response.status == 401)
+        window.location.reload();
       console.log("Error: " + err)
     });
     AdminBusAxios.get(`/vendor/bus/list/${userId}`).then(res => {
@@ -86,22 +89,20 @@ function RouteManagement() {
       'ending_time':endTime
     }
     await VendorAxios.post(`/vendor/route/create`, form_data).then((response)=>{
-      {chosen.map(async(res, index)=>{
-        setTimeout(() => {
+      
         const wayPointData = {
           'route':response.data.id,
-          'stop':res.id,
+          'stop':chosen,
         }
-        VendorAxios.post('/vendor/waypoint/create',wayPointData).then((pointRes)=>{
-          TSuccess('Route added successfully!')
+         VendorAxios.post('/vendor/waypoint/bulk/create' ,wayPointData).then((res)=>{
+          console.log(res);
+          TSuccess("Route and Waypoints created successfully");
+          // setFormData({price: '', bus_name: ''})
+          setChosen(null)
         }).catch((err)=>{
           console.log(err);
         })
-      }, 700*index);
-      
-      })}
-      setFormData({price: '', bus_name: ''})
-      setChosen(null)
+        console.log(wayPointData);
     })
     .catch((errors)=>{
       if (errors.response.status = 400)
@@ -162,7 +163,7 @@ function RouteManagement() {
                 <option className='text-center outline-none' selected={stop2 == val} value={val.id} key={val.id}>{val.stop_name}</option>
               ))}
             </select>
-            <p className='text-right mr-5 mt-3 text-blue-500' onClick={() => AvailableRoutesFn()}>Refresh</p>
+            <p className='text-right mr-5 mt-3 text-blue-500 cursor-pointer' onClick={() => AvailableRoutesFn()}>Refresh</p>
           </div>
         </div>
 

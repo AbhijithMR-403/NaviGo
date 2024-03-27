@@ -114,7 +114,7 @@ return (
                                     <div className="grid gap-4 mb-4 grid-cols-2">
                                         <div className="col-span-2">
                                             <label for="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Seating Capacity:  </label><p></p>
-                                            <input defaultValue={Capacity} onChange={(e) => setCapacity(e.target.value)} type="number" name="otp" id="name" class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Seating Capacity" required="" />
+                                            <input defaultValue={Capacity} onChange={(e) => setCapacity(e.target.value)} type="number" name="otp" id="name" className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Seating Capacity" required="" />
                                         </div>
                                     </div>
 
@@ -206,14 +206,8 @@ return (
                                         </label>
                                     </div>
                                 </td>
-                                {/* <th scope="row" class="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    <img class="w-10 h-10 rounded-full" src="/docs/images/people/profile-picture-2.jpg" alt="Jese image" />
-                    <div class="ps-3">
-                        <div class="text-base font-semibold">Jese Leos</div>
-                        <div class="font-normal text-gray-500">jese@flowbite.com</div>
-                    </div>
-                </th> */}
-                                <th scope="row" class="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                
+                                <th scope="row" className="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <img
                                         className="w-10 h-10 rounded-full"
                                         src={bus.identify_img}

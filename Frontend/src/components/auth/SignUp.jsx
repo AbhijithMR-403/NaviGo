@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import InputField from './elements/InputField'
 import { Link, useNavigate } from 'react-router-dom'
 import { MuiOtpInput } from 'mui-one-time-password-input'
-import { TError, TInfo, TSuccess } from '../toastify/Toastify'
+import { TError, TInfo, TLoading, TSuccess, TUpdate } from '../toastify/Toastify'
 import { AuthAxios, UserAxios } from '../api/api_instance'
 
 
@@ -57,7 +57,7 @@ function SignUp() {
         if (!name) {
             TError(['Please enter a username'])
         }
-        if (name.indexOf(' ') !== -1) {
+        else if (name.indexOf(' ') !== -1) {
             TError(['Enter a valid username'])
         }
         else if (!email) {
@@ -81,37 +81,48 @@ function SignUp() {
             formData.append("email", email);
             formData.append("password", password);
             formData.append("username", name)
-        }
 
-        await UserAxios.post('/auth/register', formData).then((res) => {
-            if (res.status === 201) {
-                setUserID(res.data.user_id)
-                setSignUp(false)
-                TSuccess("OTP sent")
-                return res
-            }
-        }).catch((err) => {
-            if (err.response.status === 409) {
-                if (err.response.data.is_active) {
-                    navigate('/login')
+            await UserAxios.post('/auth/register', formData).then((res) => {
+                if (res.status === 201) {
+                    setUserID(res.data.user_id)
+                    // setSignUp(false)
+                    TSuccess("OTP sent")
+                    sendOTP()
+                    return res
                 }
-                else {
+                console.log(res);
+            }).catch((err) => {
+                console.log(err);
+                if (err.response.status === 409) {
+                    if (err.response.data.is_active) {
+                        navigate('/login')
+                    }
+                }
+                else if(err.response.status == 401){
+                    console.log(err.response.data.user_id);
+                    setUserID(err.response.data.user_id)
                     sendOTP()
                     setSignUp(false)
                 }
-            }
-            for (let key in err.response.data.errors) {
-                TInfo(err.response.data.errors[key])
-            }
-        })
+                for (let key in err.response.data.errors) {
+                    TInfo(err.response.data.errors[key])
+                }
+            })
+        }
     }
 
     const sendOTP = async () => {
         var data = { "userID": UserID }
+        const toaster = TLoading('Please wait...')
+        console.log(toaster)
         await AuthAxios.patch('/otp', data).then((res) => {
-            TSuccess('OTP is sent')
+            TUpdate(toaster, 'OTP send', 'success')
+            // TSuccess('OTP is sent')
         }
-        ).catch((err) => console.log(err))
+        ).catch((err) => {
+            TUpdate(toaster, 'Error while sending OTP', 'error')
+            console.log(err)
+        })
     }
 
 
@@ -139,7 +150,7 @@ function SignUp() {
         <div>
             {sign_up ?
                 (<form className="form" method='POST' onSubmit={handleLoginSubmit}>
-                    
+
                     {/* List those Input fields */}
                     {fields.map((field, ind) => <div key={ind}><InputField {...field} /></div>)}
                     <ul className='text-red-500' >

@@ -12,6 +12,9 @@ function Approval() {
         await AdminAxios.get('/vendor/list').then((res) => {
             setApprovedList(res.data)
         }).catch((err) => {
+            if(err.response.status == 401){
+                window.location.reload();
+            }
             TError(err)
         })
     }

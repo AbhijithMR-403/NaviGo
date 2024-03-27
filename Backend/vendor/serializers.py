@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import BusDetail, Route, wayPoints
 from bus.serializers import BusStopSerializer
+from bus.models import BusStop
 
 
 class BusAddSerializer(serializers.ModelSerializer):
@@ -71,14 +72,31 @@ class RouteWayPointListSerializer(serializers.ModelSerializer):
         model = wayPoints
         fields = '__all__'
 
+    def create(self, validated_data):
+        stop_data = validated_data.pop('stop')
+        print(stop_data)
+        stop_instance = BusStop.objects.get(id=stop_data.id)
+        waypoint = wayPoints.objects.create(
+            stop=stop_instance, **validated_data)
+        return waypoint
+
 
 class RouteWayPointCreateSerializer(serializers.ModelSerializer):
-    starting_time = serializers.TimeField()
-    ending_time = serializers.TimeField()
+    # starting_time = serializers.TimeField()
+    # ending_time = serializers.TimeField()
+
     class Meta:
         model = wayPoints
         # fields = '__all__'
         exclude = ["order"]
+        
+    def create(self, validated_data):
+        stop_data = validated_data.pop('stop')
+        print(stop_data)
+        stop_instance = BusStop.objects.get(id=stop_data.id)
+        waypoint = wayPoints.objects.create(
+            stop=stop_instance, **validated_data)
+        return waypoint
 
 
 class BusListRouteSerializer(serializers.ModelSerializer):

@@ -78,6 +78,13 @@ class RegisterView(APIView):
         if serializer.is_valid():
             serializer.save()
         else:
+            email = serializer.data['email']
+            if Account.objects.filter(email=email, is_active=False, is_email_verified=False).exists():
+                context = {
+                    'user_id': Account.objects.get(email=email).id,
+                    'error': "Email already exists, But not verified"
+                    }
+                return Response(context, status=status.HTTP_401_UNAUTHORIZED)
             is_active = False
             content = {
                 'message': 'Registration failed',
@@ -149,6 +156,7 @@ class OtpVerify(APIView):
         if user.is_active:
             return Response({'message': 'user is already active'}, status=status.HTTP_200_OK)
         user.is_active = True
+        user.is_email_verified = True
         user.is_active = (int(request.data['OTP']) == user.OTP)
         if int(request.data['OTP']) != user.OTP:
             return Response({'error': 'Not a valid OTP'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)

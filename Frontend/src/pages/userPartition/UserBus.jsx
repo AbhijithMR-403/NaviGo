@@ -30,6 +30,7 @@ function UserBus()  {
     }, [])
 
   const handleSubmit = (data) =>{
+    console.log(data);
     if (!user.isAuthenticated){
       TInfo('Login Required','Please Login First')
       navigate('/login')
@@ -42,6 +43,8 @@ function UserBus()  {
       end_time:data.ending_time,
       start_time:data.starting_time,
       route_id: data.id,
+      starting_stop:data.origin.id,
+      ending_stop:data.destination.id
     }
     AuthUserAxios.post('/user/create/order', formData).then((res)=>{
       navigate(`/confirm/${res.data.ticket_order_id}`)

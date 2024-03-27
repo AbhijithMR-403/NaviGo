@@ -147,9 +147,7 @@ function VendorLogin() {
                         </button>
                         <p className="mt-6 text-xs text-gray-600 text-center">
                             Don't have an account?{" "}
-                            <a href="">
                                 <Link to={'/vendor/register'}> <span className="text-[#E9522C] font-semibold" >Register</span></Link>
-                            </a>
                         </p>
                     </div>
                 </div>

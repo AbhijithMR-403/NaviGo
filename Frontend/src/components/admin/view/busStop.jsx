@@ -1,12 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";
 import { Autocomplete, GoogleMap, MarkerF, useJsApiLoader } from '@react-google-maps/api';
-import axios from 'axios';
 import { TError, TSuccess } from '../../toastify/Toastify';
-import DirectionsMap from '../../../utils/maps/DirectionsMap';
 import { AdminBusAxios } from '../../api/api_instance';
 const places = ["places"]
 
@@ -48,6 +46,9 @@ function BusStop() {
       })
 
     }).catch((err) => {
+      if(err.response.status  == 401){
+        window.location.reload();
+    }
       console.log("Error: " + err)
     });
   }
