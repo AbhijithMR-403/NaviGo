@@ -1,13 +1,13 @@
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import BusAddSerializer, BusDetailSerializer, BusCreateRouteSerializer, RouteWayPointCreateSerializer, RouteWayPointListSerializer, BusListRouteSerializer, RouteWayPointDetailSerializer
 from rest_framework import generics
+from bus.models import BusStop
 from .models import BusDetail, Route, wayPoints
 from account.models import VendorDetails
 from admin_management.serializers import VendorDetailsSerializer
 from rest_framework.permissions import IsAuthenticated
-from datetime import timedelta
+from .utils import divide_time
 
 # Create your views here.
 
@@ -69,7 +69,8 @@ class RouteWayPointView(generics.ListAPIView):
     def get_queryset(self):
         user_id = self.kwargs.get('user_id')
         print('this is the thing', user_id)
-        queryset = Route.objects.select_related('origin').filter(bus_detail__user_id=user_id)
+        queryset = Route.objects.select_related(
+            'origin').filter(bus_detail__user_id=user_id)
         print("Filtered queryset:", queryset)
         return queryset
 
@@ -80,23 +81,42 @@ class WayPointBulkCreateView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         # ?
-        if isinstance(request.data['seat'], list):
-            seats = request.data.pop('seat')
+        if isinstance(request.data['stop'], list):
+            stops = request.data.pop('stop')
+            route = request.data.get('route')
+            try:
+                route_obj = Route.objects.get(pk=route)
+            except:
+                return Response({"error": "Route does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+            starting_time = route_obj.starting_time
+            ending_time = route_obj.ending_time
+            # listTiming = divide_time(starting_time, ending_time, len(stops))
+            # print(listTiming)
+
+            wayPointTimes = divide_time(starting_time, ending_time, len(stops))
+            print(wayPointTimes)
             models = []
-            for seat in seats:
-                # validate each model with one time slot
-                request.data['seat'] = seat
-                serializer = RouteWayPointCreateSerializer(data=request.data)
+            # for stop, PTime in zip(stops, wayPointTimes):
+            for stop, PTime in zip(stops, wayPointTimes):
+                request.data['stop'] = stop
+                request.data['reaching_time'] = PTime
+                print(BusStop.objects.get(pk=int(stop['id'])))
+                try:
+                    data = {
+                        'stop': stop['id'],
+                        'reaching_time': PTime,
+                        'route': route
+                    }
+                except:
+                    return Response({'error': 'Bus Stop does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+                serializer = RouteWayPointCreateSerializer(data=data)
                 serializer.is_valid(raise_exception=True)
-                models.append(serializer)
-            result_serializer = RouteWayPointCreateSerializer(models, many=True)
-            return Response(result_serializer.data)
+                serializer.save()
+                models.append(serializer.data)
+            return Response(models)
         # Save ticket as usual
-        serializer = RouteWayPointCreateSerializer(data=request.data)
+        print('Its an error here')
+        serializer = RouteWayPointListSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
-
-        #     return Response("Waypoints created successfully", status=status.HTTP_201_CREATED)
-        # except Exception as e:
-        #     return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

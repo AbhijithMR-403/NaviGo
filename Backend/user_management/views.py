@@ -5,11 +5,11 @@ from rest_framework import generics
 from .models import TicketOrder, Payment
 from .serializers import UserDetailSerializer, UserBusListSerializer, TicketOrderSerializer, TicketDetailSerializer
 from vendor.serializers import RouteWayPointDetailSerializer
+from .serializers import UserAvailableRouteView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 import json
-import os
 from decouple import config
 import razorpay
 
@@ -175,27 +175,38 @@ class TicketOrderListView(generics.ListAPIView):
 
 
 class UserAvailableRouteView(APIView):
-    serializer_class = RouteWayPointDetailSerializer
+    serializer_class = UserAvailableRouteView
 
     def get(self, request, start_id, end_id):
-        # print(request.data)
-        # start_id = request.data.get('start')
-        # end_id = request.data.get('end')
         print(start_id, end_id)
 
-        start_routes = Route.objects.filter(origin__id=start_id, destination__id=end_id)
-        # end_routes = Route.objects.filter(destination__id=end_id)
+        # Bus Start from start_id and End at end_id
+        route1 = Route.objects.filter(origin__id=start_id, destination__id=end_id)
 
-        waypoint_routes = Route.objects.filter(waypoints__stop__id=start_id)
-        print(start_routes)
-        print(waypoint_routes)
+        # start_id and end_id is in between waypoint
+        route2 = Route.objects.filter(waypoints__stop__id=start_id).filter(waypoints__stop__id=end_id)
 
-        start_routes_data = self.serializer_class(start_routes, many=True).data
+        # Bus Start from start_id and end_id is in b/t waypoint
+        route3 = Route.objects.filter(waypoints__stop__id=end_id, origin__id=start_id)
+
+        # Bus Start from wayPoint, But never reach end point
+        # ? you can include this later
+
+        bus_stand_route = self.serializer_class(route1, many=True).data
+        waypoint_routes = self.serializer_class(route2, many=True).data
+        route3_data = self.serializer_class(route3, many=True).data
         # end_routes_data = self.serializer_class(end_routes, many=True).data
-        waypoint_routes_data = self.serializer_class(waypoint_routes, many=True).data
+        # waypoint_routes_data = self.serializer_class(waypoint_routes, many=True).data
 
-        return Response({
-            'start_routes': start_routes_data,
-            # 'end_routes': end_routes_data,
-            'waypoint_routes': waypoint_routes_data
-        }, status=status.HTTP_200_OK)
+        combined_data = bus_stand_route + waypoint_routes + route3_data
+        # combined_data = route1 + route2 + route3
+        # print(self.serializer_class(combined_data))
+
+        return Response(combined_data)
+
+        # return Response({
+        #     'bus_stand_route': bus_stand_route,
+        #     'combined_data': combined_data,
+        #     'waypoint_routes': waypoint_routes,
+        #     'route3': route3,
+        # }, status=status.HTTP_200_OK)

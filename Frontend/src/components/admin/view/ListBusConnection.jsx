@@ -54,10 +54,10 @@ function ListBusConnection() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => {
+                    {rows.map((row, ind) => {
                         return (
                             <TableRow
-                                key={row.name}
+                                key={ind}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                                 <TableCell component="th" scope="row">
@@ -67,7 +67,7 @@ function ListBusConnection() {
                                 <TableCell align="left">{row.time} sec</TableCell>
                                 <TableCell align="center">{row.bus_stop_2}</TableCell>
                                 <TableCell align="center">
-                                    <button onClick={()=>{DeleteRow(row.id)}} class="bg-white hover:bg-red-700 text-red-400 font-bold py-1 px-3 rounded-2xl">
+                                    <button onClick={()=>{DeleteRow(row.id)}} className="bg-white hover:bg-red-700 text-red-400 font-bold py-1 px-3 rounded-2xl">
                                         Delete
                                     </button>
                                 </TableCell>

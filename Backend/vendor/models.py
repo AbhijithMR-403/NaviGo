@@ -58,6 +58,7 @@ class Route(models.Model):
         super().save(*args, **kwargs)
 
 
+# You add distance
 class wayPoints(models.Model):
     stop = models.ForeignKey(BusStop, related_name="route_pk", on_delete=models.CASCADE)
     order = models.PositiveSmallIntegerField()
@@ -77,15 +78,3 @@ class wayPoints(models.Model):
                 self.order = 1
         self.clean()
         super().save(*args, **kwargs)
-
-    def clean(self):
-        waypoints_with_origin = wayPoints.objects.filter(
-            route__origin=self.stop)
-        if waypoints_with_origin.exists():
-            raise ValidationError('Origin cannot be used in any waypoints.')
-
-        waypoints_with_destination = wayPoints.objects.filter(
-            route__destination=self.stop)
-        if waypoints_with_destination.exists():
-            raise ValidationError(
-                'Destination cannot be used in any waypoints.')

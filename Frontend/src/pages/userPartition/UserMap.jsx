@@ -69,8 +69,8 @@ function UserMap() {
 
                     {/* Origin */}
                     <div>
-                        <label for="countries" class="block mb-2 text-sm font-medium text-gray-900">Starting stop</label>
-                        <select id="countries" onChange={(e) => { setStartStop(BusStopList.find((val) => e.target.value == val.id)); showBusRoute() }} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <label for="countries" className="block mb-2 text-sm font-medium text-gray-900">Starting stop</label>
+                        <select id="countries" onChange={(e) => { setStartStop(BusStopList.find((val) => e.target.value == val.id)); showBusRoute() }} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                             <option style={{ backgroundColor: '#C2FCC6' }} value='' selected>Choose a stop</option>
                             {BusStopList.filter((val) => val != EndStop).map((res) => {
                                 return (
@@ -81,8 +81,8 @@ function UserMap() {
 
                     {/* Destination */}
                     <div>
-                        <label for="countries" class="block mb-2 text-sm font-medium text-gray-900">Ending stop</label>
-                        <select id="countries" onChange={(e) => { setEndStop(BusStopList.find((val) => e.target.value == val.id)); showBusRoute() }} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <label for="countries" className="block mb-2 text-sm font-medium text-gray-900">Ending stop</label>
+                        <select id="countries" onChange={(e) => { setEndStop(BusStopList.find((val) => e.target.value == val.id)); showBusRoute() }} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                             <option style={{ backgroundColor: '#C2FCC6' }} selected>Choose a country</option>
                             {BusStopList.filter((val) => val != StartStop).map((res) => {
                                 return (
@@ -93,34 +93,34 @@ function UserMap() {
                 </div>
                 {/* To show the available buses */}
 
-                <div class="flex justify-evenly mt-4 bus-list-card cursor-pointer rounded-lg bg-blue-400 text-surface shadow-secondary-1 m-4">
-                    <div class="p-2">
+                <div className="flex justify-evenly mt-4 bus-list-card cursor-pointer rounded-lg bg-blue-400 text-surface shadow-secondary-1 m-4">
+                    <div className="p-2">
                         <div className='justify-between flex'>
                             <div>
-                            <h5 class="mb-1 text-md font-medium leading-tight ">
+                            <h5 className="mb-1 text-md font-medium leading-tight ">
                                 Aluva - Eloor
                             </h5>
                             <h6
-                                class="mb-2 text-sm font-medium leading-tight text-surface/75 dark:text-neutral-300">
+                                className="mb-2 text-sm font-medium leading-tight text-surface/75 dark:text-neutral-300">
                                 Card subtitle
                             </h6>
                             </div>
                             <div>₹ 100</div>
                         </div>
-                        <p class="mb-4 text-sm leading-normal">
+                        <p className="mb-4 text-sm leading-normal">
                             {/* Some quick example text to build on the card title and make up the
                             bulk of the card's content. */}
                         </p>
                         <a
                             type="button"
                             href="#"
-                            class="pointer-events-auto me-5 inline-block cursor-pointer rounded text-base font-normal leading-normal text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:text-primary-700 dark:text-primary-400">
+                            className="pointer-events-auto me-5 inline-block cursor-pointer rounded text-base font-normal leading-normal text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:text-primary-700 dark:text-primary-400">
                             Show on map
                         </a>
                         <a
                             type="button"
                             href="#"
-                            class="pointer-events-auto inline-block cursor-pointer rounded text-base font-normal leading-normal text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:text-primary-700 dark:text-primary-400">
+                            className="pointer-events-auto inline-block cursor-pointer rounded text-base font-normal leading-normal text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:text-primary-700 dark:text-primary-400">
                             Buy
                         </a>
                     </div>
@@ -130,12 +130,12 @@ function UserMap() {
 
                     return (
                         <div key={ind} className='flex justify-evenly mt-4 bus-list-card cursor-pointer' onClick={() => handleSubmit(res)}>
-                            <section id="card1 bg-yellow-400" class="card">
+                            <section id="card1 bg-yellow-400" className="card">
                                 {res.origin.stop_name} - {res.destination.stop_name}
-                                <div class="card__content bg-yellow-400">
-                                    <p class="card__title">{res.bus_detail.bus_name}</p>
-                                    <p class="">{res.starting_time} - {res.ending_time}</p>
-                                    <p class="card__description">
+                                <div className="card__content bg-yellow-400">
+                                    <p className="card__title">{res.bus_detail.bus_name}</p>
+                                    <p className="">{res.starting_time} - {res.ending_time}</p>
+                                    <p className="card__description">
                                         ₹{res.price}  | Available Seats : {res.bus_detail.available_seats}
                                     </p>
                                 </div>
@@ -147,12 +147,12 @@ function UserMap() {
 
                     return (
                         <div className='flex justify-evenly mt-4 bus-list-card cursor-pointer' key={ind} onClick={() => handleSubmit(res)}>
-                            <section id="card1 bg-yellow-400" class="card">
+                            <section id="card1 bg-yellow-400" className="card">
                                 {res.origin.stop_name} - {res.destination.stop_name}
-                                <div class="card__content bg-green-400">
-                                    <p class="card__title">{res.bus_detail.bus_name}</p>
-                                    <p class="">{res.starting_time} - {res.ending_time}</p>
-                                    <p class="card__description">
+                                <div className="card__content bg-green-400">
+                                    <p className="card__title">{res.bus_detail.bus_name}</p>
+                                    <p className="">{res.starting_time} - {res.ending_time}</p>
+                                    <p className="card__description">
                                         ₹{res.price}  | Available Seats : {res.bus_detail.available_seats}
                                     </p>
                                 </div>

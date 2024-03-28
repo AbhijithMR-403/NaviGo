@@ -34,7 +34,7 @@ function BusRouteLists() {
                         {busRoutes.map((res)=>{
                             console.log(res);
                             return(
-                        <div className="bg-gray-100 mx-auto border-gray-500 border rounded-sm  text-gray-700 mb-0.5">
+                        <div className="bg-gray-100 mx-auto border-gray-500 border rounded-sm  text-gray-700 mb-0.5" key={res.id}>
                             <div className="flex p-3  border-l-8 border-green-600">
                                 <div className="space-y-1 border-r-2 pr-3">
                                     <div className="text-sm leading-5 font-semibold"><span className="text-xs leading-4 font-normal text-gray-500"> ID #</span> {res.id}</div>

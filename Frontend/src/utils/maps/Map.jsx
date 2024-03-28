@@ -1,5 +1,5 @@
 import { GoogleMap, InfoWindowF, MarkerF, useJsApiLoader } from '@react-google-maps/api'
-import React, { memo, useEffect, useState } from 'react'
+import React, { Fragment, memo, useEffect, useState } from 'react'
 import { AdminBusAxios } from '../../components/api/api_instance'
 import DirectionsMap from './DirectionsMap'
 
@@ -64,6 +64,7 @@ function Map({ PointA, PointB, dimension = {
     const handleMarkerClick = (marker) => {
         setSelectedMarker(marker);
         setInfoWindowOpen(true);
+        console.log(marker);
       };
       
 
@@ -86,7 +87,7 @@ function Map({ PointA, PointB, dimension = {
                         {stopNames.map((data, index) => {
                             let pointer = { lat: data.lat, lng: data.lng }
                             return (
-                                <>
+                                <Fragment key={index}>
                                     <MarkerF
                                         key={data.lat + data.lng} position={pointer}
                                         icon={customMarker}
@@ -103,7 +104,7 @@ function Map({ PointA, PointB, dimension = {
                                                     <h1>{selectedMarker.stop_name}</h1>
                                                 </div>
                                             </InfoWindowF>)}
-                                </>
+                                </Fragment >
                             )
                         })}
 

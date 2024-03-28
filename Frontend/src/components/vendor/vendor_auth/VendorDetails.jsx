@@ -16,31 +16,27 @@ function VendorDetails() {
     const imgRef = useRef()
     const [stateID, setStateID] = useState('');
     const [cityID, setCityID] = useState('');
-    const [ShowOTPInput, setShowOTPInput] = useState(true)
-    const {userID} = useParams()
+    const { userID } = useParams()
     const navigate = useNavigate()
 
 
 
-    const SentOTP = async() =>{
+    const SentOTP = async () => {
         const toaster = TLoading('Please wait...')
         await AuthAxios.patch('/otp', { 'userID': userID }).then((res) => {
             TUpdate(toaster, 'OTP send', 'success')
-            if (res.status == 208) {
-                setShowOTPInput(false)
-            }
         }
         ).catch((err) => {
             console.log(err)
-            if(err.response.status == 429){
+            if (err.response.status == 429) {
                 TUpdate(toaster, err.response.data.error, 'error')
             }
-            else{
+            else {
                 TUpdate(toaster, err.response.data.error, 'error')
 
             }
         })
-    
+
     }
 
     // Store the validation Documentation image
@@ -111,8 +107,7 @@ function VendorDetails() {
     }
 
     const HandleSubmit = async (event) => {
-        const ValidateOTP = await CheckOTP()
-        if (ValidateOTP && validateFormData()) {
+        if (validateFormData()) {
 
             const formData = new FormData();
             formData.append('user', userID);
@@ -123,21 +118,25 @@ function VendorDetails() {
             formData.append('city', cityID.name);
             formData.append('state', stateID.name);
             formData.append('pincode', PinCode);
-
-            await UserAxios.post('/auth/vendor/details', formData).then((res) => {
-                TSuccess('Registration completed(Your request under process now)')
-                navigate('/vendor/login')
-            }).catch((err) => {
-                console.log(err);
-                if (err.response.status == 400) {
-                    if (err.response.data.company_name) {
-                        TError(err.response.data.company_name)
+            console.log(IdProof);
+            const ValidateOTP = await CheckOTP()
+            if (ValidateOTP) {
+                await AuthAxios.post('/vendor/details', formData).then((res) => {
+                    TSuccess('Registration completed(Your request under process now)')
+                    navigate('/vendor/login')
+                }).catch((err) => {
+                    if (err.response.status == 400) {
+                        if (err.response.data.company_name) {
+                            TError(err.response.data.company_name)
+                        }
+                        else if (err.response.data.GSTIN) {
+                            TError('GSTIN: ' + err.response.data.GSTIN)
+                        }
                     }
-                    else if (err.response.data.GSTIN) {
-                        TError('GSTIN: ' + err.response.data.GSTIN)
-                    }
-                }
-            })
+                })
+            } else {
+                TError("Wrong OTP")
+            }
         }
     }
 
@@ -196,17 +195,15 @@ function VendorDetails() {
                         <div className="mx-auto max-w-xs sm:max-w-md md:max-w-lg flex flex-col gap-4">
                             <div className="flex flex-row gap-4">
                                 <InputField type="text" placeholder="Company Name" name="Company" value={Company} setValue={setCompany} />
-                                {ShowOTPInput ?
                                     <InputField type="number" placeholder="Enter OTP" name="otp" value={otp} setValue={setOTP} />
-                                    : null} 
-                                <p className=' text-sm text-blue-600 self-end cursor-pointer' onClick={()=>SentOTP()}>resent_otp?</p>
+                                <p className=' text-sm text-blue-600 self-end cursor-pointer' onClick={() => SentOTP()}>OTP..?</p>
                             </div>
                             <InputField type="text" placeholder="GSTIN" name="GSTIN" value={GSTIN} setValue={setGSTIN} />
                             <InputField type="text" placeholder="Enter Your address" name="address" value={address} setValue={setAddress} />
                             <div className="flex flex-col sm:flex-row gap-4">
-                            <InputField type="text" placeholder="State" name="state" value={stateID} setValue={setStateID} />
-                            <InputField type="text" placeholder="City" name="city" value={cityID} setValue={setCityID} />
-                            
+                                <InputField type="text" placeholder="State" name="state" value={stateID} setValue={setStateID} />
+                                <InputField type="text" placeholder="City" name="city" value={cityID} setValue={setCityID} />
+
                             </div>
                             <div className="flex flex-col sm:flex-row gap-4">
 

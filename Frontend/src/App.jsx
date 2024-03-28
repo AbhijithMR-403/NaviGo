@@ -22,7 +22,7 @@ function App() {
           autoClose={4000}
           hideProgressBar={false}
           newestOnTop={true}
-          limit={5}
+          limit={3}
           closeOnClick
           rtl={false}
           pauseOnFocusLoss

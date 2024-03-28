@@ -16,7 +16,12 @@ function StopList() {
     useEffect(() => {
         AdminBusAxios.get("/bus/stop/list").then((res) => {
             setBusStops(res.data)
-        }).catch((err) => console.log(err))
+        }).catch((err) => {
+            if (err.response.status == 401) {
+                window.location.reload();
+            }
+            console.log(err)
+        })
     }, [])
 
     return (

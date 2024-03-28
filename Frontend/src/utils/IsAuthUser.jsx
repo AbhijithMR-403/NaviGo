@@ -30,6 +30,8 @@ const updateUserToken = async ()=>{
 const IsAuthUser = async () => {
 
     const accessToken = localStorage.getItem("access");
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     if(!accessToken)
     {
       return {'name':null,isAuthenticated:false}

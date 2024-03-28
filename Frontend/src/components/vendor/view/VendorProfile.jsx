@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { VendorAxios } from '../../api/api_instance'
-import { useSelector } from 'react-redux'
 import { jwtDecode } from 'jwt-decode'
 
 function VendorProfile() {
@@ -11,7 +10,7 @@ function VendorProfile() {
         VendorAxios.get(`/vendor/detail/${userID}`).then((res) => {
             setVendorDetail(res.data)
         }).catch((err)=>{
-            if(err.response.status){
+            if(err.response.status  == 401){
                 window.location.reload();
             }
             console.error("Error: ", err)
@@ -264,6 +263,7 @@ function VendorProfile() {
                                             id="current-password"
                                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                             placeholder="••••••••"
+                                            autoComplete="on"
                                             required=""
                                         />
                                     </div>
@@ -282,6 +282,8 @@ function VendorProfile() {
                                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                             placeholder="••••••••"
                                             required=""
+                                            autoComplete="on"
+
                                         />
                                         <div
                                             data-popover=""
