@@ -30,7 +30,6 @@ function UserBus()  {
     }, [])
 
   const handleSubmit = (data) =>{
-    console.log(data);
     if (!user.isAuthenticated){
       TInfo('Login Required','Please Login First')
       navigate('/login')
