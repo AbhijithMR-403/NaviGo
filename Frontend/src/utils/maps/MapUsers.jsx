@@ -87,7 +87,7 @@ function MapUsers({ PointA, PointB, dimension = {
                         {stopNames.map((data, index) => {
                             let pointer = { lat: data.lat, lng: data.lng }
                             return (
-                                <>
+                                <div key={index}>
                                     <MarkerF
                                         key={data.lat + data.lng} position={pointer}
                                         icon={customMarker}
@@ -104,7 +104,7 @@ function MapUsers({ PointA, PointB, dimension = {
                                                     <h1>{selectedMarker.stop_name}</h1>
                                                 </div>
                                             </InfoWindowF>)}
-                                </>
+                                </div>
                             )
                         })}
 
