@@ -122,7 +122,7 @@ function RouteManagement() {
         <div className='m-8 justify-evenly flex'>
           <div>
             <select className=' text-center sm:w-56 w-32 h-11 focus:outline-none appearance-none rounded-xl shadow-xl' value={formData.bus_name} onChange={(e) => { setFormData({ ...formData, bus_name: e.target.value }) }} name="place1">
-              <option className='text-center outline-none' value="">Choice the Bus</option>
+              <option className='text-center outline-none' value="">Choose the Bus</option>
               {BusNames.map((val, index) => (
                 <option className='text-center outline-none' selected={stop1 == val} value={val.id} key={val.id}>{val.bus_name}</option>
               ))}
@@ -150,7 +150,7 @@ function RouteManagement() {
         <div className='justify-evenly flex'>
           <div>
             <select className=' text-center sm:w-56 w-32 h-11 focus:outline-none appearance-none rounded-xl shadow-xl' onChange={(e) => { setStop1(stopNames.find((val) => e.target.value == val.id)); }} name="place1">
-              <option className='text-center outline-none' value="">Choice a place</option>
+              <option className='text-center outline-none' value="">Choose a place</option>
               {stopNames.filter((value) => value != stop2).map((val, index) => (
                 <option className='text-center outline-none' selected={stop1 == val} value={val.id} key={val.id}>{val.stop_name}</option>
               ))}
@@ -158,7 +158,7 @@ function RouteManagement() {
           </div>
           <div>
             <select className='sm:w-56 text-center w-32 h-11 appearance-none focus:outline-none rounded-xl shadow-xl' onChange={(e) => { setStop2(stopNames.find((val) => e.target.value == val.id)); }} name="place2">
-              <option className='text-center outline-none' value="">Choice a place</option>
+              <option className='text-center outline-none' value="">Choose a place</option>
               {stopNames.filter((value) => value != stop1).map((val, index) => (
                 <option className='text-center outline-none' selected={stop2 == val} value={val.id} key={val.id}>{val.stop_name}</option>
               ))}
