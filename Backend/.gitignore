@@ -4,6 +4,7 @@
 dump.rdb
 
 # Django #
+**/__pycache__
 *.log
 *.pot
 *.pyc
