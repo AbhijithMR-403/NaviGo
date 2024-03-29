@@ -19,6 +19,8 @@ class TicketOrder(models.Model):
         Account, on_delete=models.CASCADE, related_name='user_tickets')
     starting_stop = models.ForeignKey(BusStop, on_delete=models.CASCADE, related_name='starting_bus_stop')
     ending_stop = models.ForeignKey(BusStop, on_delete=models.CASCADE, related_name='ending_bus_stop')
+    # start_time = models.DateTimeField(null=True)
+    # end_time = models.DateTimeField(null=True)
     route_id = models.ForeignKey(
         Route, on_delete=models.CASCADE, related_name="order_route")
     status = models.CharField(

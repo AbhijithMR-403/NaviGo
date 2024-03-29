@@ -1,8 +1,8 @@
 import { GoogleMap, InfoWindowF, MarkerF, useJsApiLoader } from '@react-google-maps/api'
 import React, { memo, useEffect, useState } from 'react'
-import { AdminBusAxios } from '../../components/api/api_instance'
+import { UserAxios } from '../../components/api/api_instance'
 import DirectionsMap from './DirectionsMap'
-
+const GOOGLE_MAP_API = import.meta.env.VITE_GOOGLE_MAP_API
 
 
 const libraries = ['places',]
@@ -28,7 +28,7 @@ function MapUsers({ PointA, PointB, dimension = {
             setPointBCoordinate({ lat: PointB.lat, lng: PointB.lng })
         }
 
-        AdminBusAxios.get('/bus/stop/list').then(res => {
+        UserAxios.get('/bus/stop/list').then(res => {
             const bus_stop_length = res.data.length
             setStopNames(res.data)
             let lat = 0
@@ -49,13 +49,13 @@ function MapUsers({ PointA, PointB, dimension = {
 
     // Custom icon for the marker
     const customMarker = {
-        url: "/public/assets/Map/pointers/bus-station34.png",
+        url: "/public/assets/Map/Pointers/bus-station34.png",
         scaledSize: { height: 30, width: 30 },
     };
 
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
-        googleMapsApiKey: `${import.meta.env.VITE_GOOGLE_MAP_API}`,
+        googleMapsApiKey: `${GOOGLE_MAP_API}`,
         libraries: libraries
     })
 
@@ -66,6 +66,7 @@ function MapUsers({ PointA, PointB, dimension = {
         setSelectedMarker(marker);
         setInfoWindowOpen(true);
       };
+      
       
 
     return (

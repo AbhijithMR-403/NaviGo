@@ -43,8 +43,8 @@ class TicketDetailSerializer(serializers.ModelSerializer):
 class UserAvailableRouteView(serializers.ModelSerializer):
     # waypoints = RouteWayPointListSerializer(many=True)
     bus_detail = BusDetailSerializer()
-    # origin = BusStopSerializer()
-    # destination = BusStopSerializer()
+    origin = BusStopSerializer()
+    destination = BusStopSerializer()
 
     class Meta:
         model = Route

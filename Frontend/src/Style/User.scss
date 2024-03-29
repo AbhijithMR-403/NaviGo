@@ -1,291 +1,302 @@
 .user-home-div {
-    .bg-quote {
-        background: url(../../public/assets/userHome/bus-stop345.jpg) center center no-repeat;
-        background-attachment: fixed;
-    }
+  .bg-quote {
+    background: url(../../public/assets/userHome/bus-stop345.jpg) center center no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+  }
+
+  .text-2 {
+    // background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+    background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+  }
 }
 
 .user-header-div {
-    background: rgb(104,220,255);
-    background: linear-gradient(90deg, rgba(104,220,255,0.23021708683473385) 8%, rgba(177,239,250,0.19380252100840334) 92%);
+  background: rgb(104, 220, 255);
+  background: linear-gradient(90deg, rgba(104, 220, 255, 0.23021708683473385) 8%, rgba(177, 239, 250, 0.19380252100840334) 92%);
 
-    // background: rgb(224, 229, 230);
-    // background: linear-gradient(90deg, rgba(248,254,255,0) 2%, rgba(248,254,255,0.3638305322128851) 53%, rgba(248,254,255,0) 99%);
+  // background: rgb(224, 229, 230);
+  // background: linear-gradient(90deg, rgba(248,254,255,0) 2%, rgba(248,254,255,0.3638305322128851) 53%, rgba(248,254,255,0) 99%);
 }
 
-.bus-list-card{
-    section.card {
-        position: relative;
-        width: 330px;
-        height: 100px;
-        background-color: #474dc3;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        perspective: 1000px;
-        transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      }
-      .card svg {
-        fill: #333;
-        transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        border-radius: 3px;
-      }
-      .card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 8px 16px #000000;
-        // background-color: #474dc3;
-        color: #ffffff;
-      }
-      
-      .card__content {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        padding: 10px;
-        box-sizing: border-box;
-        // background-color: #474dc3;
-        transform: rotateX(-90deg);
-        transform-origin: bottom;
-        transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      }
-      
-      .card:hover .card__content {
-        transform: rotateX(0deg);
-      }
-      
-      .card__title {
-        margin: 0;
-        padding-left: 5px;
-        font-size: 24px;
-        color: var(--white);
-        font-weight: 700;
-      }
-      
-      .card:hover svg {
-        scale: 0;
-      }
-      
-      .card__description {
-        margin: 10px 0 0;
-        font-size: 14px;
-        color: #ffffff;
-        line-height: 1.4;
-      }
-      /* Commands to change the shadows in dark mode
+.bus-list-card {
+  section.card {
+    position: relative;
+    width: 330px;
+    height: 100px;
+    background-color: #474dc3;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    perspective: 1000px;
+    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .card svg {
+    fill: #333;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: 3px;
+  }
+
+  .card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px #000000;
+    // background-color: #474dc3;
+    color: #ffffff;
+  }
+
+  .card__content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    // background-color: #474dc3;
+    transform: rotateX(-90deg);
+    transform-origin: bottom;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .card:hover .card__content {
+    transform: rotateX(0deg);
+  }
+
+  .card__title {
+    margin: 0;
+    padding-left: 5px;
+    font-size: 24px;
+    color: var(--white);
+    font-weight: 700;
+  }
+
+  .card:hover svg {
+    scale: 0;
+  }
+
+  .card__description {
+    margin: 10px 0 0;
+    font-size: 14px;
+    color: #ffffff;
+    line-height: 1.4;
+  }
+
+  /* Commands to change the shadows in dark mode
       @media (prefers-color-scheme: dark) {
         .card:hover {
         box-shadow: 0 8px 16px #000000;
         }
       }*/
-      
+
 }
 
 
-.buy-bus-ticket-button{
-    .btn {
-        transition: all 0.3s ease-in-out;
-        font-family: "Dosis", sans-serif;
-      }
-      
-      .btn {
-        width: 75px;
-        height: 35px;
-        border-radius: 50px;
-        background-image: linear-gradient(135deg, #feb692 0%, #ea5455 100%);
-        box-shadow: 0 20px 30px -6px rgba(238, 103, 97, 0.5);
-        outline: none;
-        cursor: pointer;
-        border: none;
-        font-size: 16px;
-        color: white;
-      }
-      
-      .btn:hover {
-        transform: translateY(3px);
-        box-shadow: none;
-      }
-      
-         .btn:active {
-        opacity: 0.5;
-      }
+.buy-bus-ticket-button {
+  .btn {
+    transition: all 0.3s ease-in-out;
+    font-family: "Dosis", sans-serif;
+  }
+
+  .btn {
+    width: 75px;
+    height: 35px;
+    border-radius: 50px;
+    background-image: linear-gradient(135deg, #feb692 0%, #ea5455 100%);
+    box-shadow: 0 20px 30px -6px rgba(238, 103, 97, 0.5);
+    outline: none;
+    cursor: pointer;
+    border: none;
+    font-size: 16px;
+    color: white;
+  }
+
+  .btn:hover {
+    transform: translateY(3px);
+    box-shadow: none;
+  }
+
+  .btn:active {
+    opacity: 0.5;
+  }
 }
 
 
-.order-ticket-card{
+.order-ticket-card {
   @import url("https://fonts.googleapis.com/css2?family=Staatliches&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap");
 
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
-
-
-.ticket {
-	margin: auto;
-	display: flex;
-	background: white;
-	box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
-}
-
-.left {
-	display: flex;
-}
-
-.image {
-	height: 250px;
-	width: 250px;
-	background-image: url("https://media.pitchfork.com/photos/60db53e71dfc7ddc9f5086f9/1:1/w_1656,h_1656,c_limit/Olivia-Rodrigo-Sour-Prom.jpg");
-	background-size: contain;
-	opacity: 0.85;
-}
-
-.admit-one {
-	position: absolute;
-	color: darkgray;
-	height: 250px;
-	padding: 0 10px;
-	letter-spacing: 0.15em;
-	display: flex;
-	text-align: center;
-	justify-content: space-around;
-	writing-mode: vertical-rl;
-	transform: rotate(-180deg);
-}
-
-.admit-one span:nth-child(2) {
-	color: white;
-	font-weight: 700;
-}
-
-.left .ticket-number {
-	height: 250px;
-	width: 250px;
-	display: flex;
-	justify-content: flex-end;
-	align-items: flex-end;
-	padding: 5px;
-}
-
-.ticket-info {
-	padding: 10px 30px;
-	display: flex;
-	flex-direction: column;
-	text-align: center;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.date {
-	border-top: 1px solid gray;
-	border-bottom: 1px solid gray;
-	padding: 5px 0;
-	font-weight: 700;
-	display: flex;
-	align-items: center;
-	justify-content: space-around;
-}
-
-.date span {
-	width: 100px;
-}
-
-.date span:first-child {
-	text-align: left;
-}
-
-.date span:last-child {
-	text-align: right;
-}
-
-.date .june-29 {
-	color: #d83565;
-	font-size: 20px;
-}
-
-.show-name {
-	font-size: 32px;
-	font-family: "Nanum Pen Script", cursive;
-	color: #d83565;
-}
-
-.show-name h1 {
-	font-size: 48px;
-	font-weight: 700;
-	letter-spacing: 0.1em;
-	color: #4a437e;
-}
-
-.time {
-	padding: 10px 0;
-	color: #4a437e;
-	text-align: center;
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-	font-weight: 700;
-}
-
-.time span {
-	font-weight: 400;
-	color: gray;
-}
-
-.left .time {
-	font-size: 16px;
-}
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
 
-.location {
-	display: flex;
-	justify-content: space-around;
-	align-items: center;
-	width: 100%;
-	padding-top: 8px;
-	border-top: 1px solid gray;
-}
+  .ticket {
+    margin: auto;
+    display: flex;
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  }
 
-.location .separator {
-	font-size: 20px;
-}
+  .left {
+    display: flex;
+  }
 
-.right {
-	width: 180px;
-	border-left: 1px dashed #404040;
-}
+  .image {
+    height: 250px;
+    width: 250px;
+    background-image: url("https://media.pitchfork.com/photos/60db53e71dfc7ddc9f5086f9/1:1/w_1656,h_1656,c_limit/Olivia-Rodrigo-Sour-Prom.jpg");
+    background-size: contain;
+    opacity: 0.85;
+  }
 
-.right .admit-one {
-	color: darkgray;
-}
+  .admit-one {
+    position: absolute;
+    color: darkgray;
+    height: 250px;
+    padding: 0 10px;
+    letter-spacing: 0.15em;
+    display: flex;
+    text-align: center;
+    justify-content: space-around;
+    writing-mode: vertical-rl;
+    transform: rotate(-180deg);
+  }
 
-.right .admit-one span:nth-child(2) {
-	color: gray;
-}
+  .admit-one span:nth-child(2) {
+    color: white;
+    font-weight: 700;
+  }
 
-.right .right-info-container {
-	height: 250px;
-	padding: 10px 10px 10px 35px;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-around;
-	align-items: center;
-}
+  .left .ticket-number {
+    height: 250px;
+    width: 250px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding: 5px;
+  }
 
-.right .show-name h1 {
-	font-size: 18px;
-}
+  .ticket-info {
+    padding: 10px 30px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-.barcode {
-	height: 100px;
-}
+  .date {
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+    padding: 5px 0;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
 
-.barcode img {
-	height: 100%;
-}
+  .date span {
+    width: 100px;
+  }
+
+  .date span:first-child {
+    text-align: left;
+  }
+
+  .date span:last-child {
+    text-align: right;
+  }
+
+  .date .june-29 {
+    color: #d83565;
+    font-size: 20px;
+  }
+
+  .show-name {
+    font-size: 32px;
+    font-family: "Nanum Pen Script", cursive;
+    color: #d83565;
+  }
+
+  .show-name h1 {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #4a437e;
+  }
+
+  .time {
+    padding: 10px 0;
+    color: #4a437e;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-weight: 700;
+  }
+
+  .time span {
+    font-weight: 400;
+    color: gray;
+  }
+
+  .left .time {
+    font-size: 16px;
+  }
+
+
+  .location {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    padding-top: 8px;
+    border-top: 1px solid gray;
+  }
+
+  .location .separator {
+    font-size: 20px;
+  }
+
+  .right {
+    width: 180px;
+    border-left: 1px dashed #404040;
+  }
+
+  .right .admit-one {
+    color: darkgray;
+  }
+
+  .right .admit-one span:nth-child(2) {
+    color: gray;
+  }
+
+  .right .right-info-container {
+    height: 250px;
+    padding: 10px 10px 10px 35px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .right .show-name h1 {
+    font-size: 18px;
+  }
+
+  .barcode {
+    height: 100px;
+  }
+
+  .barcode img {
+    height: 100%;
+  }
 
 }
