@@ -2,22 +2,21 @@ import { jwtDecode } from 'jwt-decode'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TWarning } from '../../toastify/Toastify'
-import { useSelector } from 'react-redux'
 import { UserAxios } from '../../api/api_instance'
 
 function UserProfile() {
 
     const [UserDetails, setUserDetails] = useState([])
     const navigate = useNavigate()
-    const userID = jwtDecode(localStorage.getItem('access')).user_id
+    const userID = localStorage.getItem('access')? jwtDecode(localStorage.getItem('access')).user_id:null
 
     useEffect(() => {
         if (!localStorage.getItem('access')){
-            if (!localStorage.getItem('loginWarningShown')) {
-                TWarning('Needs to Login');
-                localStorage.setItem('loginWarningShown', true);
-            }
-            navigate('/', { replace: true })
+            // if (!localStorage.getItem('loginWarningShown')) {
+            //     localStorage.setItem('loginWarningShown', true);
+            // }
+            TWarning('Needs to Login');
+            navigate('/')
             return;
         }
 
