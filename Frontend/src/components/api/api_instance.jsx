@@ -74,10 +74,6 @@ export const UserAxios = axios.create({
 
   export const VendorAuth = axios.create({
     baseURL: `${API_BASE_URL}`,
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'multipart/form-data',
-    },
   });
 
 
