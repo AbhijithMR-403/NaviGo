@@ -49,7 +49,7 @@ function MapUsers({ PointA, PointB, dimension = {
 
     // Custom icon for the marker
     const customMarker = {
-        url: "/public/assets/Map/Pointers/bus-station34.png",
+        url: "/assets/Map/Pointers/bus-station34.png",
         scaledSize: { height: 30, width: 30 },
     };
 
