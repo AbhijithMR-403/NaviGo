@@ -16,6 +16,8 @@ function VendorRoute({ children }) {
     const fetchData = async () => {
       const authInfo = await IsAuthUser();
       setIsVendor(authInfo.is_vendor)
+      console.log(authInfo.is_vendorActive);
+      console.log('The above one is the vendor ');
       setIsVendorActive(authInfo.is_vendorActive)
       setIsAuthenticated(authInfo.isAuthenticated);
       setAdmin(authInfo.is_admin);
