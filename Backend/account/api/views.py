@@ -40,7 +40,10 @@ class UserLogin(APIView):
         refresh = RefreshToken.for_user(user)
         vendor_active = False
         if vendor.exists():
+            refresh["vendor_active"] = vendor[0].approve
             vendor_active = vendor[0].approve
+        else:
+            refresh["vendor_active"] = False
         refresh["is_vendor"] = user.is_vendor
         refresh["name"] = str(user.username)
         refresh["is_admin"] = user.is_superuser
