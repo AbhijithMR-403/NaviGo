@@ -89,7 +89,7 @@ function Header() {
                 <span className="sr-only">My Logo</span>
                 <img
                   className="h-8 w-auto"
-                  src={"/assets/Logo/navigo-logo-black-transparent.png"}
+                  src="/assets/Logo/navigo-logo-black-transparent.png"
                   alt="Logo"
                 />
               </a>
