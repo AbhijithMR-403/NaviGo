@@ -24,7 +24,7 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
   const logo = (
     <Box
       component="img"
-      src={"/public/assets/Logo/navigo-logo-black-transparent.png"}
+      src={"/assets/Logo/navigo-logo-black-transparent.png"}
       sx={{ width: 100, height: 40, cursor: 'pointer', ...sx }}
     />
   );
