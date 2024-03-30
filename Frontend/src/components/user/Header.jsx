@@ -76,7 +76,7 @@ function Header() {
                 </Link>
               </>)
               :
-              (<a className="text-sm font-semibold leading-6 text-gray-900" onClick={logout}>
+              (<a className="text-sm font-semibold leading-6 text-gray-900 cursor-pointer" onClick={logout}>
                 Log out <span aria-hidden="true">&rarr;</span>
               </a>)}
           </div>
@@ -89,7 +89,7 @@ function Header() {
                 <span className="sr-only">My Logo</span>
                 <img
                   className="h-8 w-auto"
-                  src={"/public/assets/Logo/navigo-logo-black-transparent.png"}
+                  src={"/assets/Logo/navigo-logo-black-transparent.png"}
                   alt="Logo"
                 />
               </a>
