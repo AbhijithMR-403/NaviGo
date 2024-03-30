@@ -49,7 +49,7 @@ function BusRouteLists() {
                                         <div className="text-sm leading-4 font-normal"><span className="text-xs leading-4 font-normal text-gray-500"> Destination</span> {res.destination.stop_name} </div>
                                     </div>
                                 </div>
-                                <div className="border-r-2 pr-3">
+                                {/* <div className="border-r-2 pr-3">
                                     <div >
                                         <div className="ml-3 my-3 border-gray-200 border-2 bg-gray-300 p-1">
                                             <div className="uppercase text-xs leading-4 font-medium">Trailer</div>
@@ -61,14 +61,14 @@ function BusRouteLists() {
                                     <div className="ml-3 my-5 bg-green-600 p-1 w-20">
                                         <div className="uppercase text-xs leading-4 font-semibold text-center text-green-100">Picked UP</div>
                                     </div>
-                                </div>
-                                <div>
+                                </div> */}
+                                {/* <div>
                                     <button className="text-gray-100 rounded-sm my-5 ml-2 focus:outline-none bg-gray-500">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                                         </svg>
                                     </button>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                         )})}
