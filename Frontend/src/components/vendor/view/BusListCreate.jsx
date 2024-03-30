@@ -239,6 +239,8 @@ return (
 
                 </tbody>
             </table>
+            {BusList.length == 0?<div className='text-center p-4 m-6 font-bold'>No bus are Created</div>:null}
+
         </div>
 
     </div>

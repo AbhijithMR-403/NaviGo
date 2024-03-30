@@ -117,7 +117,7 @@ function UserMap() {
                     </div>
                 </div>
                 {/* To show the available buses */}
-
+                {RouteList.length == 0?<div className='text-center p-4 mt-6 font-bold'>No bus Available in this route</div>:null}
                 {/* After card */}
                 {RouteList.map((res, ind) => {
                     let starting_stop = res.list_stops.find(val => val.stop.id === StartStop.id);

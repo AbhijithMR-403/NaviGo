@@ -27,7 +27,7 @@ const VendorNav = () => {
         <div>
             <aside id="logo-sidebar" className="text-white fixed top-0 left-0 z-40 w-64 h-screen pt-10 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0  dark:border-gray-700" aria-label="Sidebar" style={{ backgroundColor: '#0E1111' }}>
                 <div className="h-full px-3 pb-4 overflow-y-auto " >
-                    <img className='w-28 h-10 mb-9' src="/public/assets/Logo/navigo-logo-white-transparent.png" alt="" srcSet="" />
+                    <img className='w-28 h-10 mb-9' src="/assets/Logo/navigo-logo-white-transparent.png" alt="" srcSet="" />
                     <ul className="space-y-2 font-medium">
                         {/* DO from here man */}
                         {NavConfig.map((item, index) => {
