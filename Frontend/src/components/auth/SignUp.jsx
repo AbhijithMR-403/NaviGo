@@ -85,9 +85,8 @@ function SignUp() {
             await UserAxios.post('/auth/register', formData).then((res) => {
                 if (res.status === 201) {
                     setUserID(res.data.user_id)
-                    // setSignUp(false)
                     TSuccess("OTP sent")
-                    sendOTP()
+                    sendOTP(res.data.user_id)
                     return res
                 }
                 console.log(res);
@@ -101,7 +100,7 @@ function SignUp() {
                 else if(err.response.status == 401){
                     console.log(err.response.data.user_id);
                     setUserID(err.response.data.user_id)
-                    sendOTP()
+                    sendOTP(err.response.data.user_id)
                     setSignUp(false)
                 }
                 for (let key in err.response.data.errors) {
@@ -111,11 +110,12 @@ function SignUp() {
         }
     }
 
-    const sendOTP = async () => {
-        var data = { "userID": UserID }
+    const sendOTP = async (ID) => {
+        var data = { "userID": ID }
         const toaster = TLoading('Please wait...')
         console.log(toaster)
         await AuthAxios.patch('/otp', data).then((res) => {
+            setSignUp(false)
             TUpdate(toaster, 'OTP send', 'success')
             // TSuccess('OTP is sent')
         }
