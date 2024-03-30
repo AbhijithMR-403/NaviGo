@@ -34,6 +34,8 @@ class PaymentSerializer(serializers.ModelSerializer):
 class TicketDetailSerializer(serializers.ModelSerializer):
     user_id = UserDetailSerializer()
     route_id = RouteWayPointDetailSerializer()
+    starting_stop = BusStopSerializer()
+    ending_stop = BusStopSerializer()
 
     class Meta:
         model = TicketOrder

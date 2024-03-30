@@ -9,6 +9,7 @@ function Order() {
     const userID = localStorage.getItem('access') ? jwtDecode(localStorage.getItem('access')).user_id : null;
     const [orderList, setOrderList] = useState([]);
     const navigate = useNavigate()
+    const [orderDetail, setOrderDetail] = useState(null)
     useEffect(() => {
         if (!localStorage.getItem('access')) {
             TWarning('Login to get to Order page')
@@ -16,82 +17,69 @@ function Order() {
         }
         AuthUserAxios.get(`user/list/order/${userID}`).then(res => {
             setOrderList(res.data)
+            console.log(res.data);
         }).catch(err => console.error(err))
     }, [])
 
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
     return (
         <>
-            {false && (
-                <div className='order-ticket-card absolute z-50 bg-slate-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
-                    <div className="ticket">
-                        <div className="left">
-                            {/* <div className="image">
-                            <p className="admit-one">
-                                <span>ADM ONE</span>
-                                <span>AT ONE</span>
-                                <span>ADMIT ONE</span>
+            {orderDetail &&
+                (
+                    <div className='order-ticket-card absolute z-50 bg-slate-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2' onClick={() => setOrderDetail(null)}>
+                <div className="ticket">
+                    <div className="left">
+                        <div className="ticket-info">
+                            <p className="date">
+                                <span>{days[new Date(orderDetail.created).getDay()].toUpperCase()}</span>
+                                <span className={`${months[new Date(orderDetail.created).getMonth()].toLowerCase()}-${new Date(orderDetail.created).getDate()}`}>{months[new Date(orderDetail.created).getMonth()].toUpperCase()} {new Date(orderDetail.created).getDate()}TH</span>
+                                <span>{new Date(orderDetail.created).getFullYear()}</span>
                             </p>
-                            <div className="text-gray-500">
-                                <p>#20030220</p>
+                            <div className="show-name">
+                                <h1>{orderDetail.route_id.bus_detail.bus_name}</h1>
+                                <h2>{orderDetail.starting_stop.stop_name} - {orderDetail.ending_stop.stop_name}</h2>
                             </div>
-                        </div> */}
-                            <div className="ticket-info">
-                                <p className="date">
-                                    <span>TUESDAY</span>
-                                    <span className="june-29">JUNE 29TH</span>
-                                    <span>2021</span>
-                                </p>
-                                <div className="show-name">
-                                    <h1>Prom</h1>
-                                    <h2>Olivia Rodrigo</h2>
-                                </div>
-                                <div className="time">
-                                    <p>
-                                        8:00 PM <span>TO</span> 11:00 PM
-                                    </p>
-                                    {/* <p>
-                                    DOORS <span>@</span> 7:00 PM
-                                </p> */}
-                                </div>
-                                <p className="location">
-                                    <span>East High School</span>
-                                    <span className="separator">
-                                        <i className="far fa-smile" />
-                                    </span>
-                                    <span>Salt Lake City, Utah</span>
+                            <div className="time">
+                                <p>
+                                    {orderDetail.route_id.starting_time} <span>TO</span> {orderDetail.route_id.ending_time}
                                 </p>
                             </div>
+                            <p className="location">
+                                <span>{orderDetail.route_id.origin.stop_name}</span>
+                                <span className="separator">
+                                    <i className="far fa-smile" />
+                                </span>
+                                <span>{orderDetail.route_id.destination.stop_name}</span>
+                            </p>
                         </div>
-                        <div className="right">
-                            {/* <p className="admit-one">
-                            <span>ADMIT ONE</span>
-                            <span>ADMIT ONE</span>
-                            <span>ADMIT ONE</span>
-                        </p> */}
-                            <div className="right-info-container">
-                                <div className="show-name">
-                                    <h1>SOUR Prom</h1>
-                                </div>
-                                <div className="time">
-                                    <p>
-                                        8:00 PM <span>TO</span> 11:00 PM
-                                    </p>
-                                    <p>
-                                        DOORS <span>@</span> 7:00 PM
-                                    </p>
-                                </div>
-                                <div className="barcode">
-                                    <img
-                                        src="https://external-preview.redd.it/cg8k976AV52mDvDb5jDVJABPrSZ3tpi1aXhPjgcDTbw.png?auto=webp&s=1c205ba303c1fa0370b813ea83b9e1bddb7215eb"
-                                        alt="QR code"
-                                    />
-                                </div>
-                                <p className="text-gray-500">#20030220</p>
+                    </div>
+                    <div className="right">
+                        <div className="right-info-container">
+                            <div className="show-name">
+                                <h1>Have a nice trip</h1>
                             </div>
+                            {/* <div className="time">
+                                <p>
+                                    8:00 PM <span>TO</span> 11:00 PM
+                                </p>
+                                <p>
+                                    DOORS <span>@</span> 7:00 PM
+                                </p>
+                            </div> */}
+                            <div className="barcode">
+                                <img
+                                    src="https://external-preview.redd.it/cg8k976AV52mDvDb5jDVJABPrSZ3tpi1aXhPjgcDTbw.png?auto=webp&s=1c205ba303c1fa0370b813ea83b9e1bddb7215eb"
+                                    alt="QR code"
+                                />
+                            </div>
+                            <p className="text-gray-500">#{orderDetail.ticket_order_id.slice(0,8)}</p>
                         </div>
                     </div>
                 </div>
-            )}
+            </div>
+                )}
             <div className='pt-24 sm:p-24 '>
 
                 <h1 className="text-center font-bold text-2xl ">Order</h1>
@@ -141,7 +129,7 @@ function Order() {
                                         ₹{res.total}
                                     </td>
                                     <td className="px-6 py-4 text-right">
-                                        <a href="#" className="font-medium text-blue-600 hover:underline">View</a>
+                                        <a href="#" className="font-medium text-blue-600 hover:underline" onClick={() => setOrderDetail(res)}>View</a>
                                     </td>
                                 </tr>)
 
@@ -149,6 +137,10 @@ function Order() {
                             }
                         </tbody>
                     </table>
+
+                    {orderList.length == 0 ? (
+                        <div className='font-bold text-center p-11'>Nothing</div>
+                    ) : null}
                 </div>
 
             </div>
