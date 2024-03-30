@@ -144,7 +144,7 @@ function VendorDetails() {
         let otp_Active = false
         await UserAxios.patch('/auth/otp/verify', { 'OTP': otp, 'UserID': userID }).then((res) => {
             if (res.status == 201) {
-                TInfo('OTP verified')
+                // TInfo('OTP verified')
                 otp_Active = true
             }
             if (res.status == 200) {
