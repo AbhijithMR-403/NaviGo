@@ -35,7 +35,7 @@ function VendorRoute({ children }) {
   if (!isAuthenticated) {
     return <Navigate to="login" />
   }
-  if (isVendorActive){
+  if (!isVendorActive){
     return <Navigate to='waiting' />
   }
 
