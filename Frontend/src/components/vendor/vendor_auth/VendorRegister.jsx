@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { TError, TWarning } from '../../toastify/Toastify';
 import { useDispatch } from 'react-redux';
 import { set_vendor } from '../../../redux/authentication/VendorSlice';
-import { AuthAxios, UserAxios } from '../../api/api_instance';
+import { AuthAxios, UserAxios, VendorAuth } from '../../api/api_instance';
 
 function VendorRegister() {
     const navigate = useNavigate()
@@ -57,7 +57,7 @@ function VendorRegister() {
             formData.append('is_vendor', true);
             formData.append('is_active', false);
             formData.append('profile_img', file);
-            await AuthAxios.post('/register', formData).then((res) => {
+            await VendorAuth.post('/auth/register', formData).then((res) => {
                 dispatch(
                     set_vendor({
                         userID: res.data.user_id,
