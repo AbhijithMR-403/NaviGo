@@ -3,7 +3,7 @@ import { AuthUserAxios, UserAxios } from '../../components/api/api_instance';
 import MapUsers from '../../utils/maps/MapUsers';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { TWarning } from '../../components/toastify/Toastify';
+import { TInfo, TWarning } from '../../components/toastify/Toastify';
 
 function UserMap() {
     const [mapHeight, setMapHeight] = useState(window.innerHeight * 0.9);
@@ -47,8 +47,8 @@ function UserMap() {
 
     const handleSubmit = (data, start, end) => {
         if (!user.isAuthenticated) {
-            TInfo('Login Required', 'Please Login First')
-            navigate('/login')
+            TInfo('Login Required')
+            navigate('/login');
         }
         console.log(typeof (end.reaching_time));
         console.log(end.reaching_time);
