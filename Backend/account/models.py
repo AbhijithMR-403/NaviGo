@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
 # from django.utils.translation import gettext as _
 
 
@@ -33,7 +34,7 @@ class CustomUserManager(BaseUserManager):
         return user
 
 
-class Account(AbstractBaseUser):
+class Account(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=60, null=True)
     username = models.CharField(max_length=30, unique=True)
     password = models.CharField(blank=True)
