@@ -53,7 +53,7 @@ export const TSuccess = (message) => {
 export const TInfo = (message) => {
   toast.info(`${message}`, {
     position: "top-center",
-    autoClose: 3999,
+    autoClose: 1999,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
