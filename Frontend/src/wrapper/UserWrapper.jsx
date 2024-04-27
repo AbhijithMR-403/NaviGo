@@ -1,10 +1,11 @@
-import React, { lazy, useEffect } from 'react'
+import React, { lazy, useEffect, useState } from 'react'
 import Home from '../pages/userPartition/Home';
 import { Outlet, useRoutes } from 'react-router-dom';
 import UserRoute from '../routes/User/UserRoute';
 import { useDispatch, useSelector } from 'react-redux';
 import IsAuthUser from '../utils/IsAuthUser';
 import { Set_Authentication } from '../redux/authentication/AuthenticationSlice';
+import Chat from '../pages/userPartition/Chat.jsx';
 
 const Login = lazy(() => import('../components/auth/Login'));
 const SignUp = lazy(() => import('../components/auth/SignUp'));
@@ -23,7 +24,7 @@ function UserWrapper() {
   const dispatch = useDispatch();
 
   const authentication_user = useSelector(state => state.authentication_user)
-
+  const [scrollWheel, setScrollWheel] = useState(99)
 
   const checkAuth = async () => {
     const isAuthenticated = await IsAuthUser();
@@ -53,7 +54,7 @@ function UserWrapper() {
       element: (
         <div className='h-full w-full'>
         
-          <Header />
+          <Header scrollWheel= {scrollWheel} />
             
           <Outlet />
         </div>
@@ -66,6 +67,7 @@ function UserWrapper() {
         { element: <BookingConfirm />, path: '/confirm/:uuid' },
         { element: <PaymentSuccess />, path: '/success' },
         { element: <Order />, path: '/order' },
+        { element: <Chat />, path: '/chat' },
       ],
     },
     {

@@ -119,7 +119,7 @@ function Login() {
         </p>
         <p className="p line">Or With</p>
 
-        <div className="text-center">
+        <div className="w-full flex justify-center items-center">
 
           <GoogleLogin
             onSuccess={credentialResponse => {

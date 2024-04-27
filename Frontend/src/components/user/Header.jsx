@@ -15,12 +15,12 @@ const navigation = [
 ]
 
 
-function Header() {
+function Header({scrollWheel}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const navigate = useNavigate()
   const token = localStorage.getItem('access');
   const refresh_token = localStorage.getItem('refresh');
-
+  console.log(scrollWheel);
   const logout = async () => {
     await AuthAxios.post('/logout', { refresh_token: refresh_token }, {
       headers: {
