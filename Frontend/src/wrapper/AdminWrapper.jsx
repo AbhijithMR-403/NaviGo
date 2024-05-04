@@ -7,6 +7,7 @@ import isAuthAdmin from '../utils/isAuthAdmin';
 import AdminRouter from '../routes/Admin/AdminRouter';
 import { Set_Authentication } from '../redux/authentication/AuthenticationSlice';
 import AdminAuthRouter from '../routes/Admin/AdminAuthRouter';
+import axios from 'axios';
 
 
 const NotFoundView = lazy(() => import('../pages/error/NotFoundView'));
@@ -45,6 +46,12 @@ function AdminWrapper() {
   };
 
   useEffect(() => {
+    if(localStorage.getItem('access'))
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('access')}`;
+    else
+    delete axios.defaults.headers.common['Authorization'];
+
+
     if (!authentication_user.name) {
       checkAuthAndFetchUserData();
     }

@@ -12,7 +12,6 @@ export const AuthAxios = axios.create({
 export const AdminAxios = axios.create({
     baseURL: `${API_BASE_URL}/admin`,
     headers: {
-      'Authorization': `Bearer ${localStorage.getItem('access')}`,
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
@@ -21,7 +20,6 @@ export const AdminAxios = axios.create({
 export const AdminBusAxios = axios.create({
     baseURL: `${API_BASE_URL}`,
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('access')}`,
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },

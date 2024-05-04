@@ -14,7 +14,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { bgGradient } from '../../components/admin/elements/theme/css';
 
 import Iconify from '../../components/admin/elements/iconify';
-import { useRouter } from '../../components/admin/navbar/hooks';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { jwtDecode } from 'jwt-decode'
@@ -76,7 +75,6 @@ export default function LoginView() {
 
   const theme = useTheme();
 
-  const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
 
