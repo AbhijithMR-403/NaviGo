@@ -14,7 +14,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { bgGradient } from '../../components/admin/elements/theme/css';
 
 import Iconify from '../../components/admin/elements/iconify';
-import { useRouter } from '../../components/admin/navbar/hooks';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { jwtDecode } from 'jwt-decode'
@@ -36,12 +35,12 @@ export default function LoginView() {
   const handleLoginSubmit = async(event)=> {
     event.preventDefault();
     setFormError([])
-    const formData = new FormData();
-    formData.append("email", event.target.email.value);
-    formData.append("password", event.target.password.value);
+    const formData = new FormData(event.target);
+    // formData.append("email", event.target.email.value);
+    // formData.append("password", event.target.password.value);
     try {
       const res = await AuthAxios.post('/login', formData)
-      if( ! res.data.isAdmin){
+      if( !res.data.isAdmin){
         TError("User is not an admin")
         return navigate('/login')
       }
@@ -55,28 +54,24 @@ export default function LoginView() {
             isAdmin:res.data.isAdmin,
           })
         );
+        console.log(localStorage.getItem('access'));
         navigate('/admin')
         return res
       }  
-      
     }
     catch (error) {
-      if (error.response.status===401)
-      {
+      if (error.response.status===401){
         TError("Account doesn't exist")
         setFormError(error.response.data)
       }
-      else
-      {
+      else{
         console.log(error);
-  
       }
     }
   }
 
   const theme = useTheme();
 
-  const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
 

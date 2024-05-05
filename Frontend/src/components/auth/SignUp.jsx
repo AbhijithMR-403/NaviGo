@@ -85,7 +85,6 @@ function SignUp() {
             await UserAxios.post('/auth/register', formData).then((res) => {
                 if (res.status === 201) {
                     setUserID(res.data.user_id)
-                    TSuccess("OTP sent")
                     sendOTP(res.data.user_id)
                     return res
                 }
@@ -163,7 +162,6 @@ function SignUp() {
                             <input type="checkbox" />
                             <label>Remember me </label>
                         </div>
-                        <span className="span">Forgot password?</span>
                     </div>
                     <button className="button-submit" type='submit'>Sign Up</button>
                     <p className="p">Don't have an account? <Link to={'/login'}><span className="span">Log in</span></Link>
@@ -175,7 +173,7 @@ function SignUp() {
                             <label >OTP </label></div>
                         <MuiOtpInput className='mb-5' value={otp} onChange={(val) => setOtp(val)} />
                         <div className="flex-row">
-                            <span className="span" onClick={() => sendOTP()}>Resent otp?</span>
+                            <span className="span" onClick={() => sendOTP(UserID)}>Resent otp?</span>
                             <span className="span" onClick={() => setSignUp(true)}>re-enter email</span>
                         </div>
                         <button className="button-submit" onClick={verify_otp}>Sign Up</button>

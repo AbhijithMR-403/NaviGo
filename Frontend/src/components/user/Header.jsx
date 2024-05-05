@@ -15,12 +15,12 @@ const navigation = [
 ]
 
 
-function Header() {
+function Header({scrollWheel}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const navigate = useNavigate()
   const token = localStorage.getItem('access');
   const refresh_token = localStorage.getItem('refresh');
-
+  console.log(scrollWheel);
   const logout = async () => {
     await AuthAxios.post('/logout', { refresh_token: refresh_token }, {
       headers: {
@@ -119,21 +119,21 @@ function Header() {
                 <div className="py-6">
                   {!authentication_user.isAuthenticated ? (
                     <>
-                      <a
+                      <div
                         className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                       // onClick={logout}
                       >
                         <Link to={'/login'}>
                           Sign in
                         </Link>
-                      </a>
-                      <a
+                      </div>
+                      <div
                         className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                       >
                         <Link to={'/signup'}>
                           Register
                         </Link>
-                      </a>
+                      </div>
                     </>) :
                     (<a
                       href="#"

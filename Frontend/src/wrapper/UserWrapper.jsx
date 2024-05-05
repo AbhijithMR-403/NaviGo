@@ -1,10 +1,12 @@
-import React, { lazy, useEffect } from 'react'
+import React, { lazy, useEffect, useState } from 'react'
 import Home from '../pages/userPartition/Home';
-import { Outlet, useRoutes } from 'react-router-dom';
+import { Outlet, useLocation, useRoutes } from 'react-router-dom';
 import UserRoute from '../routes/User/UserRoute';
 import { useDispatch, useSelector } from 'react-redux';
 import IsAuthUser from '../utils/IsAuthUser';
 import { Set_Authentication } from '../redux/authentication/AuthenticationSlice';
+import Chat from '../pages/userPartition/Chat.jsx';
+import { AuthUserAxios } from '../components/api/api_instance.jsx';
 
 const Login = lazy(() => import('../components/auth/Login'));
 const SignUp = lazy(() => import('../components/auth/SignUp'));
@@ -21,9 +23,11 @@ const Order = lazy(() => import('../pages/userPartition/Order'));
 
 function UserWrapper() {
   const dispatch = useDispatch();
+  const { pathname } = useLocation();
+
 
   const authentication_user = useSelector(state => state.authentication_user)
-
+  const [scrollWheel, setScrollWheel] = useState(99)
 
   const checkAuth = async () => {
     const isAuthenticated = await IsAuthUser();
@@ -37,13 +41,12 @@ function UserWrapper() {
   };
 
   useEffect(() => {
+    // Interceptor
+    AuthUserAxios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('access')}`;
     if (!authentication_user.name) {
-
       checkAuth();
-
     }
-
-  }, [authentication_user])
+  }, [authentication_user, pathname])
 
 
 
@@ -53,7 +56,7 @@ function UserWrapper() {
       element: (
         <div className='h-full w-full'>
         
-          <Header />
+          <Header scrollWheel= {scrollWheel} />
             
           <Outlet />
         </div>
@@ -66,6 +69,7 @@ function UserWrapper() {
         { element: <BookingConfirm />, path: '/confirm/:uuid' },
         { element: <PaymentSuccess />, path: '/success' },
         { element: <Order />, path: '/order' },
+        { element: <Chat />, path: '/chat' },
       ],
     },
     {

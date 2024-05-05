@@ -30,7 +30,8 @@ function UserManagement() {
       setUsers(res.data)
     }).catch((err) => {
       if(err.response.status  == 401){
-        window.location.reload();
+        console.log(AdminAxios.defaults.headers.common['Authorization']);
+        // window.location.reload();
     }
       console.error(err)
     })

@@ -13,18 +13,18 @@ function VendorLogin() {
     const [password, setPassword] = useState('')
 
 
-    const handleLogin = async() => {
+    const handleLogin = async () => {
         const formData = {
             'email': email,
             'password': password
         }
         try {
-            const res = await AuthAxios.post( '/login', formData)
-            if(!res.data.is_vendor){
+            const res = await AuthAxios.post('/login', formData)
+            if (!res.data.is_vendor) {
                 TInfo('Only for Vendors')
                 navigate('/')
             }
-            else if(!res.data.vendor_details){
+            else if (!res.data.vendor_details) {
                 TInfo('Complete your Detail')
                 localStorage.setItem('userID', res.data.user_id);
                 dispatch(
@@ -35,7 +35,7 @@ function VendorLogin() {
                 navigate('/vendor/details')
             }
             else if (res.status === 200) {
-                if (!res.data.is_vendor){
+                if (!res.data.is_vendor) {
                     TWarning('You are not an vendor')
                     navigate('/vendor/login')
                     return res
@@ -51,7 +51,7 @@ function VendorLogin() {
                         isVendor: res.data.is_vendor
                     })
                 );
-                if (!res.data.is_vendor_active){
+                if (!res.data.is_vendor_active) {
                     TInfo('Your approval is under process')
                     navigate('/vendor/waiting')
                     return res
@@ -63,16 +63,15 @@ function VendorLogin() {
         }
         catch (error) {
             console.log(error);
-            if(error.response.status == 401)
-            {
-            TWarning('Activate your account')
-            navigate('/vendor/details/' + error.response.data.user+'/')
+            if (error.response.status == 401) {
+                TWarning('Activate your account')
+                navigate('/vendor/details/' + error.response.data.user + '/')
             }
             TError(error.response.data.error)
         }
     }
 
-    
+
     const [darkMode, setDarkMode] = useState(false);
     return (
         <div>
@@ -106,7 +105,7 @@ function VendorLogin() {
                     {"✨            "}Welcome to NaviGo{"                  ✨"}
                 </h1>
                 <div className="w-full mt-8">
-                    <div className="mx-auto max-w-xs sm:max-w-md md:max-w-lg flex flex-col gap-4">
+                    <form className="mx-auto max-w-xs sm:max-w-md md:max-w-lg flex flex-col gap-4">
                         <div className="flex flex-col sm:flex-row gap-3">
                         </div>
                         <input
@@ -114,6 +113,7 @@ function VendorLogin() {
                                 ? "bg-[#302E30] text-white focus:border-white"
                                 : "bg-gray-100 text-black focus:border-black"
                                 }`}
+                            autoComplete="on"
                             type="email"
                             placeholder="Email Address"
                             value={email}
@@ -125,6 +125,7 @@ function VendorLogin() {
                                 : "bg-gray-100 text-black focus:border-black"
                                 }`}
                             type="password"
+                            autoComplete="on"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                             placeholder="Password"
@@ -147,9 +148,9 @@ function VendorLogin() {
                         </button>
                         <p className="mt-6 text-xs text-gray-600 text-center">
                             Don't have an account?{" "}
-                                <Link to={'/vendor/register'}> <span className="text-[#E9522C] font-semibold" >Register</span></Link>
+                            <Link to={'/vendor/register'}> <span className="text-[#E9522C] font-semibold" >Register</span></Link>
                         </p>
-                    </div>
+                    </form>
                 </div>
 
             </div>

@@ -88,6 +88,7 @@ function Login() {
       formName: "email",
       type: "text",
       placeholder: "Enter your Email",
+      autocomplete: "on",
     },
     {
       Icon: PasswordIcon,
@@ -95,6 +96,7 @@ function Login() {
       formName: "password",
       type: "Password",
       placeholder: "Enter your Password",
+      autocomplete: "on",
       EyeIcon: EyeIcon,
     },
   ]
@@ -119,7 +121,7 @@ function Login() {
         </p>
         <p className="p line">Or With</p>
 
-        <div className="text-center">
+        <div className="w-full flex justify-center items-center">
 
           <GoogleLogin
             onSuccess={credentialResponse => {

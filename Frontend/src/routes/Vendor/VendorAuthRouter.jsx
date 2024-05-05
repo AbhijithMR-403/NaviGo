@@ -17,7 +17,7 @@ function VendorAuthRouter({children}) {
       setIsVendorActive(authInfo.is_vendorActive)
       setIsAuthenticated(authInfo.isAuthenticated);
       setIsAdmin(authInfo.is_admin)
-      setTimeout(() => { setLoading(false); }, 600);
+      setLoading(false);
     };
     fetchData();
   }, []);

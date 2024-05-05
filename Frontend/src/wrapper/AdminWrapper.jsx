@@ -1,5 +1,5 @@
 import React, { lazy, useEffect } from 'react'
-import { Navigate, Outlet, useRoutes } from 'react-router-dom';
+import { Navigate, Outlet, useLocation, useRoutes } from 'react-router-dom';
 import DashboardLayout from '../pages/adminPartition/Dashboard';
 import ThemeProvider from '../components/admin/elements/theme';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,6 +7,8 @@ import isAuthAdmin from '../utils/isAuthAdmin';
 import AdminRouter from '../routes/Admin/AdminRouter';
 import { Set_Authentication } from '../redux/authentication/AuthenticationSlice';
 import AdminAuthRouter from '../routes/Admin/AdminAuthRouter';
+import axios from 'axios';
+import { AdminAxios, AdminBusAxios } from '../components/api/api_instance';
 
 
 const NotFoundView = lazy(() => import('../pages/error/NotFoundView'));
@@ -21,7 +23,7 @@ const Dashboard = lazy(() => import('../components/admin/view/dashboard'));
 
 
 function AdminWrapper() {
-
+  const { pathname } = useLocation();
   const dispatch = useDispatch()
   const authentication_user = useSelector(state => state.authentication_user);
 
@@ -37,18 +39,20 @@ function AdminWrapper() {
           isAdmin: isAuthenticated.isAdmin,
         })
       );
-
-
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
+    console.log('sddads');
+    // Interceptor
+    AdminAxios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('access')}`;
+    AdminBusAxios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('access')}`;
     if (!authentication_user.name) {
       checkAuthAndFetchUserData();
     }
-  }, []);
+  }, [pathname]);
 
 
   const routes = useRoutes([
