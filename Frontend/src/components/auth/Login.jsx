@@ -88,6 +88,7 @@ function Login() {
       formName: "email",
       type: "text",
       placeholder: "Enter your Email",
+      autocomplete: "on",
     },
     {
       Icon: PasswordIcon,
@@ -95,6 +96,7 @@ function Login() {
       formName: "password",
       type: "Password",
       placeholder: "Enter your Password",
+      autocomplete: "on",
       EyeIcon: EyeIcon,
     },
   ]

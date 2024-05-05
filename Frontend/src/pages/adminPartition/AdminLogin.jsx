@@ -35,12 +35,12 @@ export default function LoginView() {
   const handleLoginSubmit = async(event)=> {
     event.preventDefault();
     setFormError([])
-    const formData = new FormData();
-    formData.append("email", event.target.email.value);
-    formData.append("password", event.target.password.value);
+    const formData = new FormData(event.target);
+    // formData.append("email", event.target.email.value);
+    // formData.append("password", event.target.password.value);
     try {
       const res = await AuthAxios.post('/login', formData)
-      if( ! res.data.isAdmin){
+      if( !res.data.isAdmin){
         TError("User is not an admin")
         return navigate('/login')
       }
@@ -54,21 +54,18 @@ export default function LoginView() {
             isAdmin:res.data.isAdmin,
           })
         );
+        console.log(localStorage.getItem('access'));
         navigate('/admin')
         return res
       }  
-      
     }
     catch (error) {
-      if (error.response.status===401)
-      {
+      if (error.response.status===401){
         TError("Account doesn't exist")
         setFormError(error.response.data)
       }
-      else
-      {
+      else{
         console.log(error);
-  
       }
     }
   }
