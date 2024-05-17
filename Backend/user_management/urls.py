@@ -15,4 +15,5 @@ urlpatterns = [
          name='razorpay_callback'),
     path('list/order/<int:id>', views.TicketOrderListView.as_view(), name='ticketOrder'),
     path('filter/bus/<int:start_id>/<int:end_id>', views.UserAvailableRouteView.as_view(), name='busOrder'),
+    path('avail/date/<int:route_id>', views.AvailableDateView.as_view(), name='available_date'),
 ]

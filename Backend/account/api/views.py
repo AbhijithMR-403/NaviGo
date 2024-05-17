@@ -96,7 +96,7 @@ class RegisterView(APIView):
             }
             return Response(content, status=status.HTTP_409_CONFLICT)
 
-        content = {"Message": "OTP send",
+        content = {"Message": "User Registered",
                    'user_id': serializer.data['id'],
                    "username": serializer.data['email']}
         return Response(content, status=status.HTTP_201_CREATED)

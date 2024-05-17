@@ -11,7 +11,9 @@ const BookingConfirm = () => {
     const navigate = useNavigate()
     const [quantity, setQuantity] = useState(1)
     const [Tax, setTax] = useState(0.0)
+    
     useEffect(() => {
+        // Fetching the order details
         AuthUserAxios.get(`/user/order/detail/${uuid}/`).then((res) => {
             console.log(res);
             setBookingData(res.data)

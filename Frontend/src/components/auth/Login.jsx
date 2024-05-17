@@ -125,6 +125,7 @@ function Login() {
 
           <GoogleLogin
             onSuccess={credentialResponse => {
+              console.log(credentialResponse);
               GoogleTestLogin(credentialResponse.credential)
               // Google_login(user_detail)
             }}

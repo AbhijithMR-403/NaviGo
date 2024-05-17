@@ -34,8 +34,8 @@ class PaymentSerializer(serializers.ModelSerializer):
 class TicketDetailSerializer(serializers.ModelSerializer):
     user_id = UserDetailSerializer()
     route_id = RouteWayPointDetailSerializer()
-    starting_stop = BusStopSerializer()
-    ending_stop = BusStopSerializer()
+    start_stop = BusStopSerializer()
+    end_stop = BusStopSerializer()
 
     class Meta:
         model = TicketOrder
@@ -74,3 +74,36 @@ class UserAvailableRouteView(serializers.ModelSerializer):
         resource_data = data['waypoints']
 
         return super().to_internal_value(resource_data)
+
+
+# To get the available Dates
+class RouteSerializer(serializers.ModelSerializer):
+    # bus_detail = BusDetailSerializer()
+    # origin = BusStopSerializer()
+    # destination = BusStopSerializer()
+
+    class Meta:
+        model = Route
+        fields = []
+
+    def to_representation(self, instance):
+        # The first stop is been added to list_stop
+        list_stops = [{'stop': BusStopSerializer(
+            instance.origin).data['id'], 'reaching_time': instance.starting_time, 'order': 1}]
+        representation = super().to_representation(instance)
+        waypoints = instance.waypoints.all()
+
+        # Waypoint that needs to be appended to list_stop
+        for waypoint in waypoints:
+            bus_serializer = BusStopSerializer(waypoint.stop).data['id']
+            time = waypoint.reaching_time
+            order = waypoint.order
+            list_stops.append(
+                {'stop': bus_serializer, 'reaching_time': time, 'order': order + 1})
+
+        # The last stop to be appended
+        list_stops.append({'stop': BusStopSerializer(instance.destination).data['id'],
+                          'reaching_time': instance.ending_time, 'order': len(waypoints) + 2})
+        representation['list_stops'] = list_stops
+
+        return representation

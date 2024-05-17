@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+# */bus/**
 urlpatterns = [
     path("stop/add", views.BusStopLocation.as_view(), name="addStop"),
     path("stop/list", views.BusStopLocation.as_view(), name="listStop"),
