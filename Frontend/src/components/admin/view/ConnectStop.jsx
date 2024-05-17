@@ -69,9 +69,9 @@ function ConnectStop() {
             <Map PointA={stop1} PointB={stop2} />
             </div>
             <form onSubmit={submitBusConnection}>
-            <input className="ml-8 mt-8 shadow appearance-none border rounded sm:w-1/2 w-3/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name='distance' placeholder='Distance' id="distance" type="number" step=".01" />
+            {/* <input className="ml-8 mt-8 shadow appearance-none border rounded sm:w-1/2 w-3/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name='distance' placeholder='Distance' id="distance" type="number" step=".01" />
 
-            <input className="ml-8 mt-8 shadow appearance-none border rounded sm:w-1/2 w-3/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name='time' placeholder='Time(minute)' id="time" type="number" />
+            <input className="ml-8 mt-8 shadow appearance-none border rounded sm:w-1/2 w-3/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name='time' placeholder='Time(minute)' id="time" type="number" /> */}
 
             <button className="ml-8 mt-10 w-1/12 flex-shrink-0 bg-red-500 hover:bg-red-700 border-red-600 hover:border-red-900 text-sm border-4 text-white py-1 px-2 rounded" type="submit">
             Add Stop

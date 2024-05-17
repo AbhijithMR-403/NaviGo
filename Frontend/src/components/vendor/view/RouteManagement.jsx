@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Map from '../../../utils/maps/Map'
-import axios from 'axios'
-import { AdminBusAxios, VendorAxios } from '../../api/api_instance'
+import { VendorAxios } from '../../api/api_instance'
 import { TError, TSuccess } from '../../toastify/Toastify'
 import RouteCard from './elements/RouteCard'
 import StopListModal from './elements/StopListModal'
@@ -29,7 +28,7 @@ function RouteManagement() {
   const [fromTime, setFromTime] = useState('')
   const [endTime, setEndTime] = useState('')
   useEffect(() => {
-    AdminBusAxios.get('/bus/stop/list').then(res => {
+    VendorAxios.get('/bus/stop/list').then(res => {
       setStopNamesList(res.data)
       console.log(res.data);
     }).catch((err) => {
@@ -37,7 +36,7 @@ function RouteManagement() {
         window.location.reload();
       console.log("Error: " + err)
     });
-    AdminBusAxios.get(`/vendor/bus/list/${userId}`).then(res => {
+    VendorAxios.get(`/vendor/bus/list/${userId}`).then(res => {
       setBusNames(res.data)
     }).catch((err) => {
       console.log("Error: " + err)

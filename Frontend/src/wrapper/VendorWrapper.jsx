@@ -12,22 +12,37 @@ import BusListCreate from '../components/vendor/view/BusListCreate';
 import RouteManagement from '../components/vendor/view/RouteManagement';
 import BusRouteLists from '../components/vendor/view/BusRouteLists';
 import { useDispatch, useSelector } from 'react-redux';
-import DispatchAuth from '../utils/DispatchAuthDetails/DispatchAuth';
 import { VendorAxios, VendorImgAxios } from '../components/api/api_instance';
+import { Set_Authentication } from '../redux/authentication/AuthenticationSlice';
+import IsAuthUser from '../utils/IsAuthUser';
 
 function VendorWrapper() {
   const { pathname } = useLocation();
-
-  const authentication_user = useSelector(state => state.authentication_user)
   const dispatch = useDispatch();
+
+  
+  const authentication_user = useSelector(state => state.authentication_user)
+  
+  const checkAuth = async () => {
+    const isAuthenticated = await IsAuthUser();
+    dispatch(
+      Set_Authentication({
+        name: isAuthenticated.name,
+        isAuthenticated: isAuthenticated.isAuthenticated,
+        userId: isAuthenticated.user_id,
+        isVendor: isAuthenticated.is_vendor,
+      })
+    );
+  };
+
   useEffect(() => {
     // Interceptor
     VendorImgAxios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('access')}`;
     VendorAxios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('access')}`;
-
     if (!authentication_user.name) {
-      DispatchAuth(dispatch);
+      checkAuth();
     }
+    console.log(authentication_user);
   }, [pathname])
 
   const routes = useRoutes([

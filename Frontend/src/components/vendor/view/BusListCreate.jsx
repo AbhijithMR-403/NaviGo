@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { VendorAxios, VendorImgAxios } from '../../api/api_instance'
 import { TSuccess } from '../../toastify/Toastify';
-import { useDispatch, useSelector } from 'react-redux';
-import DispatchAuth from '../../../utils/DispatchAuthDetails/DispatchAuth';
-import { jwtDecode } from 'jwt-decode';
+import {  useSelector } from 'react-redux';
 
 function BusListCreate() {
     const [BusList, setBusList] = useState([])
@@ -17,15 +15,14 @@ function BusListCreate() {
 
     const [file, setFile] = useState([]);
 
-    const dispatch = useDispatch();
     const FetchBusLists = () =>{
     VendorAxios.get(`/vendor/bus/list/${userId}`).then((res) => {
         setBusList(res.data)
-    }).catch(async(err) => {
+    }).catch((err) => {
         
-        if(err.response.status == 401){
-            await DispatchAuth(dispatch)
-        }
+        // if(err.response.status == 401){
+        //     await DispatchAuth(dispatch)
+        // }
         console.log(err)
     })}
     useEffect(() => {
@@ -58,6 +55,9 @@ function BusListCreate() {
             isValid = false;
         }
         if (isValid) {
+            
+        console.log(userId);
+        console.log(typeof(userId));
             const formData = new FormData();
             formData.append('seating_capacity', Capacity);
             formData.append('bus_name', busName);

@@ -59,17 +59,17 @@ class ConnectedRoute(models.Model):
         super().save(*args, **kwargs)
 
 
-@receiver(post_save, sender=ConnectedRoute)
-def trigger_reverse_route_creation(sender, instance, **kwargs):
-    print('this is inside of  post save signal \n\n\n\n')
-    if kwargs['created'] is True:
-        reverse_connected_route, created = sender.objects.get_or_create(
-            bus_stop_1=instance.bus_stop_2,
-            bus_stop_2=instance.bus_stop_1,
-            defaults={'distance': instance.distance, 'time': instance.time}
-        )
-        if (reverse_connected_route.distance, reverse_connected_route.time) != (instance.distance, instance.time):
-            reverse_connected_route.distance = instance.distance
+# @receiver(post_save, sender=ConnectedRoute)
+# def trigger_reverse_route_creation(sender, instance, **kwargs):
+#     print('this is inside of  post save signal \n\n\n\n')
+#     if kwargs['created'] is True:
+#         reverse_connected_route, created = sender.objects.get_or_create(
+#             bus_stop_1=instance.bus_stop_2,
+#             bus_stop_2=instance.bus_stop_1,
+#             defaults={'distance': instance.distance, 'time': instance.time}
+#         )
+#         if (reverse_connected_route.distance, reverse_connected_route.time) != (instance.distance, instance.time):
+#             reverse_connected_route.distance = instance.distance
 
-            reverse_connected_route.time = instance.time
-            reverse_connected_route.save(update_fields=['distance', 'time'])
+#             reverse_connected_route.time = instance.time
+#             reverse_connected_route.save(update_fields=['distance', 'time'])

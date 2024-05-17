@@ -5,6 +5,8 @@ from rest_framework_simplejwt.views import (
 )
 from . import views
 
+
+# */auth/**
 urlpatterns = [
     # Generate Token (Only for testing purpose)
     path('token', TokenObtainPairView.as_view(), name='token_obtain_pair'),
