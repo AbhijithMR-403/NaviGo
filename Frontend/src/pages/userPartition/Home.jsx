@@ -55,13 +55,13 @@ export default function Home() {
   <p className="mb-4 text-lg">You might not have explore it well🫠</p>
   <p className="mb-6 text-xl md:text-2xl">I'm here to help you out,</p>
   <p className="mb-4 text-lg"></p>
-  <p className="mb-4 text-lg"><Link to={'/vendor'}>Click here</Link> and view the vendor page</p>
+  <p className="mb-4 text-lg"><Link className='text-blue-700' to={'/vendor'}>Click here</Link> and view the vendor page</p>
   <p className="mb-4 text-lg"></p>
-  <p className="mb-4 text-lg">Even you can get to the admin page by linking <Link to={'/admin'}>here</Link></p>
+  <p className="mb-4 text-lg">Even you can get to the admin page by linking <Link className='text-blue-700' to={'/admin'}>here</Link></p>
   <p className="mb-4 text-lg">But for that you needs to have the email and password</p>
-  <p className="mb-4 text-lg">If you are too excited mail be</p>
+  <p className="mb-4 text-lg">If you are too excited, mail be</p>
   <p className="mb-4 text-lg">abhijithmr581@gmail.com</p>
-  <p className="mb-4 text-lg">We can met there</p>
+  <p className="mb-4 text-lg">We can meet there</p>
   <p className="mb-4 text-lg"></p>
   <p className="mb-4 text-lg"></p>
 </div>
