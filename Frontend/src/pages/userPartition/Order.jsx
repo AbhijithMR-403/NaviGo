@@ -29,7 +29,7 @@ function Order() {
             {orderDetail &&
                 (
                     <div className='order-ticket-card absolute z-50 bg-slate-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2' onClick={() => setOrderDetail(null)}>
-                <div className="ticket">
+                <div className="ticket cursor-pointer">
                     <div className="left">
                         <div className="ticket-info">
                             <p className="date">
@@ -39,7 +39,7 @@ function Order() {
                             </p>
                             <div className="show-name">
                                 <h1>{orderDetail.route_id.bus_detail.bus_name}</h1>
-                                <h2>{orderDetail.starting_stop.stop_name} - {orderDetail.ending_stop.stop_name}</h2>
+                                <h2>{orderDetail.start_stop.stop_name} - {orderDetail.end_stop.stop_name}</h2>
                             </div>
                             <div className="time">
                                 <p>
@@ -110,17 +110,17 @@ function Order() {
                             </tr>
                         </thead>
                         <tbody>
-                            {orderList.map((res) => {
+                            {orderList.map((res, index) => {
                                 console.log(res);
-                                return (<tr className="bg-white border-b hover:bg-gray-50">
+                                return (<tr key={index} className="bg-white border-b hover:bg-gray-50">
                                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                                        {res.route_id.origin.stop_name} - {res.route_id.destination.stop_name}
+                                        {res.start_stop.stop_name} - {res.end_stop.stop_name}
                                     </th>
                                     <td className="px-6 py-4">
                                         {res.quantity}
                                     </td>
                                     <td className="px-6 py-4 text-center">
-                                        {res.route_id.starting_time} - {res.route_id.ending_time}
+                                        {res.start_time.split('T')[1].split('+')[0]} - {res.end_time.split('T')[1].split('+')[0]}
                                     </td>
                                     <td className="px-6 py-4">
                                         {res.route_id.bus_detail.bus_name}

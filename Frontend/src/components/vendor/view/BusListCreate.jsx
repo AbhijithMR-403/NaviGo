@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { VendorAxios, VendorImgAxios } from '../../api/api_instance'
-import { TSuccess } from '../../toastify/Toastify';
+import { TError, TSuccess } from '../../toastify/Toastify';
 import {  useSelector } from 'react-redux';
 
 function BusListCreate() {
@@ -37,17 +37,29 @@ function BusListCreate() {
 
     const handleSubmit = async () => {
         let isValid = true;
-        if (!Capacity) {
+        if (busName.trim() == '') {
+            TError('Bus name is required')
+            return
+            // console.error('Bus name is required');
+            isValid = false;
+        }
+        else if (!Capacity) {
+            TError('Capacity should not be blank')
             console.error('Capacity is required');
             isValid = false;
         }
-        if (!busName) {
-            console.error('Bus name is required');
-            isValid = false;
-        }
-        if (!BusNumber) {
+        else if (!BusNumber) {
+
             console.error('Bus number is required');
             isValid = false;
+        }
+        else if(BusNumber.length>11){
+            TError('Bus Number should be less than 11 character')
+            return 
+        }
+        else if(BusNumber.length<4){
+            TError('Number should be less than 5 character')
+            return
         }
 
         if (!busPic) {

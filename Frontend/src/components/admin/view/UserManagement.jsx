@@ -35,7 +35,7 @@ function UserManagement() {
     }
       console.error(err)
     })
-  }, [])
+  }, [editField])
 
   const handleFormSubmit = async(event) => {
 
