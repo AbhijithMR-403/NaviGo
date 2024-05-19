@@ -249,3 +249,9 @@ class AvailableDateView(APIView):
             list_dates.append({'date_time': date_time, 'day': day, 'end_date_time':end_date_time})
             current_date += timedelta(days=1)
         return Response(list_dates, status=status.HTTP_200_OK)
+
+
+class UpdateUsers(generics.UpdateAPIView):
+    serializer_class = UserDetailSerializer
+    queryset = Account.objects.all()
+    lookup_field = 'id'
