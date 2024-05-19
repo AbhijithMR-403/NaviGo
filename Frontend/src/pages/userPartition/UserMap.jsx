@@ -21,6 +21,12 @@ function UserMap() {
 
     useEffect(() => {
         const showBusRoute = async () => {
+            if(StartStop.id == EndStop.id)
+                {
+                    setRouteList([])
+                    TWarning('Choice other stop')
+                    return
+                }
             console.log(StartStop);
             console.log(EndStop);
             await UserAxios.get(`/user/filter/bus/${StartStop ? StartStop.id : 0}/${EndStop ? EndStop.id : 0}`).then((res) => {
@@ -178,10 +184,16 @@ function UserMap() {
                                     </div>
                                 </div>
                                 <div>
+                                    {user.isAuthenticated && 
                                     <div className="ml-3 my-5 bg-green-600 p-1 w-20 rounded-xl cursor-pointer">
                                         <div className="uppercase text-xs leading-4 font-semibold text-center text-green-100" onClick={() => AvailDate(res)}>Buy</div>
                                         {/* <div className="uppercase text-xs leading-4 font-semibold text-center text-green-100" onClick={() => handleSubmit(res, starting_stop, ending_stop)}>Buy</div> */}
-                                    </div>
+                                    </div>}
+                                    {!user.isAuthenticated && 
+                                    <div className="ml-3 my-5 bg-yellow-600 p-1 w-20 rounded-xl cursor-pointer">
+                                        <div className="text-xs leading-4 font-semibold text-center text-green-100">Login before order</div>
+                                        {/* <div className="uppercase text-xs leading-4 font-semibold text-center text-green-100" onClick={() => handleSubmit(res, starting_stop, ending_stop)}>Buy</div> */}
+                                    </div>}
                                     <div className="ml-3 my-5 bg-blue-600 p-1 w-20 rounded-xl cursor-pointer">
                                         <div className="uppercase text-xs leading-4 font-semibold text-center text-green-100 pt" onClick={() => setShowPoint({ 'origin': res.origin, 'destination': res.destination })}>view on map</div>
                                     </div>
