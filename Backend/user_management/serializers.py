@@ -7,6 +7,7 @@ from vendor.serializers import BusDetailSerializer, BusStopSerializer
 from vendor.models import Route
 
 
+# UpdateUsers, 
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account

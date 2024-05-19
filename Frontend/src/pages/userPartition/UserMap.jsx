@@ -85,7 +85,6 @@ function UserMap() {
             console.log(err)
             if (err.response.status == 401) {
                 TWarning('Sorry Trying to verify')
-                window.location.reload()
             }
         })
     }
@@ -108,7 +107,8 @@ function UserMap() {
                 <div className="rounded border-2 ring-offset-2 border-gray-600 absolute top-1/2 left-1/2 w-96 -translate-x-1/2 p-4 bg-blue-200">
                     <div className="flex justify-between">
                         <div className='inline-flex'>
-                        <p>Time Taken:</p> <p>12:43</p>
+                        {/* Show the time taken to reach the end point */}
+                        {/* <p>Time Taken:</p> <p>12:43</p> */}
                         </div>
                         <div className='cursor-pointer' onClick={()=>setAvailableDate(null)}>
                         <RxCross1 />

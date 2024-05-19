@@ -86,7 +86,7 @@ class RegisterView(APIView):
                 context = {
                     'user_id': Account.objects.get(email=email).id,
                     'error': "Email already exists, But not verified"
-                    }
+                }
                 return Response(context, status=status.HTTP_401_UNAUTHORIZED)
             is_active = False
             content = {
@@ -232,3 +232,19 @@ class UserGoogleAuth(APIView):
 class AddVendorDetails(generics.CreateAPIView):
     queryset = VendorDetails.objects.all()
     serializer_class = VendorDetailSerializer
+
+
+class UpdatePassword(APIView):
+    def patch(self, request):
+        password = request.data['password']
+        new_password = request.data['new_password']
+        user = request.data['user']
+        try:
+            user = Account.objects.get(id=user)
+        except:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        if user.check_password(password):
+            user.set_password(new_password)
+            user.save()
+            return Response('password updated', status=status.HTTP_202_ACCEPTED)
+        return Response({'error': 'That\'s not the password'}, status=status.HTTP_403_FORBIDDEN)

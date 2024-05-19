@@ -59,10 +59,10 @@ function Login() {
           userid: res.data.user_id
         })
       );
-      TSuccess("You have successfully login")
       if(!res.data.accountExist){
-      setTimeout(() => { TSuccess('Welcome To NaviGo') }, 3000);
-      }
+        setTimeout(() => { TSuccess('Welcome To NaviGo') }, 2000);
+      } else
+      TSuccess("You have successfully login")
       navigate('/')
       return res
       

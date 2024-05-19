@@ -22,4 +22,5 @@ urlpatterns = [
     path("vendor/details", views.AddVendorDetails.as_view(), name="VendorDetails"),
     path("logout", views.LogoutView.as_view(), name="LogoutView"),
     path("google", views.UserGoogleAuth.as_view(), name="UserGoogleAuth"),
+    path("update/password", views.UpdatePassword.as_view(), name="UpdatePassword"),
 ]

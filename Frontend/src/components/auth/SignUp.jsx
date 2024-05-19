@@ -20,7 +20,7 @@ function SignUp() {
         {
             name: "Username",
             type: "text",
-            placeholder: "Enter your Password",
+            placeholder: "Enter your Username",
             formName: "name"
         },
         {

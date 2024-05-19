@@ -1,8 +1,8 @@
 import { jwtDecode } from 'jwt-decode'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { TWarning } from '../../toastify/Toastify'
-import { UserAxios } from '../../api/api_instance'
+import { TError, TSuccess, TWarning } from '../../toastify/Toastify'
+import { AuthUserAxios, UserAxios } from '../../api/api_instance'
 
 function UserProfile() {
 
@@ -37,6 +37,21 @@ function UserProfile() {
         }).catch((err) => {
             console.error("Error: ", err)
         })
+    }
+
+    const submitPassword = async(e)=>{
+        e.preventDefault()
+        console.log(e.target.old_password.value);
+        console.log(e.target.new_password.value);
+        const formData = {password:e.target.old_password.value, new_password:e.target.new_password.value, user:userID}
+        await AuthUserAxios.patch('/auth/update/password', formData).then((res)=>{
+            TSuccess('password updated')
+            console.log(res);
+        }).catch((err)=>{
+            if(err.response.status == 403)
+                TError('Wrong current password')
+        })
+        console.log('----=-=-=-=-=-');
     }
 
     return (
@@ -142,7 +157,7 @@ function UserProfile() {
                         <h3 className="mb-4 text-xl font-semibold dark:text-white">
                             Password information
                         </h3>
-                        <form action="#">
+                        <form onSubmit={submitPassword}>
                             <div className="grid grid-cols-6 gap-6">
                                 <div className="col-span-6 sm:col-span-3">
                                     <label
@@ -153,7 +168,7 @@ function UserProfile() {
                                     </label>
                                     <input
                                         type="text"
-                                        name="current-password"
+                                        name="old_password"
                                         id="current-password"
                                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         placeholder="••••••••"
@@ -170,13 +185,14 @@ function UserProfile() {
                                     <input
                                         data-popover-target="popover-password"
                                         data-popover-placement="bottom"
-                                        type="password"
+                                        type="text"
+                                        name='new_password'
                                         id="password"
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                         placeholder="••••••••"
                                         required=""
                                     />
-                                    <div
+                                    {/* <div
                                         data-popover=""
                                         id="popover-password"
                                         role="tooltip"
@@ -245,9 +261,9 @@ function UserProfile() {
                                             </ul>
                                         </div>
                                         <div data-popper-arrow="" />
-                                    </div>
+                                    </div> */}
                                 </div>
-                                <div className="col-span-6 sm:col-span-3">
+                                {/* <div className="col-span-6 sm:col-span-3">
                                     <label
                                         htmlFor="confirm-password"
                                         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -262,7 +278,7 @@ function UserProfile() {
                                         placeholder="••••••••"
                                         required=""
                                     />
-                                </div>
+                                </div> */}
                                 <div className="col-span-6 sm:col-full">
                                     <button
                                         className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
