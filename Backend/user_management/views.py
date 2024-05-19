@@ -251,6 +251,7 @@ class AvailableDateView(APIView):
         return Response(list_dates, status=status.HTTP_200_OK)
 
 
+# !This is off no use
 class UpdateUsers(generics.UpdateAPIView):
     serializer_class = UserDetailSerializer
     queryset = Account.objects.all()
