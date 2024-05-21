@@ -12,20 +12,20 @@ import IconButton from '@mui/material/IconButton';
 import { account } from '../../../../constant/userdetail'; 
 
 // ----------------------------------------------------------------------
-
+// Use this later
 const MENU_OPTIONS = [
-  {
-    label: 'Home',
-    icon: 'eva:home-fill',
-  },
-  {
-    label: 'Profile',
-    icon: 'eva:person-fill',
-  },
-  {
-    label: 'Settings',
-    icon: 'eva:settings-2-fill',
-  },
+  // {
+  //   label: 'Home',
+  //   icon: 'eva:home-fill',
+  // },
+  // {
+  //   label: 'Profile',
+  //   icon: 'eva:person-fill',
+  // },
+  // {
+  //   label: 'Settings',
+  //   icon: 'eva:settings-2-fill',
+  // },
 ];
 
 // ----------------------------------------------------------------------
@@ -98,7 +98,7 @@ export default function AccountPopover() {
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
-
+        {/* This map is of no use of now, but utilize this later */}
         {MENU_OPTIONS.map((option) => (
           <MenuItem key={option.label} onClick={handleClose}>
             {option.label}
