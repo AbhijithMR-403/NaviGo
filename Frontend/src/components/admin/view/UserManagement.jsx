@@ -87,9 +87,9 @@ function UserManagement() {
                       <span className="mr-3 font-semibold text-dark">User management</span>
                       <span className="mt-1 font-medium text-secondary-dark text-lg/normal"></span>
                     </h3>
-                    <div className="relative flex flex-wrap items-center my-2">
+                    {/* <div className="relative flex flex-wrap items-center my-2">
                       <a href="javascript:void(0)" className="inline-block text-[.925rem] font-medium leading-normal text-center align-middle cursor-pointer rounded-2xl transition-colors duration-150 ease-in-out text-light-inverse bg-light-dark border-light shadow-none border-0 py-2 px-5 hover:bg-secondary active:bg-light focus:bg-light"> See other projects </a>
-                    </div>
+                    </div> */}
                   </div>
                   {/* end card header */}
                   {/* card body  */}

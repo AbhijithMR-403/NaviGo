@@ -1,6 +1,6 @@
 export const account = {
     displayName: 'Abhijth',
-    email: 'demo@minimals.cc',
+    email: 'abhijithmr@gmail.com',
     photoURL: '/assets/avatar/avatar_6.jpg',
   };
   
