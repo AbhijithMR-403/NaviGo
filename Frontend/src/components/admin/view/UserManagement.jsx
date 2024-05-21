@@ -84,8 +84,8 @@ function UserManagement() {
                   {/* card header */}
                   <div className="px-9 pt-5 flex justify-between items-stretch flex-wrap min-h-[70px] pb-0 bg-transparent">
                     <h3 className="flex flex-col items-start justify-center m-2 ml-0 font-medium text-xl/tight text-dark">
-                      <span className="mr-3 font-semibold text-dark">Projects Deliveries</span>
-                      <span className="mt-1 font-medium text-secondary-dark text-lg/normal">All projects from the Loopple team</span>
+                      <span className="mr-3 font-semibold text-dark">User management</span>
+                      <span className="mt-1 font-medium text-secondary-dark text-lg/normal"></span>
                     </h3>
                     <div className="relative flex flex-wrap items-center my-2">
                       <a href="javascript:void(0)" className="inline-block text-[.925rem] font-medium leading-normal text-center align-middle cursor-pointer rounded-2xl transition-colors duration-150 ease-in-out text-light-inverse bg-light-dark border-light shadow-none border-0 py-2 px-5 hover:bg-secondary active:bg-light focus:bg-light"> See other projects </a>
@@ -102,7 +102,7 @@ function UserManagement() {
                             <th className="pb-3 text-start min-w-[175px]">User</th>
                             <th className="pb-3 text-end min-w-[100px]">Email</th>
                             <th className="pb-3 text-end min-w-[100px]">Active</th>
-                            <th className="pb-3 pr-12 text-end min-w-[100px]">Trips</th>
+                            {/* <th className="pb-3 pr-12 text-end min-w-[100px]">Trips</th> */}
                             <th className="pb-3 pr-12 text-end min-w-[100px]">Created</th>
                             <th className="pb-3 text-end min-w-[50px]">DETAILS</th>
                           </tr>
@@ -146,9 +146,9 @@ function UserManagement() {
                                   </td>
                                 )}
 
-                                <td className="p-3 pr-12 text-end">
+                                {/* <td className="p-3 pr-12 text-end">
                                   <span className="text-center align-baseline inline-flex px-4 py-3 mr-auto items-center font-semibold text-[.95rem] leading-none text-primary bg-primary-light rounded-lg"> 45 </span>
-                                </td>
+                                </td> */}
                                 <td className="pr-0 text-center">
                                   <span className="font-semibold text-light-inverse text-md/normal">{item.last_login.split('T')[0]}</span>
                                 </td>
