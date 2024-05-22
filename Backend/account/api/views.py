@@ -91,11 +91,11 @@ class RegisterView(APIView):
             is_active = False
             content = {
                 'message': 'Registration failed',
-                'errors': serializer.errors,
+                'error': serializer.errors,
                 'is_active': is_active
             }
-            return Response(content, status=status.HTTP_409_CONFLICT)
-
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        
         content = {"Message": "User Registered",
                    'user_id': serializer.data['id'],
                    "username": serializer.data['email']}

@@ -1,6 +1,10 @@
+from datetime import timedelta, datetime
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
+from django.core.validators import EmailValidator
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 # from django.utils.translation import gettext as _
 
 
@@ -73,3 +77,19 @@ class VendorDetails(models.Model):
     state = models.CharField(max_length=50, null=True)
     country = models.CharField(max_length=50, null=True, default='India')
     pincode = models.IntegerField(null=True)
+
+
+# @receiver(post_save, sender=Account)
+# def update_otp_expire_on_change(sender, instance, created, **kwargs):
+#     """
+#     This function updates the OTP_expire field whenever the Account instance is saved
+#     and the OTP field has changed.
+#     """
+#     print(created)
+#     print(instance.OTP != kwargs.get('previous', {}).get('OTP', None))
+#     print(not created and instance.OTP != kwargs.get('previous', {}).get('OTP', None))
+#     if not created and instance.OTP != kwargs.get('previous', {}).get('OTP', None) :
+#         # Check if the instance is not newly created and OTP has changed
+#         instance.OTP_expire = datetime.now() + timedelta(seconds=40)
+#         print(instance.OTP_expire)
+#         instance.save()

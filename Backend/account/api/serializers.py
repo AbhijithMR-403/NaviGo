@@ -17,21 +17,38 @@ from account.models import Account, VendorDetails
 class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ['id', 'username', 'email', 'name',
-                  'password', 'is_active', 'is_vendor', 'phone_number', 'profile_img']
+        fields = ['id', 'username', 'email', 'name', 'OTP', 'password',
+                  'is_active', 'is_vendor', 'phone_number', 'profile_img']
         extra_kwargs = {
             'password': {'write_only': True}
         }
 
     def validate(self, attrs):
         if 'password' not in attrs or not attrs['password'].strip():
-            raise serializers.ValidationError({"error": "Password is required"})
+            raise serializers.ValidationError(
+                {"error": "Password is required"})
         return super().validate(attrs)
 
     def create(self, validated_data):
         validated_data['password'] = make_password(
             validated_data.get('password'))
         return super(UserRegisterSerializer, self).create(validated_data)
+
+    def validate_username(self, username):
+        if not username[0].isalpha():
+            raise serializers.ValidationError(
+                "The username must start with an alphabetic character.")
+
+        if len(username) < 4 or len(username) > 25:
+            raise serializers.ValidationError(
+                "The username must be between 4 and 25 characters long.")
+
+        for char in username:
+            if not char.isalnum() and char != '_':
+                raise serializers.ValidationError(
+                    "The username can only contain alphanumeric characters and underscores ('_').")
+        print(username)
+        return username
 
 
 class UserSerializer(serializers.ModelSerializer):
