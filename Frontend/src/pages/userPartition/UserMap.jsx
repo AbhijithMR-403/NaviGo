@@ -20,22 +20,22 @@ function UserMap() {
     const navigate = useNavigate()
 
     useEffect(() => {
+
         const showBusRoute = async () => {
             if(StartStop.id == EndStop.id)
                 {
-                    setRouteList([])
                     TWarning('Choice other stop')
                     return
                 }
-            console.log(StartStop);
-            console.log(EndStop);
             await UserAxios.get(`/user/filter/bus/${StartStop ? StartStop.id : 0}/${EndStop ? EndStop.id : 0}`).then((res) => {
-                console.log(res);
+
+                console.log('------------------------');
                 setRouteList(res.data)
             }).catch((err) => {
                 console.log("Error: " + err)
             })
         }
+        setRouteList([])
         if (StartStop && EndStop)
             showBusRoute()
     }, [StartStop, EndStop]);
@@ -139,8 +139,16 @@ function UserMap() {
                     {/* Origin */}
                     <div>
                         <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-900">Starting stop</label>
-                        <select id="countries" onChange={(e) => { setStartStop(BusStopList.find((val) => e.target.value == val.id)) }} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                            <option style={{ backgroundColor: '#C2FCC6' }} value=''>Choose a stop</option>
+                        <select id="countries" onChange={(e) => {
+                            console.log('this is the log page here');
+                            console.log(e.target.value == 'null');
+                            console.log(typeof(e.target.value));
+                            if (e.target.value == 'null'){
+                                console.log('thisis nere to after the conditoni is true');
+                                setStartStop(null)}
+                            else
+                             setStartStop(BusStopList.find((val) => e.target.value == val.id)) }} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            <option style={{ backgroundColor: '#C2FCC6' }} value='null'>Choose a stop</option>
                             {BusStopList.map((res, ind) => {
                                 return (
                                     <option key={ind} style={{ backgroundColor: '#C2FCC6' }} value={res.id}>{res.stop_name}</option>
@@ -152,7 +160,14 @@ function UserMap() {
                     {/* Destination */}
                     <div>
                         <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-900">Ending stop</label>
-                        <select id="countries" onChange={(e) => { setEndStop(BusStopList.find((val) => e.target.value == val.id)) }} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <select id="countries" onChange={(e) => {
+                            if (e.target.value == null){
+                                console.log('thisis nere to after the conditoni is true');
+                                setEndStop(null)}
+                            else{
+                                console.log('this is herer for checkin g log');
+                             setEndStop(BusStopList.find((val) => e.target.value == val.id)) }
+                             }} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                             <option style={{ backgroundColor: '#C2FCC6' }}>Choose a stop</option>
                             {BusStopList.map((res, ind) => {
                                 return (
@@ -165,8 +180,8 @@ function UserMap() {
                 {RouteList.length == 0 ? <div className='text-center p-4 mt-6 font-bold'>No bus Available in this route</div> : null}
                 {/* After card */}
                 {RouteList.map((res, ind) => {
-                    let starting_stop = res.list_stops.find(val => val.stop.id === StartStop.id);
-                    let ending_stop = res.list_stops.find(val => val.stop.id === EndStop.id);
+                    let starting_stop = res.list_stops.find(val => val.stop.id === StartStop?.id);
+                    let ending_stop = res.list_stops.find(val => val.stop.id === EndStop?.id);
                     return (
                         <div className="bg-gray-100 mx-auto border-gray-500 border rounded-sm mt-4 text-gray-700 mb-0.5" key={res.id}>
                             <div className="flex p-3  border-l-8 border-green-600">
