@@ -28,11 +28,9 @@ class UserLogin(APIView):
         if not Account.objects.filter(email=email).exists():
             return Response({'error': 'Email Does Not Exist'},
                             status=status.HTTP_404_NOT_FOUND)
-
         if not Account.objects.filter(email=email, is_active=True).exists():
             user = Account.objects.get(email=email)
             return Response({'error': 'Your mail is not validated', 'user': user.id}, status=status.HTTP_401_UNAUTHORIZED)
-
         user = authenticate(username=email, password=password)
         if user is None:
             raise AuthenticationFailed('Invalid Password')
@@ -48,7 +46,6 @@ class UserLogin(APIView):
         refresh["name"] = str(user.username)
         refresh["is_admin"] = user.is_superuser
         vendor_detail = VendorDetails.objects.filter(user=user).exists()
-
         content = {
             'vendor_details': vendor_detail,
             'user_id': user.id,
@@ -95,7 +92,7 @@ class RegisterView(APIView):
                 'is_active': is_active
             }
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
-        
+
         content = {"Message": "User Registered",
                    'user_id': serializer.data['id'],
                    "username": serializer.data['email']}
@@ -235,6 +232,8 @@ class AddVendorDetails(generics.CreateAPIView):
 
 
 class UpdatePassword(APIView):
+    permission_classes = [IsAuthenticated]
+
     def patch(self, request):
         password = request.data['password']
         new_password = request.data['new_password']
