@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { MuiOtpInput } from 'mui-one-time-password-input'
 import { TError, TInfo, TLoading, TSuccess, TUpdate } from '../toastify/Toastify'
 import { AuthAxios, UserAxios } from '../api/api_instance'
+import { toast } from 'react-toastify'
 
 
 
@@ -72,6 +73,9 @@ function SignUp() {
         else if (password.trim() === "") {
             TError(['Invalid Password'])
         }
+        else if (password.trim().length < 5 || password.trim().length > 20) {
+            TError(['Password length should be between 5 to 20'])
+        }
         else if (confirmPassword !== password) {
             TError(['Passwords do not match'])
         }
@@ -88,19 +92,17 @@ function SignUp() {
                     sendOTP(res.data.user_id)
                     return res
                 }
-                console.log(res);
             }).catch((err) => {
-                console.log(err);
-                if (err.response.status === 409) {
-                    if (err.response.data.is_active) {
-                        navigate('/login')
-                    }
+                if (err.response.status == 409) {
+                    TError(err.response.data.error)
                 }
                 else if(err.response.status == 401){
-                    console.log(err.response.data.user_id);
                     setUserID(err.response.data.user_id)
                     sendOTP(err.response.data.user_id)
                     setSignUp(false)
+                }
+                else if(err.response.status == 400){
+                    TError(err.response.data.error.username)
                 }
                 for (let key in err.response.data.errors) {
                     TInfo(err.response.data.errors[key])
@@ -111,17 +113,28 @@ function SignUp() {
 
     const sendOTP = async (ID) => {
         var data = { "userID": ID }
-        const toaster = TLoading('Please wait...')
-        console.log(toaster)
-        await AuthAxios.patch('/otp', data).then((res) => {
+        toast.promise(
+        AuthAxios.patch('/otp', data).then((res) => {
             setSignUp(false)
-            TUpdate(toaster, 'OTP send', 'success')
-            // TSuccess('OTP is sent')
+            return res
         }
         ).catch((err) => {
-            TUpdate(toaster, 'Error while sending OTP', 'error')
-            console.log(err)
-        })
+            console.log('its here in some where insdie catch block');
+            const errorMessage = err.response?.data?.error || 'Promise rejected 🤯';
+            throw new Error(errorMessage);
+        }),
+        {
+            pending: 'Please wait...',
+            success: 'OTP send 👌',
+            error: {
+                render({ data }) {
+                    return `${data.message}`;
+                }
+            },
+                    onClick: () => toast.dismiss()
+          }
+        );
+
     }
 
 
@@ -157,12 +170,6 @@ function SignUp() {
                             {formError}
                         </li>}
                     </ul>
-                    <div className="flex-row">
-                        <div>
-                            <input type="checkbox" />
-                            <label>Remember me </label>
-                        </div>
-                    </div>
                     <button className="button-submit" type='submit'>Sign Up</button>
                     <p className="p">Don't have an account? <Link to={'/login'}><span className="span">Log in</span></Link>
                     </p>

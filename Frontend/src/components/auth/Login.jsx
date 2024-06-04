@@ -38,6 +38,7 @@ function Login() {
       }
     }
     catch (error) {
+      console.log(error);
       TError(error.response.data.error)
     }
   }

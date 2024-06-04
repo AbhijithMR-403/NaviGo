@@ -33,7 +33,8 @@ class UserLogin(APIView):
             return Response({'error': 'Your mail is not validated', 'user': user.id}, status=status.HTTP_401_UNAUTHORIZED)
         user = authenticate(username=email, password=password)
         if user is None:
-            raise AuthenticationFailed('Invalid Password')
+            return Response({'error': 'Invalid password'},
+                            status=status.HTTP_401_UNAUTHORIZED)
         vendor = VendorDetails.objects.filter(user=user)
         refresh = RefreshToken.for_user(user)
         vendor_active = False
@@ -55,7 +56,6 @@ class UserLogin(APIView):
             "is_vendor": user.is_vendor,
             "is_vendor_active": vendor_active
         }
-        print(content)
         return Response(content, status=status.HTTP_200_OK)
 
 
@@ -75,10 +75,21 @@ class LogoutView(APIView):
 class RegisterView(APIView):
     def post(self, request):
         serializer = UserRegisterSerializer(data=request.data)
+        email = request.data['email']
+        if Account.objects.filter(email=email, is_active=False, is_email_verified=False, is_vendor=False).exists():
+            Account.objects.get(email=email).delete()
+
         if serializer.is_valid():
             serializer.save()
         else:
             email = serializer.data['email']
+            if Account.objects.filter(email=email, is_email_verified=True).exists():
+                context = {
+                    'user_id': Account.objects.get(email=email).id,
+                    'error': "Email already exists"
+                }
+                return Response(context, status=status.HTTP_409_CONFLICT)
+            
             if Account.objects.filter(email=email, is_active=False, is_email_verified=False).exists():
                 context = {
                     'user_id': Account.objects.get(email=email).id,
@@ -112,20 +123,15 @@ class Send_OTP(APIView):
         if user.is_active:
             return Response({'error': 'This user is already active'}, status=status.HTTP_208_ALREADY_REPORTED)
         current_time = datetime.now(timezone.utc)
-        print(type(current_time))
         otp_expiry_time = user.OTP_expire
         try:
-
             if user.OTP_expire is not None:
-                if current_time < otp_expiry_time + timedelta(seconds=20):
-                    print(user.OTP_expire, current_time)
-                    time_remaining = (otp_expiry_time +
-                                      timedelta(seconds=20)) - current_time
+                if current_time < otp_expiry_time:
+                    time_remaining = otp_expiry_time - current_time
                     error_message = f'OTP was sent just before (wait for {time_remaining.seconds} seconds)'
                     return Response({'error': error_message}, status=status.HTTP_429_TOO_MANY_REQUESTS)
                 else:
                     user.OTP = random_num
-                    user.OTP_expire = current_time
                     user.save()
             else:
                 user.OTP = random_num
@@ -140,8 +146,7 @@ class Send_OTP(APIView):
             return Response({'error': 'This OTP is not sent'}, status=status.HTTP_408_REQUEST_TIMEOUT)
 
         context = {
-            "Message": "OTP send",
-            "OTP": str(random_num)
+            "Message": "OTP send"
         }
         return Response(context, status=status.HTTP_200_OK)
 
@@ -162,7 +167,6 @@ class OtpVerify(APIView):
             return Response({'error': 'Not a valid OTP'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
         user.save()
-        print('check is it active or not', user.is_active)
         content = {
             'message': 'User is activated',
         }
@@ -221,7 +225,6 @@ class UserGoogleAuth(APIView):
             "isVendor": False,
             'accountExist': accountExist,
         }
-        print(content)
 
         return Response(content, status=status.HTTP_200_OK)
 
