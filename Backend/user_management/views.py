@@ -2,6 +2,7 @@ from django.shortcuts import render
 from account.models import Account
 from vendor.models import Route, BusDetail
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 from .models import TicketOrder, Payment
 from .serializers import UserDetailSerializer, UserBusListSerializer, TicketOrderSerializer, TicketDetailSerializer, RouteSerializer
 from vendor.serializers import RouteWayPointDetailSerializer
@@ -17,12 +18,14 @@ import razorpay
 
 # Create your views here.
 class UserDetail(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Account.objects.all()
     serializer_class = UserDetailSerializer
     lookup_field = 'id'
 
 
 class UserUpdateDetailView(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Account.objects.all()
     serializer_class = UserDetailSerializer
     lookup_field = 'id'
