@@ -11,7 +11,7 @@ from vendor.models import Route
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = '__all__'
+        fields = ['name', 'phone_number', 'profile_img', 'username', 'email']
 
 
 class UserBusListSerializer(serializers.ModelSerializer):

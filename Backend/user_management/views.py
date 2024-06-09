@@ -2,6 +2,7 @@ from django.shortcuts import render
 from account.models import Account
 from vendor.models import Route, BusDetail
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 from .models import TicketOrder, Payment
 from .serializers import UserDetailSerializer, UserBusListSerializer, TicketOrderSerializer, TicketDetailSerializer, RouteSerializer
 from vendor.serializers import RouteWayPointDetailSerializer
@@ -17,12 +18,14 @@ import razorpay
 
 # Create your views here.
 class UserDetail(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Account.objects.all()
     serializer_class = UserDetailSerializer
     lookup_field = 'id'
 
 
 class UserUpdateDetailView(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Account.objects.all()
     serializer_class = UserDetailSerializer
     lookup_field = 'id'
@@ -87,12 +90,14 @@ class RazorpayPaymentView(APIView):
 
         except:
             Response({'error': 'Wrong order id'})
+        if Payment.objects.filter(ticket=ticketOrder).exists():
+            Payment.objects.get(ticket=ticketOrder).delete()
+
         # Save the order in DB
-        order = Payment.objects.create(
+        Payment.objects.create(
             amount=amount, provider_order_id=razorpay_order["id"], ticket=ticketOrder)
 
         data = {
-            # "name": name,
             "merchantId": RAZOR_KEY_ID,
             "amount": amount,
             "currency": 'INR',

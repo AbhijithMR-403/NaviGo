@@ -44,7 +44,7 @@ function VendorRegister() {
         else if (email.indexOf('@') == -1 || email.indexOf('.') == -1) {
             TError(['Invalid email address'])
         }
-        else if(!file){
+        else if (!file) {
             TError('Upload your image')
         }
         else {
@@ -63,18 +63,20 @@ function VendorRegister() {
                         userID: res.data.user_id,
                     })
                 )
-                navigate('/vendor/details/' + res.data.user_id+'/')
-                
+                navigate('/vendor/details/' + res.data.user_id + '/')
+
             }).catch((err) => {
                 console.log(err);
-                if (err.response.status == 409){
-                    if(err.response.data.errors.email)
-                        TWarning('This email already exist')
-                    else if (err.response.data.errors.username)
+                if (err.response.status == 400) {
+                    if (err.response.data.error.username)
                         TWarning('This  username is already taken')
-
-                navigate('/vendor/register');
-            }
+                    // navigate('/vendor/register');
+                }
+                if (err.response.status == 409) {
+                    if (err.response.data.error)
+                        TWarning('This email already exist')
+                    // navigate('/vendor/register');
+                }
                 console.log(err);
             })
         }
@@ -84,9 +86,13 @@ function VendorRegister() {
 
     // Store the validation Documentation image
     function handleChange(e) {
-        console.log(e.target.files[0]);
-        setFile(e.target.files[0]);
-        setFileImg(URL.createObjectURL(e.target.files[0]))
+        console.log(e.target.files[0].type);
+        if (e.target.files[0].type.includes('image')) {
+            setFile(e.target.files[0]);
+            setFileImg(URL.createObjectURL(e.target.files[0]))
+        }
+        else
+        TError('Not a valid Image')
     }
 
     return (
@@ -199,7 +205,7 @@ function VendorRegister() {
 
                             </div>
                             <label className='font-mono text-sm mt-2 -mb-3'>Upload profile pic</label>
-                            <input type="file" onChange={handleChange} />
+                            <input type="file" onChange={handleChange} accept="image/png, image/gif, image/jpeg" inputProps={{ accept: 'image/*' }} />
                             <img className='max-w-56 max-h-44' src={FileImg} />
 
                             {/* <ul className='text-red-700'>

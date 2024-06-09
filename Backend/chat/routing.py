@@ -1,6 +1,6 @@
-from django.urls import re_path
-from Backend.consumers import ChatConsumer
+from django.urls import path
+from chat.consumers import ChatConsumer
 
 websocket_urlpatterns = [
-    re_path("ws/chat/public_room/", ChatConsumer.as_asgi()),
+    path("ws/chat/<int:ticketID>", ChatConsumer.as_asgi()),
 ]

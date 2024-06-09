@@ -1,6 +1,10 @@
+from datetime import timedelta, datetime
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
+from django.core.validators import EmailValidator
+from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
 # from django.utils.translation import gettext as _
 
 
@@ -73,3 +77,30 @@ class VendorDetails(models.Model):
     state = models.CharField(max_length=50, null=True)
     country = models.CharField(max_length=50, null=True, default='India')
     pincode = models.IntegerField(null=True)
+
+
+updating_instance = False
+
+
+@receiver(post_save, sender=Account)
+def update_otp_expire_on_change(sender, instance, created, **kwargs):
+
+    global updating_instance
+
+    if updating_instance:
+        return
+    previous_otp = None
+    if instance.pk:
+        try:
+            previous_otp = Account.objects.get(pk=instance.pk).OTP
+        except Account.DoesNotExist:
+            previous_otp = None
+    if not created and int(instance.OTP) is not int(previous_otp):
+        # Check if the instance is not newly created and OTP has changed
+        instance.OTP_expire = (
+            datetime.now() + timedelta(seconds=15))
+        updating_instance = True
+        try:
+            instance.save()
+        finally:
+            updating_instance = False
