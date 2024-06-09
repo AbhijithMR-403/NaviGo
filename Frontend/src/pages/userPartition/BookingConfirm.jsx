@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { AuthUserAxios } from '../../components/api/api_instance';
-import { TError } from '../../components/toastify/Toastify';
+import { TError, TWarning } from '../../components/toastify/Toastify';
+import { Modal } from '@mui/material';
 
 
 const BookingConfirm = () => {
@@ -86,9 +87,14 @@ const BookingConfirm = () => {
                     navigate('/success')
                 }).catch((err)=>console.log(err))
             },
+            modal: {
+                ondismiss: function hello(){
+                    TWarning('No issue try again')
+                }
+            },
             prefill: {
-                name: "Swapnil Pawar",
-                email: "swapnil@example.com",
+                name: "Abhijith",
+                email: "Abhijith@example.com",
                 contact: "9999999999",
             },
             notes: {

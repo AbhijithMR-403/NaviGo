@@ -86,7 +86,6 @@ function VendorRegister() {
 
     // Store the validation Documentation image
     function handleChange(e) {
-        console.log('this is unser the file ');
         console.log(e.target.files[0].type);
         if (e.target.files[0].type.includes('image')) {
             setFile(e.target.files[0]);

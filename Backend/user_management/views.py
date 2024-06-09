@@ -90,12 +90,14 @@ class RazorpayPaymentView(APIView):
 
         except:
             Response({'error': 'Wrong order id'})
+        if Payment.objects.filter(ticket=ticketOrder).exists():
+            Payment.objects.get(ticket=ticketOrder).delete()
+
         # Save the order in DB
-        order = Payment.objects.create(
+        Payment.objects.create(
             amount=amount, provider_order_id=razorpay_order["id"], ticket=ticketOrder)
 
         data = {
-            # "name": name,
             "merchantId": RAZOR_KEY_ID,
             "amount": amount,
             "currency": 'INR',
