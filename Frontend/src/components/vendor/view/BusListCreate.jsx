@@ -76,7 +76,7 @@ function BusListCreate() {
             formData.append('bus_number', BusNumber);
             formData.append('identify_img', busPic);
             formData.append('user_id', userId);
-            
+            console.log(userId);
             await VendorImgAxios.post('/vendor/bus/create', formData).then((res) => {
                 TSuccess('Created successfully')
                 setShowModal(false);

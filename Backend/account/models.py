@@ -86,6 +86,8 @@ updating_instance = False
 def update_otp_expire_on_change(sender, instance, created, **kwargs):
 
     global updating_instance
+    print(kwargs)
+    print(created)
 
     if updating_instance:
         return
@@ -104,3 +106,4 @@ def update_otp_expire_on_change(sender, instance, created, **kwargs):
             instance.save()
         finally:
             updating_instance = False
+    return

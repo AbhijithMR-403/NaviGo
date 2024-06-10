@@ -4,6 +4,7 @@ import { TError, TWarning } from '../../toastify/Toastify';
 import { useDispatch } from 'react-redux';
 import { set_vendor } from '../../../redux/authentication/VendorSlice';
 import { AuthAxios, UserAxios, VendorAuth } from '../../api/api_instance';
+import { validatePassword } from '../../../utils/validation/passwordValidation';
 
 function VendorRegister() {
     const navigate = useNavigate()
@@ -35,8 +36,11 @@ function VendorRegister() {
         else if (username.replaceAll(/\s/g, '').length < 3) {
             TError('Not a valid Username')
         }
-        else if (password.trim() === "") {
-            TError(['Invalid Password'])
+        else if(isNaN(phone)){
+            TError('Enter a valid number')
+        }
+        else if (validatePassword(password)) {
+            TError(validatePassword(password))
         }
         else if (confirmPassword !== password) {
             TError(['Passwords do not match'])
