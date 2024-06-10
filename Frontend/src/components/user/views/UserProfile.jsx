@@ -24,9 +24,7 @@ function UserProfile() {
         }
 
 
-        UserAxios.get(`/user/details/${userID}/`).then((res) => {
-            console.log('ti ------------------ ><-------');
-            console.log(res);
+        AuthUserAxios.get(`/user/details/${userID}/`).then((res) => {
             setUserDetails(res.data)
         }).catch((err) => {
             console.error("Error: ", err)
