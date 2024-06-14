@@ -31,7 +31,7 @@ export const AuthUserAxios = axios.create({
     baseURL: `${API_BASE_URL}`,
     // timeout: 3000,
     headers: {
-      // Authorization: `Bearer ${localStorage.getItem('access')}`,
+      Authorization: `Bearer ${localStorage.getItem('access')}`,
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },

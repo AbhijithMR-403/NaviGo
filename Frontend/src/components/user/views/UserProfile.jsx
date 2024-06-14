@@ -7,7 +7,7 @@ import { validatePassword } from '../../../utils/validation/passwordValidation'
 
 function UserProfile() {
 
-    const [UserDetails, setUserDetails] = useState([])
+    const [UserDetails, setUserDetails] = useState({})
     const [ShowOldPassword, setShowOldPassword] = useState(true)
     const [ShowNewPassword, setShowNewPassword] = useState(true)
     const navigate = useNavigate()
@@ -24,7 +24,9 @@ function UserProfile() {
         }
 
 
-        AuthUserAxios.get(`/user/details/${userID}/`).then((res) => {
+        console.log('this is here first use effect somthings like that ');
+        UserAxios.get(`/user/details/${userID}/`).then((res) => {
+            console.log(res);
             setUserDetails(res.data)
         }).catch((err) => {
             console.error("Error: ", err)
@@ -35,7 +37,7 @@ function UserProfile() {
     const handleFormSubmit = (e) => {
         e.preventDefault()
         const formData = new FormData(e.target)
-        UserAxios.patch(`/user/details/update/${userID}/`, formData).then((res) => {
+        AuthUserAxios.patch(`/user/details/update/${userID}/`, formData).then((res) => {
             setUserDetails(res.data)
         }).catch((err) => {
             console.error("Error: ", err)
@@ -92,7 +94,7 @@ function UserProfile() {
                                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         value={UserDetails ? UserDetails.username : ""}
                                         required=""
-                                        readonly
+                                        readOnly
                                     />
                                 </div>
                                 <div className="col-span-6 sm:col-span-3">

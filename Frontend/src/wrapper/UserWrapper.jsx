@@ -41,11 +41,14 @@ function UserWrapper() {
   };
 
   useEffect(() => {
+    console.log('this is where right now');
+    console.log(localStorage.getItem('access'));
     // Interceptor
     AuthUserAxios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('access')}`;
     if (!authentication_user.name) {
       checkAuth();
     }
+    console.log(localStorage.getItem('access'));
   }, [authentication_user, pathname])
 
 
