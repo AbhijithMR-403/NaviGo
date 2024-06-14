@@ -1,14 +1,15 @@
 .user-home-div {
   .bg-quote {
-    background: url(../../public/assets/userHome/bus-stop345.jpg) center center no-repeat;
+    background: url('../../public/assets/userHome/bus-stop142.jpg') center center no-repeat;
     background-attachment: fixed;
     background-size: cover;
   }
 
   .text-2 {
-    // background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
-    background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
-    -webkit-text-fill-color: transparent;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-color: #7CB9E8;
+    // background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+    // -webkit-text-fill-color: transparent;
     -webkit-background-clip: text;
   }
 }

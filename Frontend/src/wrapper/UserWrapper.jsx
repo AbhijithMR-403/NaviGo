@@ -43,7 +43,6 @@ function UserWrapper() {
   useEffect(() => {
     // Interceptor
     AuthUserAxios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('access')}`;
-    console.log(localStorage.getItem('access'));
     if (!authentication_user.name) {
       checkAuth();
     }
