@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { TInfo } from '../../components/toastify/Toastify';
 import { AuthUserAxios, UserAxios } from '../../components/api/api_instance';
+import { RxCross1 } from 'react-icons/rx';
 
 const myStyle = {
     display: "-webkit-box",
@@ -17,7 +18,10 @@ const myStyle = {
   };
 
 function UserBus()  {
+  const [AvailableDate, setAvailableDate] = useState(null)
     const [BusRouteList, setBusRouteList] = useState([])
+    const [RouteDetail, setRouteDetail] = useState(null)
+
     const user = useSelector(state => state.authentication_user)
     const navigate = useNavigate()
     useEffect(() => {
@@ -29,29 +33,99 @@ function UserBus()  {
         })
     }, [])
 
-  const handleSubmit = (data) =>{
-    if (!user.isAuthenticated){
-      TInfo('Login Required','Please Login First')
-      navigate('/login')
+  // const handleSubmit = (data) =>{
+  //   if (!user.isAuthenticated){
+  //     TInfo('Login Required','Please Login First')
+  //     navigate('/login')
+  //   }
+  //   const formData = {
+  //     bus_detail: data.bus_detail.id,
+  //     user_id: user.userId,
+  //     start_stop:data.origin.id,
+  //     end_stop:data.destination.id,
+  //     end_time:data.ending_time,
+  //     start_time:data.starting_time,
+  //     route_id: data.id,
+  //     starting_stop:data.origin.id,
+  //     ending_stop:data.destination.id
+  //   }
+  //   AuthUserAxios.post('/user/create/order', formData).then((res)=>{
+  //     navigate(`/confirm/${res.data.ticket_order_id}`)
+  //   }).catch((err)=>console.log(err))
+  // }
+
+  const handleSubmit = (start, end) => {
+    console.log('this reach here how ever');
+    console.log(user.userId);
+    if (!user.isAuthenticated) {
+        TInfo('Login Required')
+        navigate('/login');
     }
     const formData = {
-      bus_detail: data.bus_detail.id,
-      user_id: user.userId,
-      start_stop:data.origin.id,
-      end_stop:data.destination.id,
-      end_time:data.ending_time,
-      start_time:data.starting_time,
-      route_id: data.id,
-      starting_stop:data.origin.id,
-      ending_stop:data.destination.id
+        bus_detail: RouteDetail.bus_detail.id,
+        user_id: user.userId,
+        start_stop: RouteDetail.origin.id,
+        end_stop: RouteDetail.destination.id,
+        start_time: start,
+        end_time: end,
+        route_id: RouteDetail.id,
+        // Not using this 
+        starting_stop: RouteDetail.origin.id,
+        ending_stop: RouteDetail.destination.id,
     }
-    AuthUserAxios.post('/user/create/order', formData).then((res)=>{
-      navigate(`/confirm/${res.data.ticket_order_id}`)
-    }).catch((err)=>console.log(err))
-  }
+    AuthUserAxios.post('/user/create/order', formData).then((res) => {
+        console.log('you are here');
+        navigate(`/confirm/${res.data.ticket_order_id}`)
+    }).catch((err) => {
+        console.log(err)
+        if (err.response.status == 401) {
+            TWarning('Sorry Trying to verify')
+        }
+    })
+}
+  
+  const AvailDate = async (res) => {
+    console.log(res);
+    setRouteDetail(res)
+    await UserAxios.get(`/user/avail/date/${res.id}?start_stop=${res.origin.id}&end_stop=${res.destination.id}`).then((res) => {
+        setAvailableDate(res.data)
+        console.log(res.data);
+    }).catch((err) => {
+        console.log(err);
+    })
+}
 
         return (
           <div className="bg-black pt-11 bg-opacity-20 min-h-[100vh] flex items-center">
+            
+            {AvailableDate && <div className="absolute w-full h-72 z-40">
+                <div className="rounded border-2 ring-offset-2 border-gray-600 absolute top-1/2 left-1/2 w-96 -translate-x-1/2 p-4 bg-blue-200">
+                    <div className="flex justify-between">
+                        <div className='inline-flex'>
+                            {/* Show the time taken to reach the end point */}
+                            {/* <p>Time Taken:</p> <p>12:43</p> */}
+                        </div>
+                        <div className='cursor-pointer' onClick={() => setAvailableDate(null)}>
+                            <RxCross1 />
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap justify-center">
+                        {AvailableDate.map((res) => {
+                            const date = res.date_time.split('T')[0]
+                            return (
+                                <div class="m-2" onClick={() => handleSubmit(res.date_time, res.end_date_time)}>
+                                    <div class="rounded border-2 border-gray-600 p-4 bg-blue-300 hover:bg-blue-400 cursor-pointer min-w-32 text-center">
+                                        {date.split('-')[2]}-{date.split('-')[1]}
+                                        <br />
+                                        {res.day}
+                                    </div>
+                                </div>)
+                        })}
+                    </div>
+                </div>
+            </div>}
+
+
             <div className="container mx-auto">
               {/* card grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 py-10 text-left mx-5 xl:mx-10">
@@ -108,7 +182,7 @@ function UserBus()  {
                           <span className="text-xl text-gray-600">
                           ₹ {data.price}
                           </span>
-                          <button className="btn" onClick={()=>handleSubmit(data)}>Buy</button>
+                          <button className="btn" onClick={()=>AvailDate(data)}>Buy</button>
                           
                         </div>
                       </div>

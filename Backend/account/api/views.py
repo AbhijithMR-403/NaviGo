@@ -89,7 +89,7 @@ class RegisterView(APIView):
                     'error': "Email already exists"
                 }
                 return Response(context, status=status.HTTP_409_CONFLICT)
-            
+
             if Account.objects.filter(email=email, is_active=False, is_email_verified=False).exists():
                 context = {
                     'user_id': Account.objects.get(email=email).id,
@@ -113,7 +113,10 @@ class RegisterView(APIView):
 class Send_OTP(APIView):
     def patch(self, request):
         random_num = random.randint(1000, 9999)
-        userID = int(request.data['userID'])
+        try:
+            userID = int(request.data['userID'])
+        except:
+            return Response({'error': 'userID cannot be null'}, status=status.HTTP_400_BAD_REQUEST)
         try:
             user = None
             if userID:
