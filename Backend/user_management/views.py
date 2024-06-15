@@ -18,7 +18,7 @@ import razorpay
 
 # Create your views here.
 class UserDetail(generics.RetrieveAPIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     queryset = Account.objects.all()
     serializer_class = UserDetailSerializer
     lookup_field = 'id'

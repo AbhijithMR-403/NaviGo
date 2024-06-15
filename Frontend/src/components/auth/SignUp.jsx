@@ -5,6 +5,7 @@ import { MuiOtpInput } from 'mui-one-time-password-input'
 import { TError, TInfo, TLoading, TSuccess, TUpdate } from '../toastify/Toastify'
 import { AuthAxios, UserAxios } from '../api/api_instance'
 import { toast } from 'react-toastify'
+import { debounce } from 'lodash'
 
 
 
@@ -96,12 +97,12 @@ function SignUp() {
                 if (err.response.status == 409) {
                     TError(err.response.data.error)
                 }
-                else if(err.response.status == 401){
+                else if (err.response.status == 401) {
                     setUserID(err.response.data.user_id)
                     sendOTP(err.response.data.user_id)
                     setSignUp(false)
                 }
-                else if(err.response.status == 400){
+                else if (err.response.status == 400) {
                     TError(err.response.data.error.username)
                 }
                 for (let key in err.response.data.errors) {
@@ -111,31 +112,26 @@ function SignUp() {
         }
     }
 
-    const sendOTP = async (ID) => {
+    const sendOTP = debounce( async (ID) => {
         var data = { "userID": ID }
-        toast.promise(
-        AuthAxios.patch('/otp', data).then((res) => {
-            setSignUp(false)
-            return res
-        }
-        ).catch((err) => {
-            console.log('its here in some where insdie catch block');
-            const errorMessage = err.response?.data?.error || 'Promise rejected 🤯';
-            throw new Error(errorMessage);
-        }),
-        {
-            pending: 'Please wait...',
-            success: 'OTP send 👌',
-            error: {
-                render({ data }) {
-                    return `${data.message}`;
-                }
-            },
-                    onClick: () => toast.dismiss()
-          }
+        toast.dismiss();
+        await toast.promise(
+            AuthAxios.patch('/otp', data).then((res) => {
+                setSignUp(false)
+                return res
+            }
+            ).catch((err) => {
+                console.log(data);
+                const errorMessage = err.response?.data?.error || 'Promise rejected 🤯';
+                throw new Error(errorMessage);
+            }),
+            {
+                pending: 'Please wait...',
+                success: 'OTP send 👌',
+                error: 'This is an error'}
         );
 
-    }
+    }, 2000)
 
 
 
@@ -175,7 +171,7 @@ function SignUp() {
                     </p>
                 </form>)
                 : (
-                    <div className='m-40 p-10 bg-slate-50' >
+                    <div className='mt-40 md:m-40 p-7 sm:p-10 m-8 lg:mr-80 lg:ml-80 rounded-xl bg-slate-50' >
                         <div className="flex-column mb-5">
                             <label >OTP </label></div>
                         <MuiOtpInput className='mb-5' value={otp} onChange={(val) => setOtp(val)} />
