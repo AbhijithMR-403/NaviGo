@@ -108,13 +108,13 @@ function Login() {
 
         {fields.map((field, index) => <div key={index}><InputField {...field} /></div>)}
 
-        <div className="flex-row">
+        {/* <div className="flex-row">
           <div>
             <input type="checkbox" />
             <label>Remember me </label>
           </div>
           <span className="span">Forgot password?</span>
-        </div>
+        </div> */}
         <button className="button-submit" type='submit'>Sign In</button>
         <p className="p">Don't have an account? <Link to={'/signup'}>
           <span className="span">Sign Up</span></Link>
